@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import AssignmentCard from "./components/assignmentCard";
-import AssignmentListHeader from "./components/assignmentListHeader";
+import AssignmentCard from "./components/AssignmentCard";
+import AssignmentListHeader from "./components/AssignmentListHeader";
 import { Button } from "../components/ui/button";
 import FilterTabs from "../components/ui/filterTabs";
 import NotificationList from "../components/ui/cards/notificationList";
@@ -9,12 +9,33 @@ import { MessageIcon, NotificationIcon, RattingIcon } from "../assets";
 import FilterBar from "./components/Filterbar";
 
 const sampleNotifications = [
-  { user: "Kevin", message: "sent you message", action: "What is ux", course: "2024 ui/ux design with figma", time: "Just now", icon: MessageIcon },
-  { user: "John", message: "give a 5 star rating on your assignment", course: "2024 ui/ux design with figma", time: "5 mins ago", icon: RattingIcon },
-  { user: "Kevin", message: "sent you message", action: "What is ux", course: "2024 ui/ux design with figma", time: "6 mins ago", icon: NotificationIcon },
-
+  {
+    user: "Kevin",
+    message: "sent you message",
+    action: "What is ux",
+    course: "2024 ui/ux design with figma",
+    time: "Just now",
+    icon: MessageIcon,
+    type: "message",
+  },
+  {
+    user: "John",
+    message: "give a 5 star rating on your assignment",
+    course: "2024 ui/ux design with figma",
+    time: "5 mins ago",
+    icon: RattingIcon,
+    type: "rating",
+  },
+  {
+    user: "Kevin",
+    message: "sent you message",
+    action: "What is ux",
+    course: "2024 ui/ux design with figma",
+    time: "6 mins ago",
+    icon: NotificationIcon,
+    type: "notification",
+  },
 ];
-
 
 const transactions = [
   { date: "21 Sep, 2021 at 2:14 AM", amount: "$20", status: "Pending" },
@@ -50,7 +71,10 @@ export default function Assignment() {
   // Close dropdown when clicking outside of it
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setOpenDropdown(null);
       }
     };
@@ -76,16 +100,17 @@ export default function Assignment() {
           My Assignment
         </div>
 
-
         <div className="w-full max-w-xs">
           <div className="relative">
             <span className="absolute -right-1 top-[17px] -bottom-1 w-full h-full border-2 border-[#0099cc] rounded-full z-0"></span>
-            <Button variant="outline_rounded_1" className="w-full relative z-10 px-6 py-6 ">
+            <Button
+              variant="outline_rounded_1"
+              className="w-full relative z-10 px-6 py-6 "
+            >
               Submit New Assignment
             </Button>
           </div>
         </div>
-
       </div>
 
       <div>
@@ -96,9 +121,7 @@ export default function Assignment() {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 ">
         {/* Left Column - Filter tabs and content */}
 
-
         <div className="lg:col-span-3 ">
-
           <FilterTabs
             tabs={["Requested", "Completed", "On-Going"]}
             defaultTab="Assignments"
@@ -106,7 +129,11 @@ export default function Assignment() {
           />
 
           <div className="bg-white px-4 py-2 mt-8 mb-2">
-            <AssignmentListHeader completed={8} total={10} filter="This week" />
+            <AssignmentListHeader
+              completed={8}
+              total={10}
+              filter={["This week"]}
+            />
 
             <AssignmentCard
               title="New swift assignment - iOS Programming"
@@ -138,14 +165,15 @@ export default function Assignment() {
           </div>
         </div>
 
-
         {/* Right Column - Notifications and Transactions */}
         <div className="lg:col-span-2 mt-16">
           <NotificationList notifications={sampleNotifications} />
           <div className="mt-6">
             <TransactionTable
               transactions={transactions}
-              onPayNow={(index) => alert(`Pay now clicked for transaction ${index + 1}`)}
+              onPayNow={(index) =>
+                alert(`Pay now clicked for transaction ${index + 1}`)
+              }
             />
           </div>
         </div>

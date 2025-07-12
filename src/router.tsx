@@ -7,11 +7,12 @@ import Signup from "./auth/signup";
 import Landing from "./landing/Landing";
 import HomeContent from "./components/layout/Mainlayout";
 import Student from "./student/Student";
-import NotFound from "./landing/components/notfound";
+import NotFound from "./landing/components/Notfound";
 import Assignment from "./student/Assignment";
-import Profile from "./profile/profile";
+import Profile from "./profile/Profile";
 import ProtectedRoute from "./protectedRoute";
 import SessionCard from "./sessiondetails/SessionDetails";
+import LiveQuestion from "./liveQuestion/LiveQuestion";
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -28,12 +29,11 @@ export const createAppRouter = createBrowserRouter([
   },
 
   {
-    element: <ProtectedRoute />,
+    // element: <ProtectedRoute />,
+
     children: [
       {
-        element: (
-          <HomeContent />
-        ),
+        element: <HomeContent />,
         children: [
           {
             path: paths.student.profile.path,
@@ -41,30 +41,31 @@ export const createAppRouter = createBrowserRouter([
           },
           {
             path: paths.student.dashboard.path,
-            element: <Student />
+            element: <Student />,
           },
           {
             path: paths.student.assignment.path,
-            element: <Assignment />
+            element: <Assignment />,
           },
           {
             path: paths.student.assignmentdetails.path,
-            element: <SessionCard />
+            element: <SessionCard />,
+          },
+          {
+            path: paths.student.livequestion.path,
+            element: <LiveQuestion />,
           },
           {
             path: "*",
             element: <NotFound />,
           },
-        ]
-
-      }
-    ]
+        ],
+      },
+    ],
   },
 
   {
     path: "*",
     element: <NotFound />,
   },
-
-
 ]);

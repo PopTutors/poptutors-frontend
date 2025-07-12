@@ -25,7 +25,7 @@ const MainLayout = () => {
         <div className="flex h-[calc(100vh-75px)]">
           <Sidebar />
           <div className="bg-[#f6f6f6] w-full overflow-y-auto">
-            <div className="container  mx-auto"> 
+            <div className="p-5"> 
             <Outlet />
             </div>
           </div>

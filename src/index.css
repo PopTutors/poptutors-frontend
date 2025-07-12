@@ -125,7 +125,7 @@
 
 body {
   font-family: var(--font-poppins);
-  color: var(--foreground);
+  color: #000000;
   /* background: var(--background); */
 }
 

@@ -25,6 +25,10 @@ export const paths = {
             path: "/student/assignmentdetails",
             getHref: () => "/student/assignmentdetails",
         },
+        livequestion: {
+            path: "/student/live-question",
+            getHref: () => "/student/live-question",
+        },
     },
     landing: {
         path: "/landing",

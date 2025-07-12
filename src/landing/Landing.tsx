@@ -8,7 +8,7 @@ import Footer from "./components/Footer";
 import DashboardHero from "./components/HeroSection";
 import PainPoints from "./components/PainPoints";
 import FadeInSection from "./components/animations/FadeInSection";
-import Carousels from "./components/carousels";
+import Carousels from "./components/Carousels";
 import Navbar from "./components/navbar/Navbar";
 
 const assignMentSteps = [
@@ -21,7 +21,7 @@ const assignMentSteps = [
 
 export default function Page() {
   return (
-    <div style={{backgroundColor: "#ffffff"}} className="container mx-auto flex w-full flex-col px-3 sm:px-1">
+    <div style={{backgroundColor: "#ffffff"}} className="flex w-full flex-col px-3 sm:px-1">
       <Navbar />
       <DashboardHero />
       <FadeInSection delay={0.1}>
