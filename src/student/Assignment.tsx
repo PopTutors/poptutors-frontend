@@ -100,21 +100,17 @@ export default function Assignment() {
           My Assignment
         </div>
 
-        <div className="w-full max-w-xs">
-          <div className="relative">
-            <span className="absolute -right-1 top-[17px] -bottom-1 w-full h-full border-2 border-[#0099cc] rounded-full z-0"></span>
-            <Button
-              variant="outline_rounded_1"
-              className="w-full relative z-10 px-6 py-6 "
-            >
-              Submit New Assignment
-            </Button>
+        <div className="flex items-center justify-between gap-6 p-6 bg-white rounded-lg shadow-sm border border-gray-200">
+          <div>
+            <h2 className="text-lg font-poppinsmedium text-[18px] text-gray-900">Request New Assignment</h2>
+            <p className="text-[10px] text-gray-400">Fill the form to request an Assignment</p>
           </div>
+
+          <Button className=" mt-0 py-2 px-4 font-poppinsmedium text-[16px]" variant={"outline_rounded"} onClick={() => setOpenDropdown("request")}>Request</Button>
         </div>
       </div>
 
       <div>
-        <FilterBar />
       </div>
 
       {/* Main grid layout */}
@@ -128,41 +124,50 @@ export default function Assignment() {
             onTabChange={handleTabChange}
           />
 
-          <div className="bg-white px-4 py-2 mt-8 mb-2">
-            <AssignmentListHeader
-              completed={8}
-              total={10}
-              filter={["This week"]}
-            />
+          <div className="bg-white h-[706px] overflow-y-scroll  py-2 mt-8 mb-2">
+            <div className="max-w-4xl px-6 mx-auto">
+              <FilterBar />
 
-            <AssignmentCard
-              title="New swift assignment - iOS Programming"
-              status="Completed"
-              price={30}
-            />
-            <AssignmentCard
-              title="Documentation on AI - Robotics"
-              status="Negotiate"
-              price={56}
-              milestone="Milestone stage 1 submitted"
-              showIcons
-            />
-            <AssignmentCard
-              title="AI Technology - Digital Data"
-              status="Requested"
-              price={65}
-              milestone="In Review"
-            />
-            <AssignmentCard
-              title="New swift assignment - iOS Programming"
-              status="Completed"
-              price={30}
-            />
+              <AssignmentCard
+                title="New swift assignment - iOS Programming"
+                status="Milestone 1"
+                tags={['Python', 'Computer Science', 'Coding', 'React Native', 'Application Developments']}
+                price={50}
+                deadline="30th Aug, 2025"
+              />
+              <AssignmentCard
+                title="New swift assignment - iOS Programming"
+                status="Milestone 1"
+                tags={['Python', 'Computer Science', 'Coding', 'React Native', 'Application Developments']}
+                price={50}
+                deadline="30th Aug, 2025"
+              />
+
+              <AssignmentCard
+                title="New swift assignment - iOS Programming"
+                status="Under Review"
+                tags={['Python', 'Computer Science', 'Coding', 'React Native', 'Application Developments']}
+                price={50}
+                deadline="30th Aug, 2025"
+              />
+
+              <AssignmentCard
+                title="New swift assignment - iOS Programming"
+                status="Completed"
+                tags={['Python', 'Computer Science', 'Coding', 'React Native', 'Application Developments']}
+                price={50}
+                deadline="30th Aug, 2025"
+              />
+
+              <div className="flex font-poppinssemibold text-[13px] justify-center text-primary">
+                <Button variant="ghost">See More</Button>
+              </div>
+            </div>
+
+
           </div>
 
-          <div className="flex justify-center">
-            <Button variant="ghost">See More</Button>
-          </div>
+
         </div>
 
         {/* Right Column - Notifications and Transactions */}

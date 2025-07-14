@@ -30,13 +30,13 @@ const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <div className="sticky top-0 z-50 bg-white flex">
+    <div className="sticky mx-5 top-0 z-50 bg-white flex">
       {/* Logo Group */}
       <div className="w-[291px] flex items-center justify-center">
         <img src={logo} alt="Logo" className="h-[60px] w-[150px] object-contain" />
       </div>
 
-      <div className="container mx-auto ">
+      <div className="container mx-auto px-5 ">
         <div className="flex w-full justify-between items-center py-2 md:py-2">
           <div className="hidden md:flex items-center gap-2 justify-center w-[304px] md:w-[354px]">
             <SearchInput />

@@ -30,7 +30,6 @@ export const createAppRouter = createBrowserRouter([
 
   {
     // element: <ProtectedRoute />,
-
     children: [
       {
         element: <HomeContent />,

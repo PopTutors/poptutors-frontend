@@ -22,7 +22,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
   return (
     <div
       className={clsx(
-        "w-full max-w-full bg-white shadow-sm",
+        "w-full bg-white shadow-sm",
         className
       )}
     >
@@ -38,10 +38,10 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
         <table className="w-full text-sm text-left min-w-[500px]">
           <thead className="bg-[#f5f7fa] text-gray-600 uppercase text-xs">
             <tr>
-              <th className="px-4 py-3 whitespace-nowrap">Date</th>
-              <th className="px-4 py-3 whitespace-nowrap">Amount</th>
-              <th className="px-4 py-3 whitespace-nowrap">Status</th>
-              <th className="px-4 py-3 whitespace-nowrap"></th>
+              <th className="ps-4 py-3 whitespace-nowrap">Date</th>
+              <th className=" py-3 whitespace-nowrap">Amount</th>
+              <th className=" py-3 whitespace-nowrap">Status</th>
+              <th className=" py-3 whitespace-nowrap"></th>
             </tr>
           </thead>
           <tbody>
@@ -50,15 +50,15 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                 key={index}
                 className="border-t font-poppinsregular hover:bg-gray-50 transition-colors"
               >
-                <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
+                <td className="ps-4 py-3 text-gray-700 whitespace-nowrap">
                   {txn.date}
                 </td>
-                <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
+                <td className=" py-3 text-gray-700 whitespace-nowrap">
                   {txn.amount}
                 </td>
                 <td
                   className={clsx(
-                    "px-4 py-3 font-medium whitespace-nowrap",
+                    "px-0  py-3 font-medium whitespace-nowrap",
                     txn.status === "Completed"
                       ? "text-green-600"
                       : "text-orange-500"
@@ -66,16 +66,16 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                 >
                   {txn.status}
                 </td>
-                <td className="px-4 py-3 whitespace-nowrap">
+                <td className=" py-3 whitespace-nowrap">
                   {txn.status === "Pending" && (
                     // <button
                     //   onClick={() => onPayNow(index)}
-                    //   className="text-sm border border-accent text-blue-500 px-4 py-1 rounded-full hover:bg-blue-50 transition-all"
+                    //   className="text-sm border border-accent text-blue-500 px-2 py-1 rounded-full hover:bg-blue-50 transition-all"
                     // >
                     //   Pay Now
                     // </button>
                     <Button
-                    
+                     className="mt-0 m-0 font-epilogue font-semibold text-[12px] "
                       onClick={() => onPayNow(index)}
                       variant="outline_rounded"
                     >

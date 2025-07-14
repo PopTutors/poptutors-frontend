@@ -1,74 +1,70 @@
-import { FaPen, FaTrash, FaCopy } from "react-icons/fa";
+import React from "react";
+import { FaCalendarAlt, FaRegCalendar } from "react-icons/fa";
 import { Button } from "../../components/ui/button";
 
 type AssignmentCardProps = {
-    title: string;
-    status: "Completed" | "Requested" | "Negotiate";
-    price: number;
-    milestone?: string;
-    showIcons?: boolean;
+  title: string;
+  status: string;
+  tags: string[];
+  price: number;
+  deadline: string;
 };
 
-const statusColors: Record<string, string> = {
-    Completed: "bg-green-100 text-green-700",
-    Requested: "bg-blue-100 text-blue-700",
-    Negotiate: "bg-red-100 text-red-700",
-};
+const AssignmentCard: React.FC<AssignmentCardProps> = ({
+  title,
+  status,
+  tags,
+  price,
+  deadline,
+}) => {
+  const statusStyle = {
+    "Milestone 1": "bg-[#d3ffd5] text-[#2fbe4d] ",
+    "Under Review": "bg-[#ffedc5] text-[#c5911e]",
+    Completed: "bg-[#D4EDFF] text-[#2F86C3]",
+  };
 
-export default function AssignmentCard({
-    title,
-    status,
-    price,
-    milestone,
-    showIcons = true,
-}: AssignmentCardProps) {
-    return (
-        <div className="bg-white shadow-sm rounded-lg p-4 mb-4 border border-gray-200">
-            <div className="flex justify-between items-start">
-                {/* Left Side */}
-                <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-2">
-                        <h3 className="font-poppinsmedium text-[15px] text-gray-800">{title}</h3>
-                        <span>
-                            <Button variant="secondary" size="sm" className={statusColors[status]}>
-                                {status}
-                            </Button>
-                        </span>
-                        {showIcons && status === "Negotiate" && (
-                            <div className="flex items-center gap-2 ml-2 text-gray-400 text-sm">
-                                <FaPen className="hover:text-blue-500 cursor-pointer" />
-                                <FaCopy className="hover:text-gray-600 cursor-pointer" />
-                                <FaTrash className="hover:text-red-500 cursor-pointer" />
-                            </div>
-                        )}
-                    </div>
+  return (
+    <div className="flex flex-col mt-6  md:flex-row justify-between items-start md:items-center bg-white rounded-lg shadow-lg border border-gray-100 p-[14px]  mb-4">
+      <div className="flex-1 w-full md:w-auto">
+        <h2 className="font-poppinsmedium text-lg text-gray-800">{title}</h2>
+        <span
+          className={`inline-block mt-2 px-3 py-1 rounded-sm text-[12px] font-poppinsregular ${statusStyle[status]}`}
+        >
+          {status}
+        </span>
 
-                    <div className="text-sm font-poppinsregular text-gray-500 flex items-center gap-2">
-                        <span>Topic Name</span>
-                        {milestone && (
-                            <a href="#" className="text-sky-500 text-xs hover:underline">
-                                {milestone}
-                            </a>
-                        )}
-                    </div>
-
-                    <p className="text-xs text-gray-400 mt-1">
-                        University Name &nbsp;&nbsp; Teacher Code : #56789
-                    </p>
-                </div>
-
-                {/* Right Side */}
-                <div className="flex flex-col items-end gap-2">
-                    <p className="text-sm font-semibold text-gray-400">${price}</p>
-                    <div className="flex items-center justify-end mt-4">
-                        <Button variant="outline_rounded">
-                            <span>View Assignment</span>
-                        </Button>
-                    </div>
-                </div>
-            </div>
-
-
+        <div className="flex flex-wrap gap-2 mt-4">
+          {tags.map((tag) => (
+            <span
+              key={tag}
+              className="text-[12px] bg-[#f3fcff] text-primary px-2 py-1 font-poppinsregular rounded-md"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
-    );
-}
+      </div>
+
+      <div className="bg-[#e6f9ff] rounded-lg p-4 flex flex-col items-center justify-center mt-4 md:mt-0 md:ml-4 w-full md:w-[134px]">
+        <div className="text-[#019ACB] font-popbold text-[16px] bg-white rounded-md  px-2 py-1">{price} $</div>
+
+        
+
+        <div className="flex items-center  gap-1 text-[#0b7db6] font-poppinsregular text-[12px] mt-3">
+          <span className="text-[15px]"> <FaRegCalendar /> </span> Deadline
+        </div>
+        <div>
+          <div className="flex items-center gap-1 text-[#019ACB] font-poppinsregular text-[12px] ">
+           {deadline}
+          </div>
+        </div>
+
+        <Button variant={"outline"} className="mt-4 border-[#019ACB] text-[#019ACB] bg-white flex items-center px-[10px] hover:bg-white  py-[7px] text-[10px] font-epilogue">
+          View Assignment
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default AssignmentCard;

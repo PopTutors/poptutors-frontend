@@ -22,7 +22,8 @@ const config = {
         poppinsmedium: ['Poppins Medium', 'Poppins'],
         poppinssemibold: ['Poppins SemiBold', 'Poppins'],
         poppinsbold: ['Poppins Bold', 'Poppins'],
-        
+        epilogue: ['Epilogue', 'sans-serif'],
+        inter: ["InterVar", "sans-serif"],
       },
 
       backgroundColor: {

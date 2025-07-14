@@ -43,9 +43,19 @@ import google from "../assets/landing/image 2.png";
 import MessageIcon from "../assets/student/message.png";
 import NotificationIcon from "../assets/student/files.png";
 import RattingIcon from "../assets/student/ratting.png";
+import Arrowright from "../assets/arrow_right.svg";
+import InfoIcon from "../assets/infoIcon.svg";
+import ArrowRightHalf from "../assets/halfarw-right.svg"
+import Checkmark from "../assets/Checkmark (1).png"
+import UsDollarCircled from "../assets/Us Dollar Circled.png"
+import Alarm from "../assets/Alarm (1).png"
+import Time from "../assets/time.png"
+import Language from "../assets/language.png"
+import BarChart from "../assets/bar-chart.png"
+import User from "../assets/Users.png"
+import Clock from "../assets/Clock.png"
 
 
 
-
-export {google,LandingPageIcon,Livequestionlanding,Calenderlanding, logo ,logowhite, Hero, CalenderIcon, PageIcon, SearchIcon, GroupIcon,MessageIcon,NotificationIcon,RattingIcon, WalletIcon, Upwork, Fiverr, PeopleperHour, Teacheron,Whatsapp,Phonecall,Facebook,Snapchat,IG,Discord,Person,Livequestion,Arrow,Clickhere,Recorder,MailIcon,Assignmentsupport,OneonOne,Painpoints1,Painpoints2,Painpoints3,Painpoints4,Painpoints5,Painpoints6,Ananya,Rahul,Mehta,Anita,Rating,livequestionshelp};
+export { User,Time, Clock,Language,BarChart,Checkmark,UsDollarCircled,Alarm, ArrowRightHalf,InfoIcon,Arrowright,google,LandingPageIcon,Livequestionlanding,Calenderlanding, logo ,logowhite, Hero, CalenderIcon, PageIcon, SearchIcon, GroupIcon,MessageIcon,NotificationIcon,RattingIcon, WalletIcon, Upwork, Fiverr, PeopleperHour, Teacheron,Whatsapp,Phonecall,Facebook,Snapchat,IG,Discord,Person,Livequestion,Arrow,Clickhere,Recorder,MailIcon,Assignmentsupport,OneonOne,Painpoints1,Painpoints2,Painpoints3,Painpoints4,Painpoints5,Painpoints6,Ananya,Rahul,Mehta,Anita,Rating,livequestionshelp};
 

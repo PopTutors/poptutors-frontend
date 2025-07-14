@@ -186,15 +186,15 @@ export default function Dashboard() {
             </div>
 
             {/* Loading and Error State */}
-            {isLoading ? (
+            {false ? (
               <p className="font-poppinsregular">Loading assignments...</p>
-            ) : isError ? (
+            ) : false ? (
               <p className="text-red-500 font-poppinsregular">
                 Failed to load assignments.
               </p>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4">
-                {data?.data?.map((assignment: any) => (
+              <div className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4">
+                {courseCards?.map((assignment: any) => (
                   <CourseCard
                     key={assignment._id}
                     title={assignment.title}

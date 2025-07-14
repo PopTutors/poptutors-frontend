@@ -68,10 +68,10 @@ export const paths = {
         login: {
             path: "/login",
             getHref: (redirectTo?: string | null | undefined) => {
-                if (!redirectTo || redirectTo === "/auth/login") {
-                    return "/auth/login";
+                if (!redirectTo || redirectTo === "/login") {
+                    return "/login";
                 }
-                return `/auth/login?redirectTo=${encodeURIComponent(redirectTo)}`;
+                return `/login?redirectTo=${encodeURIComponent(redirectTo)}`;
             },
         },
     },
