@@ -13,6 +13,7 @@ import Profile from "./profile/Profile";
 import ProtectedRoute from "./protectedRoute";
 import SessionCard from "./sessiondetails/SessionDetails";
 import LiveQuestion from "./liveQuestion/LiveQuestion";
+import SessionPage from "./pages/session/Session";
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -53,6 +54,10 @@ export const createAppRouter = createBrowserRouter([
           {
             path: paths.student.livequestion.path,
             element: <LiveQuestion />,
+          },
+          {
+            path: paths.student.session.path,
+            element: <SessionPage />,
           },
           {
             path: "*",
