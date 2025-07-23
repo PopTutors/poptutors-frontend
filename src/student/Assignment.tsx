@@ -7,6 +7,7 @@ import NotificationList from "../components/ui/cards/notificationList";
 import TransactionTable from "../components/ui/cards/transactionTable";
 import { MessageIcon, NotificationIcon, RattingIcon } from "../assets";
 import FilterBar from "./components/Filterbar";
+import type { TransactionType } from "../types/course";
 
 const sampleNotifications = [
   {
@@ -33,16 +34,20 @@ const sampleNotifications = [
     course: "2024 ui/ux design with figma",
     time: "6 mins ago",
     icon: NotificationIcon,
-    type: "notification",
+    type: "message",
   },
 ];
 
-const transactions = [
-  { date: "21 Sep, 2021 at 2:14 AM", amount: "$20", status: "Pending" },
-  { date: "21 Sep, 2021 at 2:14 AM", amount: "$20", status: "Pending" },
-  { date: "21 Sep, 2021 at 2:14 AM", amount: "$20", status: "Completed" },
-  { date: "21 Sep, 2021 at 2:14 AM", amount: "$20", status: "Completed" },
+const transaction: TransactionType[] = [
+  { id: 't1', date: '21 Dec, 2021', amount: '534', status: 'Pending' },
+  { id: 't2', date: '21 Sep, 2021', amount: '99', status: 'Pending' },
+  { id: 't3', date: '21 Sep, 2021', amount: '202', status: 'Completed' },
+  { id: 't4', date: '21 Sep, 2021', amount: '20', status: 'Pending' },
+  { id: 't5', date: '21 Sep, 2021', amount: '53', status: 'Pending' },
+  { id: 't6', date: '21 Sep, 2021', amount: '888', status: 'Pending' },
+  { id: 't7', date: '21 Sep, 2021', amount: '20', status: 'Pending' },
 ];
+
 // Assignment component for dashboard
 export default function Assignment() {
   // State for selected date in calendar
@@ -95,7 +100,7 @@ export default function Assignment() {
   return (
     <div>
       {/* Top summary bar */}
-      <div className="flex wrap justify-between gap-2 my-4 ">
+      <div className="flex wrap justify-between gap-2 my-2 ">
         <div className="text-[21px] text-black mb-4 font-semibold">
           My Assignment
         </div>
@@ -112,53 +117,47 @@ export default function Assignment() {
 
       <div>
       </div>
+      <FilterTabs
+        tabs={["ALL", "Requested", "In Progress", "Completed", "Rejected"]}
+        defaultTab="Assignments"
+        onTabChange={handleTabChange}
+      />
 
       {/* Main grid layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 ">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-6  mt-3">
         {/* Left Column - Filter tabs and content */}
 
-        <div className="lg:col-span-3 ">
-          <FilterTabs
-            tabs={["Requested", "Completed", "On-Going"]}
-            defaultTab="Assignments"
-            onTabChange={handleTabChange}
-          />
+        <div className="lg:col-span-4">
 
-          <div className="bg-white h-[706px] overflow-y-scroll  py-2 mt-8 mb-2">
+
+          <div className="bg-white h-[706px] overflow-y-scroll  py-2 mb-2">
             <div className="max-w-4xl px-6 mx-auto">
               <FilterBar />
 
               <AssignmentCard
-                title="New swift assignment - iOS Programming"
-                status="Milestone 1"
-                tags={['Python', 'Computer Science', 'Coding', 'React Native', 'Application Developments']}
-                price={50}
-                deadline="30th Aug, 2025"
-              />
-              <AssignmentCard
-                title="New swift assignment - iOS Programming"
-                status="Milestone 1"
-                tags={['Python', 'Computer Science', 'Coding', 'React Native', 'Application Developments']}
-                price={50}
-                deadline="30th Aug, 2025"
-              />
-
-              <AssignmentCard
-                title="New swift assignment - iOS Programming"
-                status="Under Review"
-                tags={['Python', 'Computer Science', 'Coding', 'React Native', 'Application Developments']}
-                price={50}
-                deadline="30th Aug, 2025"
-              />
-
-              <AssignmentCard
-                title="New swift assignment - iOS Programming"
+                id={61436}
+                title="New swift assignment – iOS Programming"
+                subtitle="Subject Name Lorem ipsum dolor sit"
+                amount={150}
+                deadline="30 Aug 2025"
+                tags={['Python', 'Computer Science', 'Coding', 'Application Development', 'React Native']}
                 status="Completed"
-                tags={['Python', 'Computer Science', 'Coding', 'React Native', 'Application Developments']}
-                price={50}
-                deadline="30th Aug, 2025"
+                statusLabel="Completed • Under Review"
               />
 
+              <AssignmentCard
+                id={61436}
+                title="Lorem ipsum dolor sit amet consectetur."
+                subtitle="Subject Name Lorem ipsum dolor sit"
+                amount={150}
+                deadline="30 Aug 2025"
+                tags={['Python', 'Computer Science', 'Coding', 'Application Development', 'React Native']}
+                status="Inprogress"
+                statusLabel="Inprogress"
+                milestone="Milestone 1"
+                rating={4.8}
+                ratingCount={451444}
+              />
               <div className="flex font-poppinssemibold text-[13px] justify-center text-primary">
                 <Button variant="ghost">See More</Button>
               </div>
@@ -171,15 +170,10 @@ export default function Assignment() {
         </div>
 
         {/* Right Column - Notifications and Transactions */}
-        <div className="lg:col-span-2 mt-16">
+        <div className="lg:col-span-2 ">
           <NotificationList notifications={sampleNotifications} />
           <div className="mt-6">
-            <TransactionTable
-              transactions={transactions}
-              onPayNow={(index) =>
-                alert(`Pay now clicked for transaction ${index + 1}`)
-              }
-            />
+            <TransactionTable transactions={transaction} />
           </div>
         </div>
       </div>

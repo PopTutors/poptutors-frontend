@@ -10,10 +10,10 @@ import Student from "./student/Student";
 import NotFound from "./landing/components/Notfound";
 import Assignment from "./student/Assignment";
 import Profile from "./profile/Profile";
-import ProtectedRoute from "./protectedRoute";
 import SessionCard from "./sessiondetails/SessionDetails";
 import LiveQuestion from "./liveQuestion/LiveQuestion";
 import SessionPage from "./pages/session/Session";
+import SubmitAssignmentPage from "./student/components/SubmitAssignment";
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -46,6 +46,10 @@ export const createAppRouter = createBrowserRouter([
           {
             path: paths.student.assignment.path,
             element: <Assignment />,
+          },
+          {
+            path: paths.student.assignmentSubmission.path,
+            element: <SubmitAssignmentPage />,
           },
           {
             path: paths.student.assignmentdetails.path,

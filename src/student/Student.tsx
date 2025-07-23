@@ -4,11 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import calendarIcon from "../assets/calendar.svg"; // or use public folder
 import DropdownCard from "../components/ui/dropdownCard";
 import FilterTabs from "../components/ui/filterTabs";
-import CourseCard from "../components/ui/cards/courseCard";
 import NotificationList from "../components/ui/cards/notificationList";
 import TransactionTable from "../components/ui/cards/transactionTable";
 import { useAssignments } from "../features/assignment/api/getAssignment";
 import { MessageIcon, NotificationIcon, RattingIcon } from "../assets";
+import Tabs from "./components/Tabs";
+import CourseCard from "./components/CourseCard";
+import type { CourseType, TransactionType } from "../types/course";
+import TabHeader from "./components/Tabs";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown";
+import { ChevronDown } from "lucide-react";
 
 // courseCardData.ts
 
@@ -86,22 +91,126 @@ const sampleNotifications = [
     user: "Kevin",
     message: "sent you message",
     action: "What is ux",
-    course: "2024 ui/ux",
-    time: "19 mins ago",
+    course: "2024 ui/ux design with figma",
+    time: "6 mins ago",
     icon: NotificationIcon,
     type: "message",
   },
+
 ];
 
-const transactions = [
-  { date: "21 Sep, 2021 at 2:14 AM", amount: "$20", status: "Pending" },
-  { date: "21 Sep, 2021 at 2:14 AM", amount: "$20", status: "Pending" },
-  { date: "21 Sep, 2021 at 2:14 AM", amount: "$20", status: "Completed" },
-  { date: "21 Sep, 2021 at 2:14 AM", amount: "$20", status: "Completed" },
+
+
+const courses: CourseType[] = [
+  {
+    id: '1',
+    title: 'Social Media Course Lorem Ipsum Dolor',
+    date: '25/10/2024',
+    subtitle: 'Lorem ipsum dolor sit amet consectetur',
+    tags: [
+      { label: 'Live Question', color: 'text-red-500' },
+      { label: 'Milestone 1', color: 'text-green-600' },
+    ],
+    price: '$50/hr',
+    duration: '2 hours',
+  },
+  {
+    id: '1',
+    title: 'Social Media Course Lorem Ipsum Dolor',
+    date: '25/10/2024',
+    subtitle: 'Lorem ipsum dolor sit amet consectetur',
+    tags: [
+      { label: 'Live Question', color: 'text-red-500' },
+      { label: 'Milestone 1', color: 'text-green-600' },
+    ],
+    price: '$50/hr',
+    duration: '2 hours',
+  },
+  {
+    id: '1',
+    title: 'Social Media Course Lorem Ipsum Dolor',
+    date: '25/10/2024',
+    subtitle: 'Lorem ipsum dolor sit amet consectetur',
+    tags: [
+      { label: 'Live Question', color: 'text-red-500' },
+      { label: 'Milestone 1', color: 'text-green-600' },
+    ],
+    price: '$50/hr',
+    duration: '2 hours',
+  },
+  {
+    id: '1',
+    title: 'Social Media Course Lorem Ipsum Dolor',
+    date: '25/10/2024',
+    subtitle: 'Lorem ipsum dolor sit amet consectetur',
+    tags: [
+      { label: 'Live Question', color: 'text-red-500' },
+      { label: 'Milestone 1', color: 'text-green-600' },
+    ],
+    price: '$50/hr',
+    duration: '2 hours',
+  },
+  {
+    id: '1',
+    title: 'Social Media Course Lorem Ipsum Dolor',
+    date: '25/10/2024',
+    subtitle: 'Lorem ipsum dolor sit amet consectetur',
+    tags: [
+      { label: 'Live Question', color: 'text-red-500' },
+      { label: 'Milestone 1', color: 'text-green-600' },
+    ],
+    price: '$50/hr',
+    duration: '2 hours',
+  },
+  {
+    id: '1',
+    title: 'Social Media Course Lorem Ipsum Dolor',
+    date: '25/10/2024',
+    subtitle: 'Lorem ipsum dolor sit amet consectetur',
+    tags: [
+      { label: 'Live Question', color: 'text-red-500' },
+      { label: 'Milestone 1', color: 'text-green-600' },
+    ],
+    price: '$50/hr',
+    duration: '2 hours',
+  },
+  {
+    id: '1',
+    title: 'Social Media Course Lorem Ipsum Dolor',
+    date: '25/10/2024',
+    subtitle: 'Lorem ipsum dolor sit amet consectetur',
+    tags: [
+      { label: 'Live Question', color: 'text-red-500' },
+      { label: 'Milestone 1', color: 'text-green-600' },
+    ],
+    price: '$50/hr',
+    duration: '2 hours',
+  },
+  {
+    id: '1',
+    title: 'Social Media Course Lorem Ipsum Dolor',
+    date: '25/10/2024',
+    subtitle: 'Lorem ipsum dolor sit amet consectetur',
+    tags: [
+      { label: 'Live Question', color: 'text-red-500' },
+      { label: 'Milestone 1', color: 'text-green-600' },
+    ],
+    price: '$50/hr',
+    duration: '2 hours',
+  },
+];
+
+const transaction: TransactionType[] = [
+  { id: 't1', date: '21 Dec, 2021', amount: '534', status: 'Pending' },
+  { id: 't2', date: '21 Sep, 2021', amount: '99', status: 'Pending' },
+  { id: 't3', date: '21 Sep, 2021', amount: '202', status: 'Completed' },
+  { id: 't4', date: '21 Sep, 2021', amount: '20', status: 'Pending' },
+  { id: 't5', date: '21 Sep, 2021', amount: '53', status: 'Pending' },
+  { id: 't6', date: '21 Sep, 2021', amount: '888', status: 'Pending' },
+  { id: 't7', date: '21 Sep, 2021', amount: '20', status: 'Pending' },
 ];
 
 export default function Dashboard() {
-  const { data, isLoading, isError } = useAssignments(); // Custom hook
   const [selectedOption, setSelectedOption] = useState("Assignments");
   const [openDropdown, setOpenDropdown] = useState<null | "request">(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -140,88 +249,59 @@ export default function Dashboard() {
   return (
     <div>
       <div className="flex wrap justify-between gap-2 my-4">
-        <div
-          style={{ fontWeight: "900" }}
-          className="text-[13px] text-[#334d6e] mb-4 font-poppinsmedium"
-        >
-          3 Recent Assignments, 2 Live Questions & 1 Paid Session are in
-          progress
+        <div>
+          <span className="text-[12px] font-poppinsregular font-light text-gray-500">
+            Welcome back,
+          </span>
+          <div className="text-[16px]  mb-4 font-poppinssemibold">
+            Shubham Gone
+          </div>
         </div>
-        <div className="w-full max-w-xs flex justify-end">
-          <DropdownCard
-            label="Request New"
-            title={selectedOption}
-            iconType="arrow"
-            menuItems={["Assignment", "Project", "Quiz"]}
-            onSelect={handleSelect}
-            isOpen={openDropdown === "request"}
-            onToggle={() =>
-              setOpenDropdown((prev) => (prev === "request" ? null : "request"))
-            }
-            dropdownRef={dropdownRef}
-          />
+        <div className="w-[280px]">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="w-full text-left bg-[#007A99] border border-[3px] border-white text-white p-3 rounded-xl shadow-md flex justify-between items-center focus:outline-none">
+              <div>
+                <p className=" font-poppinssemibold">Request Now</p>
+                <p className="text-[11px] text-white/80 font-poppinsregular">Select your request type</p>
+              </div>
+              <ChevronDown className="w-5 h-5 text-white font-bold" />
+            </button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent className="w-full mt-2 rounded-xl border shadow-md bg-white">
+            <DropdownMenuItem onSelect={(type) => console.log('Selected request type:', type)}>
+              Request 1
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={(type) => console.log('Selected request type:', type)}>
+               Request 2
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={(type) => console.log('Selected request type:', type)}>
+               Request 3
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-7 gap-6 ">
         {/* Left Column */}
-        <div className="lg:col-span-3">
-          <FilterTabs
-            tabs={["Assignments", "Sessions", "Live Question"]}
-            defaultTab="Assignments"
-            onTabChange={handleTabChange}
-          />
-
-          <div className="p-5 mt-8  bg-white">
-            <div className="flex items-center gap-2 mb-4">
-              <h2 className="text-lg font-poppinsregular text-[#1f2442]">
-                23 December, Sunday
-              </h2>
-              <img
-                src={calendarIcon}
-                alt="Calendar Icon"
-                width={20}
-                height={20}
-              />
+        <div className="lg:col-span-5 ">
+          <TabHeader />
+          <div className="bg-white rounded-b-lg p-4  overflow-y-scroll h-[830px] scrollbar-thin scrollbar-track-gray-50 scrollbar-thumb-gray-300">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
+              {courses.map((course) => (
+                <CourseCard key={course.id} course={course} />
+              ))}
             </div>
-
-            {/* Loading and Error State */}
-            {false ? (
-              <p className="font-poppinsregular">Loading assignments...</p>
-            ) : false ? (
-              <p className="text-red-500 font-poppinsregular">
-                Failed to load assignments.
-              </p>
-            ) : (
-              <div className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4">
-                {courseCards?.map((assignment: any) => (
-                  <CourseCard
-                    key={assignment._id}
-                    title={assignment.title}
-                    topic={[assignment.subject, assignment.course]}
-                    date={formatDate(assignment.createdAt)}
-                    price={`$${assignment.studentPrice ?? "N/A"}`}
-                    progress={0}
-                    label="Assignments"
-                    labelColor="#019ACB"
-                    labelBackground="#E6F5F4"
-                  />
-                ))}
-              </div>
-            )}
           </div>
         </div>
 
         {/* Right Column */}
-        <div className="lg:col-span-2 mt-16">
+        <div className="lg:col-span-2">
           <NotificationList notifications={sampleNotifications} />
           <div className="mt-6">
-            <TransactionTable
-              transactions={transactions}
-              onPayNow={(index) =>
-                alert(`Pay now clicked for transaction ${index + 1}`)
-              }
-            />
+            <TransactionTable transactions={transaction} />
           </div>
         </div>
       </div>

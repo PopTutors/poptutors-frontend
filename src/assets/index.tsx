@@ -54,8 +54,9 @@ import Language from "../assets/language.png"
 import BarChart from "../assets/bar-chart.png"
 import User from "../assets/Users.png"
 import Clock from "../assets/Clock.png"
+import SelectDwn from "../assets/selectdown.png"
 
 
 
-export { User,Time, Clock,Language,BarChart,Checkmark,UsDollarCircled,Alarm, ArrowRightHalf,InfoIcon,Arrowright,google,LandingPageIcon,Livequestionlanding,Calenderlanding, logo ,logowhite, Hero, CalenderIcon, PageIcon, SearchIcon, GroupIcon,MessageIcon,NotificationIcon,RattingIcon, WalletIcon, Upwork, Fiverr, PeopleperHour, Teacheron,Whatsapp,Phonecall,Facebook,Snapchat,IG,Discord,Person,Livequestion,Arrow,Clickhere,Recorder,MailIcon,Assignmentsupport,OneonOne,Painpoints1,Painpoints2,Painpoints3,Painpoints4,Painpoints5,Painpoints6,Ananya,Rahul,Mehta,Anita,Rating,livequestionshelp};
+export {SelectDwn, User,Time, Clock,Language,BarChart,Checkmark,UsDollarCircled,Alarm, ArrowRightHalf,InfoIcon,Arrowright,google,LandingPageIcon,Livequestionlanding,Calenderlanding, logo ,logowhite, Hero, CalenderIcon, PageIcon, SearchIcon, GroupIcon,MessageIcon,NotificationIcon,RattingIcon, WalletIcon, Upwork, Fiverr, PeopleperHour, Teacheron,Whatsapp,Phonecall,Facebook,Snapchat,IG,Discord,Person,Livequestion,Arrow,Clickhere,Recorder,MailIcon,Assignmentsupport,OneonOne,Painpoints1,Painpoints2,Painpoints3,Painpoints4,Painpoints5,Painpoints6,Ananya,Rahul,Mehta,Anita,Rating,livequestionshelp};
 

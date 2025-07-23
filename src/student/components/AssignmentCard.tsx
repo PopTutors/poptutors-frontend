@@ -1,67 +1,86 @@
-import React from "react";
-import { FaCalendarAlt, FaRegCalendar } from "react-icons/fa";
-import { Button } from "../../components/ui/button";
+import React from 'react';
+import { Star } from 'lucide-react';
 
-type AssignmentCardProps = {
+type AssignmentStatus = 'Completed' | 'Inprogress';
+
+interface AssignmentCardProps {
+  id: number;
   title: string;
-  status: string;
-  tags: string[];
-  price: number;
+  subtitle: string;
+  amount: number;
   deadline: string;
-};
+  tags: string[];
+  status: AssignmentStatus;
+  statusLabel: string;
+  rating?: number;
+  ratingCount?: number;
+  milestone?: string;
+}
 
 const AssignmentCard: React.FC<AssignmentCardProps> = ({
+  id,
   title,
-  status,
-  tags,
-  price,
+  subtitle,
+  amount,
   deadline,
+  tags,
+  status,
+  statusLabel,
+  rating,
+  ratingCount,
+  milestone,
 }) => {
-  const statusStyle = {
-    "Milestone 1": "bg-[#d3ffd5] text-[#2fbe4d] ",
-    "Under Review": "bg-[#ffedc5] text-[#c5911e]",
-    Completed: "bg-[#D4EDFF] text-[#2F86C3]",
-  };
+  const isCompleted = status === 'Completed';
 
   return (
-    <div className="flex flex-col mt-6  md:flex-row justify-between items-start md:items-center bg-white rounded-lg shadow-lg border border-gray-100 p-[14px]  mb-4">
-      <div className="flex-1 w-full md:w-auto">
-        <h2 className="font-poppinsmedium text-lg text-gray-800">{title}</h2>
-        <span
-          className={`inline-block mt-2 px-3 py-1 rounded-sm text-[12px] font-poppinsregular ${statusStyle[status]}`}
-        >
-          {status}
-        </span>
-
-        <div className="flex flex-wrap gap-2 mt-4">
-          {tags.map((tag) => (
-            <span
-              key={tag}
-              className="text-[12px] bg-[#f3fcff] text-primary px-2 py-1 font-poppinsregular rounded-md"
-            >
-              {tag}
-            </span>
-          ))}
+    <div className="border rounded-xl shadow-sm  mb-4 bg-white">
+      <div className="flex justify-between p-4 items-start mb-2">
+        <div>
+          <h3 className="font-poppinsbold text-[16px] ">
+            #{id} {title}
+          </h3>
+          <p className="text-[10px] text-[#707070] font-poppinsregular">{subtitle}</p>
+        </div>
+        <div className="font-poppinsmedium text-[12px] text-right">
+          <p className={` ${isCompleted ? 'text-green-600' : 'text-blue-600'}`}>
+            {statusLabel}
+          </p>
+          {!isCompleted && milestone && (
+            <p className="text-blue-400 text-xs">{milestone}</p>
+          )}
+        </div>
+      </div>
+      <div className="bg-[#e6f9ff] p-3 mx-4 my-3 rounded-md flex items-center justify-between">
+        <div>
+          <p className="text-primary font-poppinssemibold">{amount}</p>
+          <p className="text-[10px] text-gray-500 font-poppinsregular"> Deadline: {deadline}</p>
+        </div>
+        <div className="flex items-center space-x-2">
+          
+          <button className="border border-primary text-primary px-4 py-1 rounded-full text-[14px] font-poppinsmedium hover:bg-primary hover:text-white">
+            View Assignment
+          </button>
         </div>
       </div>
 
-      <div className="bg-[#e6f9ff] rounded-lg p-4 flex flex-col items-center justify-center mt-4 md:mt-0 md:ml-4 w-full md:w-[134px]">
-        <div className="text-[#019ACB] font-popbold text-[16px] bg-white rounded-md  px-2 py-1">{price} $</div>
-
-        
-
-        <div className="flex items-center  gap-1 text-[#0b7db6] font-poppinsregular text-[12px] mt-3">
-          <span className="text-[15px]"> <FaRegCalendar /> </span> Deadline
+      <div className="flex items-center justify-between flex-wrap gap-2 mt-2 bg-[#EDEDED] p-2 rounded-b-md">
+        <div className='flex items-center gap-2 text-[10px] font-poppinsregular text-gray-600'>
+        {tags.map((tag, index) => (
+          <span
+            key={index}
+            className="bg-white  text-[10px] font-poppinsregular px-[6px] py-1 rounded-md"
+          >
+            {tag}
+          </span>
+        ))}
         </div>
-        <div>
-          <div className="flex items-center gap-1 text-[#019ACB] font-poppinsregular text-[12px] ">
-           {deadline}
-          </div>
+        {!isCompleted && rating && ratingCount ? (
+        <div className="flex items-center  text-sm  text-gray-600">
+          <Star size={16} className="text-orange-400 fill-orange-400 mr-1" />
+          <span className=" font-poppinssemibold text-[14px] text-[#1D2026]">{rating.toFixed(1)}</span>
+          <span className=" font-poppinsregular text-[10px]">({ratingCount.toLocaleString()} Rating)</span>
         </div>
-
-        <Button variant={"outline"} className="mt-4 border-[#019ACB] text-[#019ACB] bg-white flex items-center px-[10px] hover:bg-white  py-[7px] text-[10px] font-epilogue">
-          View Assignment
-        </Button>
+      ) : null}
       </div>
     </div>
   );

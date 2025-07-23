@@ -40,15 +40,15 @@ const NotificationList: React.FC<NotificationListProps> = ({
     onFilterChange?.(option);
   };
   return (
-    <div className=" bg-white shadow-sm w-full">
-      <div className="flex justify-between items-center mb-4 border-b border-gray-200">
-        <h2 className="text-lg p-4 text-gray-900 font-poppinsmedium">
+    <div className=" bg-white shadow-sm w-full p-4 rounded-lg">
+      <div className="flex justify-between items-center mb-4 border-b pb-3 border-gray-200">
+        <h2 className=" text-[16px] font-poppinssemibold">
           {title}
         </h2>
-        <DropdownMenu open={open} onOpenChange={setOpen}>
+        <DropdownMenu  open={open} onOpenChange={setOpen}>
           <DropdownMenuTrigger asChild>
             <div
-              className="flex p-4 items-center gap-1 font-poppinsregular text-gray-600"
+              className="flex items-center me-3 gap-1 font-poppinsregular text-[12px] rounded-lg p-[2px] bg-gray-100 text-gray-600 hover:none"
               data-state={open ? "open" : "closed"}
             >
               <Button size="sm" variant="ghost">
@@ -66,7 +66,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
               <DropdownMenuItem
                 key={option}
                 onSelect={() => handleSelect(option)}
-                className="cursor-pointer font-poppinsregular text-gray-600"
+                className="cursor-pointer font-poppinsregular  text-[12px] text-gray-600"
               >
                 {option}
               </DropdownMenuItem>
@@ -76,12 +76,12 @@ const NotificationList: React.FC<NotificationListProps> = ({
       </div>
 
       {notifications.map((item, idx) => (
-        <div key={idx} className="flex p-4 items-start  space-x-3 py-3 ">
-          <div>
+        <div key={idx} className="flex items-start space-x-3 py-2">
+          <div className="w-[52px] h-[32px]">
             <img src={item?.icon} alt="" />
           </div>
           <div className="text-sm text-gray-900">
-            <p>
+            <p className="font-poppinsmedium">
               <strong>{item.user}</strong> {item.message}
               {item.action && ` “${item.action}”`} in{" "}
               <span className="text-gray-600 font-poppinsregular">

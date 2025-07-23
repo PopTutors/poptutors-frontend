@@ -10,7 +10,7 @@ const SearchInput: React.FC = () => {
       <input
         type="text"
         placeholder="Search"
-        className="ml-2 bg-transparent outline-none w-full text-sm text-gray-700 placeholder-gray-400"
+        className="ml-2 bg-transparent font-poppinsregular outline-none w-full text-sm text-gray-700 placeholder-gray-400"
       />
     </div>
   );

@@ -1,87 +1,46 @@
-import React from "react";
-import clsx from "clsx";
-import { Button } from "../button";
+import React from 'react';
+import type { TransactionType } from '../../../types/course';
+import { Button } from '../button';
 
-interface Transaction {
-  date: string;
-  amount: string;
-  status: string;
-}
-
-interface TransactionTableProps {
-  transactions: Transaction[];
-  onPayNow?: (index: number) => void;
-  className?: string;
-}
-
-const TransactionTable: React.FC<TransactionTableProps> = ({
-  transactions,
-  onPayNow = () => {},
-  className = "",
-}) => {
+const TransactionTable: React.FC<{ transactions: TransactionType[] }> = ({ transactions }) => {
   return (
-    <div
-      className={clsx(
-        "w-full bg-white shadow-sm",
-        className
-      )}
-    >
-      {/* Table Header */}
-      <div className="p-4 border-b">
-        <h2 className="text-base font-poppinsmedium text-gray-800">
-          Recent Transactions
-        </h2>
-      </div>
-
-      {/* Table Body */}
+    <div className="bg-white rounded-xl shadow ">
+      <h2 className="text-[16px] font-poppinssemibold p-4">Recent Transactions</h2>
       <div className="overflow-x-auto">
-        <table className="w-full text-sm text-left min-w-[500px]">
-          <thead className="bg-[#f5f7fa] text-gray-600 uppercase text-xs">
-            <tr>
-              <th className="ps-4 py-3 whitespace-nowrap">Date</th>
-              <th className=" py-3 whitespace-nowrap">Amount</th>
-              <th className=" py-3 whitespace-nowrap">Status</th>
-              <th className=" py-3 whitespace-nowrap"></th>
+        <table className="min-w-full text-sm">
+          <thead>
+            <tr className="text-left bg-[#f5f7fa] font-poppinsmedium text-[12px] text-gray-500 border-b">
+              <th className="py-2 px-2">DATE</th>
+              <th className="py-2 px-2">AMT</th>
+              <th className="py-2 px-2">STATUS</th>
+              <th className="py-2 px-2">ACTION</th>
             </tr>
           </thead>
           <tbody>
-            {transactions.map((txn, index) => (
+            {transactions.map((txn, idx) => (
               <tr
-                key={index}
-                className="border-t font-poppinsregular hover:bg-gray-50 transition-colors"
+                key={txn.id}
+                className={`border-b hover:bg-[#e6f9ff]`}
               >
-                <td className="ps-4 py-3 text-gray-700 whitespace-nowrap">
-                  {txn.date}
+                <td className="py-2 px-2 text-[#1d2026] font-poppinsmedium text-[12px] whitespace-nowrap">{txn.date}</td>
+                <td className="py-2 px-2 font-poppinsemibold text-[14px] text-primary font-bold">${txn.amount}</td>
+                <td className="py-2 px-2 font-poppinsmedium text-[12px]">
+                  <span
+                    className={`font-medium ${
+                      txn.status === 'Completed' ? 'text-green-600' : 'text-[#d8a121]'
+                    }`}
+                  >
+                    {txn.status}
+                  </span>
                 </td>
-                <td className=" py-3 text-gray-700 whitespace-nowrap">
-                  {txn.amount}
-                </td>
-                <td
-                  className={clsx(
-                    "px-0  py-3 font-medium whitespace-nowrap",
-                    txn.status === "Completed"
-                      ? "text-green-600"
-                      : "text-orange-500"
-                  )}
-                >
-                  {txn.status}
-                </td>
-                <td className=" py-3 whitespace-nowrap">
-                  {txn.status === "Pending" && (
-                    // <button
-                    //   onClick={() => onPayNow(index)}
-                    //   className="text-sm border border-accent text-blue-500 px-2 py-1 rounded-full hover:bg-blue-50 transition-all"
-                    // >
-                    //   Pay Now
-                    // </button>
-                    <Button
-                     className="mt-0 m-0 font-epilogue font-semibold text-[12px] "
-                      onClick={() => onPayNow(index)}
+                <td className="py-2 px-2">
+                  <Button
+                     className="mt-0 m-0  font-poppinsmedium text-[12px] "
+                      // onClick={() => onPayNow(index)}
                       variant="outline_rounded"
                     >
                       Pay Now
                     </Button>
-                  )}
                 </td>
               </tr>
             ))}

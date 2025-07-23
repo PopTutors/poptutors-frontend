@@ -62,6 +62,7 @@ const config = {
   },
   plugins: [
     require('tailwindcss-animate'), // If you use it, ensure it's installed
+    require('tailwind-scrollbar'), // If you use it, ensure it's installed
   ],
 };
 
