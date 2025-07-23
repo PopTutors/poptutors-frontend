@@ -69,7 +69,7 @@
 :root {
   --radius: 0.625rem;
 
-  --color-blue-50: #E6F9FF;
+  --color-blue-50: #e6f9ff;
   --color-blue-100: #b0e0ef;
   --color-blue-200: #8ad1e7;
   --color-blue-300: #55bbdc;
@@ -88,6 +88,7 @@
   --secondary-foreground: #ffffff;
   --muted: #f7f7f7;
   --muted-foreground: #999999;
+  --muted-dark: #636363;
   --accent: var(--color-blue-400);
   --accent-foreground: #ffffff;
   --accent-background: var(--color-blue-50);
@@ -112,9 +113,9 @@
   --sidebar-accent-foreground: #1f2937;
   --sidebar-border: #e5e7eb;
   --sidebar-ring: #3b82f6;
-  --font-poppins: 'Poppins', sans-serif;
-  --font-sans: 'Inter', sans-serif;
-  --font-mono: 'Fira Code', monospace;
+  --font-poppins: "Poppins", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "Fira Code", monospace;
 }
 
 .dark {
@@ -156,6 +157,4 @@ body {
   * {
     @apply border-border;
   }
-
-  
 }

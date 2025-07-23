@@ -20,6 +20,10 @@ export const paths = {
     assignment: {
       path: "/student/assignment",
       getHref: () => "/student/assignment",
+      newAssignment: {
+        path: "/student/assignment/new",
+        getHref: () => "/student/assignment/new",
+      },
     },
     assignmentSubmission: {
       path: "/student/assignment-submission",

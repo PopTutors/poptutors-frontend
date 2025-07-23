@@ -4,10 +4,10 @@ const BookLiveHelp = () => {
   return (
     <div className="flex w-[662px] h-[97px] justify-between items-center shrink-0 bg-white rounded p-6">
       <div className="flex flex-col gap-2">
-        <h2 className="text-[22px] font-medium text-black font-['DM_Sans'] leading-tight">
+        <h2 className="text-[22px]  text-black font-poppinsregular leading-tight">
           Book Live Help
         </h2>
-        <p className="text-[14px] font-normal text-black opacity-40 font-['DM_Sans'] leading-relaxed max-w-[380px]">
+        <p className="text-[14px] font-normal text-black opacity-40  leading-relaxed max-w-[380px]">
           Fill up the form for requesting a new session to clear up your doubts.
         </p>
       </div>

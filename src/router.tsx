@@ -13,7 +13,9 @@ import Profile from "./profile/Profile";
 import SessionCard from "./sessiondetails/SessionDetails";
 import LiveQuestion from "./liveQuestion/LiveQuestion";
 import SessionPage from "./pages/session/Session";
-import SubmitAssignmentPage from "./student/components/SubmitAssignment";
+// import SubmitAssignmentPage from "./student/components/SubmitAssignment";
+import BookExpertPage from "./pages/live-question/book-expert";
+import NewAssignmentPage from "./pages/assignment/new-assignment";
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -44,12 +46,20 @@ export const createAppRouter = createBrowserRouter([
             element: <Student />,
           },
           {
+            path: paths.student.livequestion.path,
+            element: <BookExpertPage />,
+          },
+          {
             path: paths.student.assignment.path,
             element: <Assignment />,
           },
+          // {
+          //   path: paths.student.assignmentSubmission.path,
+          //   element: <SubmitAssignmentPage />,
+          // },
           {
-            path: paths.student.assignmentSubmission.path,
-            element: <SubmitAssignmentPage />,
+            path: paths.student.assignment.newAssignment.path,
+            element: <NewAssignmentPage />,
           },
           {
             path: paths.student.assignmentdetails.path,
@@ -57,7 +67,7 @@ export const createAppRouter = createBrowserRouter([
           },
           {
             path: paths.student.livequestion.path,
-            element: <LiveQuestion />,
+            element: <BookExpertPage />,
           },
           {
             path: paths.student.session.path,
