@@ -1,19 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 
 // Images (adjust path according to where they're stored)
-import calendarIcon from "../assets/calendar.svg"; // or use public folder
-import DropdownCard from "../components/ui/dropdownCard";
-import FilterTabs from "../components/ui/filterTabs";
 import NotificationList from "../components/ui/cards/notificationList";
 import TransactionTable from "../components/ui/cards/transactionTable";
-import { useAssignments } from "../features/assignment/api/getAssignment";
 import { MessageIcon, NotificationIcon, RattingIcon } from "../assets";
-import Tabs from "./components/Tabs";
 import CourseCard from "./components/CourseCard";
 import type { CourseType, TransactionType } from "../types/course";
 import TabHeader from "./components/Tabs";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Pencil, Tv, Video } from "lucide-react";
 
 // courseCardData.ts
 
@@ -211,18 +206,8 @@ const transaction: TransactionType[] = [
 ];
 
 export default function Dashboard() {
-  const [selectedOption, setSelectedOption] = useState("Assignments");
-  const [openDropdown, setOpenDropdown] = useState<null | "request">(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleSelect = (item: string) => {
-    setSelectedOption(item);
-    setOpenDropdown(null);
-  };
 
-  const handleTabChange = (tab: string) => {
-    console.log("Selected Tab:", tab);
-  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -236,15 +221,14 @@ export default function Dashboard() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+const options = [
+    { label: "Assignment", icon: <Pencil className="w-4 h-4 mr-2" /> },
+    { label: "Live Sessions", icon: <Video className="w-4 h-4 mr-2" /> },
+    { label: "Live Question", icon: <Tv className="w-4 h-4 mr-2" /> }
+  ]
 
-  const formatDate = (dateStr: string) => {
-    if (!dateStr) return "";
-    const date = new Date(dateStr);
-    const day = date.toLocaleDateString("en-GB", { day: "2-digit" });
-    const month = date.toLocaleDateString("en-GB", { month: "long" });
-    const weekday = date.toLocaleDateString("en-GB", { weekday: "long" });
-    return `${day} ${month}, ${weekday}`;
-  };
+  const selected = "Live Sessions" // replace with dynamic state if needed
+  
 
   return (
     <div>
@@ -258,37 +242,42 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="w-[280px]">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="w-full text-left bg-[#007A99] border border-[3px] border-white text-white p-3 rounded-xl shadow-md flex justify-between items-center focus:outline-none">
-              <div>
-                <p className=" font-poppinssemibold">Request Now</p>
-                <p className="text-[11px] text-white/80 font-poppinsregular">Select your request type</p>
-              </div>
-              <ChevronDown className="w-5 h-5 text-white font-bold" />
-            </button>
-          </DropdownMenuTrigger>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className="w-full text-left bg-[#007A99] border-[3px] border-white text-white p-3 rounded-xl shadow-md flex justify-between items-center focus:outline-none">
+            <div>
+              <p className="font-poppinssemibold">Request Now</p>
+              <p className="text-[11px] text-white/80 font-poppinsregular">Select your request type</p>
+            </div>
+            <ChevronDown className="w-5 h-5 text-white" />
+          </button>
+        </DropdownMenuTrigger>
 
-          <DropdownMenuContent className="w-full mt-2 rounded-xl border shadow-md bg-white">
-            <DropdownMenuItem onSelect={(type) => console.log('Selected request type:', type)}>
-              Request 1
+        <DropdownMenuContent className="w-full w-[280px]  rounded-xl border shadow-md bg-white p-0 overflow-hidden">
+          {options.map(({ label, icon }) => (
+            <DropdownMenuItem
+              key={label}
+              className={`flex items-center px-4 py-3 text-[15px] font-poppinsmedium cursor-pointer ${
+                selected === label
+                  ? "bg-[#E6F6FF] text-[#007A99]"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
+              onSelect={() => console.log("Selected:", label)}
+            >
+              {icon}
+              {label}
             </DropdownMenuItem>
-            <DropdownMenuItem onSelect={(type) => console.log('Selected request type:', type)}>
-               Request 2
-            </DropdownMenuItem>
-            <DropdownMenuItem onSelect={(type) => console.log('Selected request type:', type)}>
-               Request 3
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        </div>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-7 gap-6 ">
         {/* Left Column */}
         <div className="lg:col-span-5 ">
           <TabHeader />
-          <div className="bg-white rounded-b-lg p-4  overflow-y-scroll h-[830px] scrollbar-thin scrollbar-track-gray-50 scrollbar-thumb-gray-300">
+          <div className="bg-white rounded-b-lg p-4  h-full md:overflow-y-scroll overflow-none md:h-[830px] scrollbar-thin scrollbar-track-gray-50 scrollbar-thumb-gray-300">
             <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
               {courses.map((course) => (
                 <CourseCard key={course.id} course={course} />

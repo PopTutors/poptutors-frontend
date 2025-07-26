@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import AssignmentCard from "./components/AssignmentCard";
-import AssignmentListHeader from "./components/AssignmentListHeader";
 import { Button } from "../components/ui/button";
 import FilterTabs from "../components/ui/filterTabs";
 import NotificationList from "../components/ui/cards/notificationList";
@@ -50,23 +49,12 @@ const transaction: TransactionType[] = [
 
 // Assignment component for dashboard
 export default function Assignment() {
-  // State for selected date in calendar
-  const [selectedDate, setSelectedDate] = useState("");
 
-  // State for currently selected tab (Assignments, Sessions, etc.)
-  const [selectedOption, setSelectedOption] = useState("Assignments");
 
-  // State for dropdown visibility
-  const [openDropdown, setOpenDropdown] = useState<null | "request">(null);
 
-  // Reference to dropdown element to detect outside clicks
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Handle selection from dropdown
-  const handleSelect = (item: string) => {
-    setSelectedOption(item);
-    setOpenDropdown(null);
-  };
 
   // Handle tab change from FilterTabs
   const handleTabChange = (tab: string) => {
@@ -80,7 +68,6 @@ export default function Assignment() {
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setOpenDropdown(null);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -88,20 +75,13 @@ export default function Assignment() {
   }, []);
 
   // Format a date string to "Day Month, Weekday" format
-  const formatDate = (dateStr: string) => {
-    if (!dateStr) return "";
-    const date = new Date(dateStr);
-    const day = date.toLocaleDateString("en-GB", { day: "2-digit" });
-    const month = date.toLocaleDateString("en-GB", { month: "long" });
-    const weekday = date.toLocaleDateString("en-GB", { weekday: "long" });
-    return `${day} ${month}, ${weekday}`;
-  };
+
 
   return (
     <div>
       {/* Top summary bar */}
       <div className="flex wrap justify-between gap-2 my-2 ">
-        <div className="text-[21px] text-black mb-4 font-semibold">
+        <div className="text-[22px] text-black mb-4 font-poppinssemibold">
           My Assignment
         </div>
 
@@ -111,7 +91,7 @@ export default function Assignment() {
             <p className="text-[10px] text-gray-400">Fill the form to request an Assignment</p>
           </div>
 
-          <Button className=" mt-0 py-2 px-4 font-poppinsmedium text-[16px]" variant={"outline_rounded"} onClick={() => setOpenDropdown("request")}>Request</Button>
+          <Button className=" mt-0 py-2 px-4 font-poppinsmedium text-[16px]" variant={"outline_rounded"} >Request</Button>
         </div>
       </div>
 
@@ -124,13 +104,13 @@ export default function Assignment() {
       />
 
       {/* Main grid layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-6 gap-6  mt-3">
+      <div className="grid grid-cols-1 lg:grid-cols-7 gap-4  mt-4">
         {/* Left Column - Filter tabs and content */}
 
-        <div className="lg:col-span-4">
+        <div className="lg:col-span-5">
 
 
-          <div className="bg-white h-[706px] overflow-y-scroll  py-2 mb-2">
+          <div className="bg-white md:h-[706px] h-full scrollbar-thin rounded-md  md:overflow-y-scroll overflow-none py-2 mb-2">
             <div className="max-w-4xl px-6 mx-auto">
               <FilterBar />
 
@@ -138,22 +118,56 @@ export default function Assignment() {
                 id={61436}
                 title="New swift assignment – iOS Programming"
                 subtitle="Subject Name Lorem ipsum dolor sit"
+                subjectcode="CS1013"
                 amount={150}
                 deadline="30 Aug 2025"
                 tags={['Python', 'Computer Science', 'Coding', 'Application Development', 'React Native']}
                 status="Completed"
-                statusLabel="Completed • Under Review"
+                statusLabel={["Completed", "Under Review"]}
               />
+
 
               <AssignmentCard
                 id={61436}
                 title="Lorem ipsum dolor sit amet consectetur."
                 subtitle="Subject Name Lorem ipsum dolor sit"
+                subjectcode="CS1013"
                 amount={150}
                 deadline="30 Aug 2025"
                 tags={['Python', 'Computer Science', 'Coding', 'Application Development', 'React Native']}
                 status="Inprogress"
-                statusLabel="Inprogress"
+                // statusLabel="Inprogress • Milestone 1"
+                statusLabel={["Inprogress", "Milestone 1"]}
+                milestone="Milestone 1"
+                rating={4.8}
+                ratingCount={451444}
+              />
+              <AssignmentCard
+                id={61436}
+                title="Lorem ipsum dolor sit amet consectetur."
+                subtitle="Subject Name Lorem ipsum dolor sit"
+                subjectcode="CS1013"
+                amount={150}
+                deadline="30 Aug 2025"
+                tags={['Python', 'Computer Science', 'Coding', 'Application Development', 'React Native']}
+                status="Inprogress"
+                // statusLabel="Inprogress • Milestone 1"
+                statusLabel={["Inprogress", "Milestone 1"]}
+                milestone="Milestone 1"
+                rating={4.8}
+                ratingCount={451444}
+              />
+              <AssignmentCard
+                id={61436}
+                title="Lorem ipsum dolor sit amet consectetur."
+                subtitle="Subject Name Lorem ipsum dolor sit"
+                subjectcode="CS1013"
+                amount={150}
+                deadline="30 Aug 2025"
+                tags={['Python', 'Computer Science', 'Coding', 'Application Development', 'React Native']}
+                status="Inprogress"
+                // statusLabel="Inprogress • Milestone 1"
+                statusLabel={["Inprogress", "Milestone 1"]}
                 milestone="Milestone 1"
                 rating={4.8}
                 ratingCount={451444}

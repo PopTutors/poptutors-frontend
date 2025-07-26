@@ -2,7 +2,7 @@ import type { CourseType } from "../../types/course";
 
 const CourseCard: React.FC<{ course: CourseType }> = ({ course }) => {
   return (
-    <div className="border border-gray-200 rounded-xl py-4 px-3 bg-white shadow-sm">
+    <div className="border border-gray-200 rounded-xl py-[17px] px-3 bg-white shadow-sm">
       <div className="flex justify-between items-start mb-1">
         <h3 className="text-[16px] font-semibold text-gray-900 leading-snug">
           {course.title}
@@ -26,7 +26,7 @@ const CourseCard: React.FC<{ course: CourseType }> = ({ course }) => {
   ))}
 </div>
 
-      <div className="bg-[#e6f9ff] p-3 rounded-xl flex items-center justify-between">
+      <div className="bg-[#e6f9ff] p-2 rounded-xl flex items-center justify-between">
         <div>
           <p className="text-primary font-poppinssemibold">{course.price}</p>
           <p className="text-[10px] text-gray-500 font-poppinsregular">{course.duration}</p>

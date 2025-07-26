@@ -1,61 +1,73 @@
-
-import React, { useState } from "react";
+// components/layout/Sidebar.tsx
+import React from "react";
 import SidebarTab from "../../components/ui/sidebarTab";
 import {
-    AssignmentIcon,
-    WalletIcon,
-    DashboardIcon,
-    HelpIcon,
-    LiveQuestionsIcon,
-    SessionsIcon,
-    DashboardIconActive,
-    LiveQuestionsIconActive,
-    AssignmentIconActive,
-    HelpIconActive,
-    WalletIconActive,
-    SessionsIconActive,
+  AssignmentIcon,
+  WalletIcon,
+  DashboardIcon,
+  HelpIcon,
+  LiveQuestionsIcon,
+  SessionsIcon,
+  DashboardIconActive,
+  LiveQuestionsIconActive,
+  AssignmentIconActive,
+  HelpIconActive,
+  WalletIconActive,
+  SessionsIconActive,
 } from "../../assets/sidebar-icon";
 import { paths } from "../../config/path";
 import { useLocation } from "react-router-dom";
 
-const Sidebar = () => {
-    const location = useLocation(); 
-    const [activeTab, setActiveTab] = useState("Dashboard");
-    const sidebarTabs = [
-        { label: "Dashboard", icon: DashboardIcon, iconActive: DashboardIconActive ,path: paths.student.home.getHref()},
-        { label: "Assignment", icon: AssignmentIcon, iconActive: AssignmentIconActive ,path:  paths.student.assignment.getHref()},
-        { label: "Live Question", icon: LiveQuestionsIcon, iconActive: LiveQuestionsIconActive ,path: "/live-question"},
-        {
-            label: "Sessions",
-            icon: SessionsIcon,
-            iconActive: SessionsIconActive,
-            path: "/sessions"
-        },
-        { label: "Wallet", icon: WalletIcon, iconActive: WalletIconActive ,path: "/wallet"},
-        { label: "Help & Support", icon: HelpIcon, iconActive: HelpIconActive ,path: "/help-support"},
-    ];
-    return (
-        <aside className="w-[271px] bg-white overflow-y-auto border-r shadow-md flex-none">
-            {/* Menu Items */}
-            <nav className="mt-6 px-4 space-y-2">
-                 {sidebarTabs.map((tab) => {
-                    const isActive = location.pathname === tab.path;
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 
-                    return (
-                        <SidebarTab
-                            key={tab.label}
-                            icon={tab.icon}
-                            iconActive={tab.iconActive}
-                            label={tab.label}
-                            active={isActive}
-                            redirectPath={tab.path}
-                        />
-                    );
-                })}
-            </nav>
-        </aside>
-    );
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+  const location = useLocation();
+
+  const sidebarTabs = [
+    { label: "Dashboard", icon: DashboardIcon, iconActive: DashboardIconActive, path: paths.student.home.getHref() },
+    { label: "Assignment", icon: AssignmentIcon, iconActive: AssignmentIconActive, path: paths.student.assignment.getHref() },
+    { label: "Live Question", icon: LiveQuestionsIcon, iconActive: LiveQuestionsIconActive, path: "/live-question" },
+    { label: "Sessions", icon: SessionsIcon, iconActive: SessionsIconActive, path: "/sessions" },
+    { label: "Wallet", icon: WalletIcon, iconActive: WalletIconActive, path: "/wallet" },
+    { label: "Help & Support", icon: HelpIcon, iconActive: HelpIconActive, path: "/help-support" },
+  ];
+
+  return (
+    <>
+      {/* Overlay on mobile */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black bg-opacity-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`fixed top-0 left-0 z-40 h-full bg-white w-[256px] border-r shadow-md overflow-y-auto transform transition-transform duration-300
+        ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:block`}
+      >
+        <nav className="mt-6 px-4 space-y-2">
+          {sidebarTabs.map((tab) => {
+            const isActive = location.pathname === tab.path;
+            return (
+              <SidebarTab
+                key={tab.label}
+                icon={tab.icon}
+                iconActive={tab.iconActive}
+                label={tab.label}
+                active={isActive}
+                redirectPath={tab.path}
+              />
+            );
+          })}
+        </nav>
+      </aside>
+    </>
+  );
 };
 
 export default Sidebar;
-

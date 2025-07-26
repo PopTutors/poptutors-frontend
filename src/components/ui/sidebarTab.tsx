@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiChevronRight, FiChevronDown } from 'react-icons/fi';
 
 interface SubTab {
   label: string;
@@ -29,7 +28,7 @@ const SidebarTab: React.FC<SidebarTabProps> = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClick = () => {
-    if (subTabs && subTabs.length > 0) {
+    if (subTabs?.length) {
       setIsOpen(!isOpen);
     } else {
       onClick?.();
@@ -39,32 +38,16 @@ const SidebarTab: React.FC<SidebarTabProps> = ({
   const TabContent = (
     <div
       onClick={handleClick}
-      className={`flex items-center justify-between px-3 py-3 rounded-lg cursor-pointer font-poppinsmedium transition-all
-      ${active ? 'text-[#019ACB]  ' : 'text-[#9197B3] hover:bg-gray-100'}`}
+      className={`flex items-center  px-4 py-3 rounded-md cursor-pointer transition-all
+        ${active ? 'bg-[#00A5CF] text-white' : 'text-[#9197B3] hover:bg-gray-100'}
+      `}
     >
-      <div className="flex items-center gap-3">
-        <img
-          src={active && IconActive ? IconActive : Icon}
-          alt={`${label} icon`}
-          className="w-5 h-5 transition duration-200"
-        />
-        <span
-          className={`text-[16px] transition duration-200 ${
-            active ? 'font-poppinsmedium text-[#019ACB]' : 'text-[#9197B3]'
-          }`}
-        >
-          {label}
-        </span>
-      </div>
-      {subTabs && subTabs.length > 0 ? (
-        isOpen ? (
-          <FiChevronDown className="text-gray-400" />
-        ) : (
-          <FiChevronRight className="text-gray-400" />
-        )
-      ) : (
-        <FiChevronRight className={`text-base ${active ? 'text-[#00bcd4]' : 'text-gray-400'}`} />
-      )}
+      <img
+        src={active && IconActive ? IconActive : Icon}
+        alt={`${label} icon`}
+        className="object-contain w-6  h-6 mr-3 transition duration-200"
+      />
+      <span className={`text-base  ${active ? "font-poppinsmedium":"font-poppinsregular"}`}>{label}</span>
     </div>
   );
 

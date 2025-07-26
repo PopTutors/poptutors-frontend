@@ -1,96 +1,87 @@
-import React, { useState, useRef, useEffect } from 'react';
-import SearchInput from '../ui/searchInput';
-import DropdownCard from '../ui/dropdownCard';
+import React from "react";
+import logo from "../../assets/Mentoos_logo.svg";
+import notification from "../../assets/notification.svg";
+import { User2, Menu, X } from "lucide-react";
+import SearchInput from "../ui/searchInput";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown";
+import Line from "../../assets/line.png";
 
-// Replace with actual imports if you use Webpack/Vite
-import logo from '../../assets/Mentoos_logo.png';
-import notification from '../../assets/notification.svg';
-import profile_pic from '../../assets/user_profile.png';
-import { User2 } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown';
+interface HeaderProps {
+  onSidebarToggle?: () => void;
+  isOpen?: boolean;
+  onClose?: () => void
+}
 
-const Navbar: React.FC = () => {
-  const [openDropdown, setOpenDropdown] = useState<null | 'profile'>(null);
-  const profileDropdownRef = useRef<HTMLDivElement>(null);
-
+const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen, onClose }) => {
   const handleSelect = (item: string) => {
-    console.log('Selected:', item);
+    console.log("Selected:", item);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        profileDropdownRef.current &&
-        !profileDropdownRef.current.contains(event.target as Node)
-      ) {
-        setOpenDropdown(null);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   return (
-    <div className="sticky mx-5 top-0 z-50 bg-white flex">
-      {/* Logo Group */}
-      <div className="w-[291px] flex items-center justify-center">
-        <img src={logo} alt="Logo" className="h-[60px] w-[150px] object-contain" />
+    <header className="sticky top-0 z-50 bg-white shadow-sm h-[75px] flex items-center px-4">
+      {/* Left: Logo + Menu Button (Mobile) */}
+      <div className="flex items-center  md:justify-center  gap-1 w-[220px]">
+        <button
+          onClick={onSidebarToggle}
+          className="relative w-6 h-6 flex flex-col justify-between items-center p-[3px] z-50 lg:hidden"
+        >
+          <span
+            className={`block h-0.5 w-full bg-black transform transition duration-300 ease-in-out ${isOpen ? "rotate-45 translate-y-2" : ""
+              }`}
+          />
+          <span
+            className={`block h-0.5 w-full bg-black transition-opacity duration-300 ease-in-out ${isOpen ? "opacity-0" : "opacity-100"
+              }`}
+          />
+          <span
+            className={`block h-0.5 w-full bg-black transform transition duration-300 ease-in-out ${isOpen ? "-rotate-45 -translate-y-2" : ""
+              }`}
+          />
+        </button>
+        <img src={logo} alt="Logo" className="" />
       </div>
 
-      <div className="container mx-auto px-5 ">
-        <div className="flex w-full justify-between items-center py-2 md:py-2">
-          <div className="hidden md:flex items-center gap-2 justify-center w-[304px] md:w-[354px]">
-            <SearchInput />
-          </div>
-
-          {/* Right Section */}
-          <div className="flex items-center gap-4 md:gap-6">
-            <div>
-              <img src={notification} alt="Notification" width={25} height={25} />
-            </div>
-
-            {/* <DropdownCard
-              title="Alexa Jhon"
-              label="Welcome back,"
-              iconType="image"
-              imageSrc={profile_pic}
-              menuItems={['Profile', 'Settings']}
-              
-              onSelect={handleSelect}
-              isOpen={openDropdown === 'profile'}
-              onToggle={() =>
-                setOpenDropdown((prev) => (prev === 'profile' ? null : 'profile'))
-              }
-              dropdownRef={profileDropdownRef}
-            /> */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div>
-                  <div className="flex items-center space-x-3 px-2 py-1.5 cursor-pointer rounded-md hover:bg-gray-100 transition-colors">
-                    <div className="w-8 h-8 rounded-full border border-black flex items-center justify-center">
-                      <User2 className="w-4 h-4 text-black" />
-                    </div>
-                    <div className="flex flex-col text-left">
-                      <span className="text-[14px] font-poppinssemibold text-black">Shubham Gone</span>
-                      <span className="text-[10px] font-poppinsregular text-gray-500 flex items-center gap-1">
-                        Student <span className="w-1 h-1 bg-gray-400 rounded-full" /> 23 Dec, Sun
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuItem onSelect={() => handleSelect('Profile')}>Profile</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => handleSelect('Logout')}>Logout</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-          </div>
+      {/* Center: Search bar */}
+      <div className="flex-1 flex gap-4 items-center justify-start ml-4">
+        <img src={Line} alt="" className="h-[26px]" />
+        <div className="w-full max-w-md hidden md:block">
+          <SearchInput />
         </div>
       </div>
-    </div>
+
+      {/* Right: Notification + Profile */}
+      <div className="flex items-center gap-4">
+        <img src={notification} alt="Notification" className="w-5 h-5" />
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div className="flex items-center space-x-2 cursor-pointer px-2 py-1.5 rounded-md hover:bg-gray-100 transition-colors">
+              <div className="w-8 h-8 rounded-full border border-black flex items-center justify-center">
+                <User2 className="w-4 h-4 text-black" />
+              </div>
+              <div className="hidden sm:flex flex-col text-left">
+                <span className="text-[13px] font-medium text-black">
+                  Shubham Gone
+                </span>
+                <span className="text-[11px] text-gray-500 flex items-center gap-1">
+                  Student <span className="w-1 h-1 bg-gray-400 rounded-full" /> 23 Dec, Sun
+                </span>
+              </div>
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-48">
+            <DropdownMenuItem onSelect={() => handleSelect("Profile")}>Profile</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => handleSelect("Logout")}>Logout</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </header>
   );
 };
 
-export default Navbar;
+export default Header;

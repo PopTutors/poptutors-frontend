@@ -48,14 +48,14 @@ const NotificationList: React.FC<NotificationListProps> = ({
         <DropdownMenu  open={open} onOpenChange={setOpen}>
           <DropdownMenuTrigger asChild>
             <div
-              className="flex items-center me-3 gap-1 font-poppinsregular text-[12px] rounded-lg p-[2px] bg-gray-100 text-gray-600 hover:none"
+              className="flex items-center gap-2 font-poppinsregular text-[12px] px-2  py-[2px] h-[30px] rounded-lg  bg-gray-100 text-gray-600 hover:none"
               data-state={open ? "open" : "closed"}
             >
               <Button size="sm" variant="ghost">
                 {selectedOption}
               </Button>
               <FiChevronDown
-                className={`ml-1 text-lg text-gray-600 transition-transform duration-200 ${
+                className={`text-lg text-gray-600 transition-transform duration-200 ${
                   open ? "rotate-180" : "rotate-0"
                 }`}
               />

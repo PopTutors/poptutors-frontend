@@ -2,7 +2,10 @@ export type CourseType = {
   id: string;
   title: string;
   date: string;
-  tags: string[];
+  subtitle: string;
+  tags: string[
+    { label: string; color: string }
+  ];
   price: string;
   duration?: string;
   courseCode?: string;
