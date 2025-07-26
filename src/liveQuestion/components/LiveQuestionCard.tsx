@@ -1,4 +1,3 @@
-import React from "react";
 
 type ColorKey = "purple" | "blue" | "green" | "orange";
 

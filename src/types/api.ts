@@ -1,10 +1,11 @@
-export type Assignment = Entity<{
+export type Assignment = {
+  id: string;
   title: string;
   description: string;
   teamId: string;
   points: number;
   dueDate: number;
-}>;
+};
 
 export type Meta = {
   page: number;

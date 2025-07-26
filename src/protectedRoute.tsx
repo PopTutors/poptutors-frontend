@@ -1,22 +1,22 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { paths } from "./config/path";
-import api from "./lib/api";
+// import api from "./lib/api";
 
 const ProtectedRoute = () => {
   const location = useLocation();
 
- const getUser = async () => {
-  const response = await api.get("/auth/me");
+//  const getUser = async () => {
+//   const response = await api.get("/auth/me");
 
-  console.log("✅ [getUser] Response:", response);
+//   console.log("✅ [getUser] Response:", response);
 
-  if (response?.success && response?.data) {
-    return response.data;
-  }
+//   if (response?.success && response?.data) {
+//     return response.data;
+//   }
 
-  throw new Error("User not authenticated");
-};
+//   throw new Error("User not authenticated");
+// };
 
 
 

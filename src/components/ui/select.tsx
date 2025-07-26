@@ -5,7 +5,7 @@ import {
   ListboxOptions,
   Transition,
 } from "@headlessui/react";
-import { Check, ChevronDown } from "lucide-react";
+import { Check } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { Fragment } from "react";
 

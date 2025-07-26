@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 // import { lazy } from "react";
 // import ProtectedRoute from "./ProtectedRoute";
 import { paths } from "./config/path";
@@ -11,7 +11,6 @@ import NotFound from "./landing/components/Notfound";
 import Assignment from "./student/Assignment";
 import Profile from "./profile/Profile";
 import SessionCard from "./sessiondetails/SessionDetails";
-import LiveQuestion from "./liveQuestion/LiveQuestion";
 import SessionPage from "./pages/session/Session";
 // import SubmitAssignmentPage from "./student/components/SubmitAssignment";
 import BookExpertPage from "./pages/live-question/book-expert";

@@ -1,5 +1,4 @@
 // components/SessionCard.tsx
-import { FaClock, FaChartLine, FaUniversity, FaPhoneAlt } from "react-icons/fa";
 import TeacherCard from "./components/TeacherCard";
 import { InfoIcon } from "../assets";
 import AssignmentMilestone from "./components/AssignmentMilestone";

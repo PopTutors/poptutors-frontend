@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 
 // Images (adjust path according to where they're stored)
 import NotificationList from "../components/ui/cards/notificationList";
@@ -207,20 +206,6 @@ const transaction: TransactionType[] = [
 
 export default function Dashboard() {
 
-
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setOpenDropdown(null);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 const options = [
     { label: "Assignment", icon: <Pencil className="w-4 h-4 mr-2" /> },
     { label: "Live Sessions", icon: <Video className="w-4 h-4 mr-2" /> },

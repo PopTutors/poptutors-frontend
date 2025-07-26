@@ -1,4 +1,4 @@
-import { Arrow, CalenderIcon, Calenderlanding, Clickhere, LandingPageIcon, Livequestion, Livequestionlanding, MailIcon, PageIcon, Person, Recorder } from "../../assets"
+import { Arrow, Calenderlanding, Clickhere, LandingPageIcon, Livequestionlanding, MailIcon, Person, Recorder } from "../../assets"
 
 
 const PersonLinks = () => {

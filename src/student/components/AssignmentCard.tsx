@@ -29,7 +29,6 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({
   statusLabel,
   rating,
   ratingCount,
-  milestone,
   subjectcode
 }) => {
   const isCompleted = status === 'Completed';

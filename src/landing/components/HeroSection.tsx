@@ -1,4 +1,3 @@
-import { PhoneCall } from "lucide-react";
 import { Fiverr, PeopleperHour, Phonecall, Teacheron, Upwork, Whatsapp } from "../../assets";
 import { Button } from "../../components/ui/button";
 import { cn } from "../../utils/cn";

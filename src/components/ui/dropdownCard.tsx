@@ -24,7 +24,6 @@ interface DropdownCardProps {
 }
 
 const DropdownCard: React.FC<DropdownCardProps> = ({
-  isOpen,
   label,
   title,
   iconType = 'arrow',

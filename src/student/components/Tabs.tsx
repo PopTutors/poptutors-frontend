@@ -1,6 +1,6 @@
 // src/components/TabHeader.tsx
-import React, { useState } from 'react';
 import { ChevronDown, SlidersHorizontal } from 'lucide-react';
+import { useState } from 'react';
 
 const TabHeader = () => {
     const tabs = ['All', 'Assignment', 'Live Questions', 'Sessions'];

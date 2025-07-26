@@ -8,7 +8,7 @@ const AssignmentDetails: React.FC = () => {
         label,
         value,
     }: {
-        icon: React.ReactNode;
+        icon: string;
         label: string;
         value: string;
     }) => (

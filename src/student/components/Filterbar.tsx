@@ -1,4 +1,3 @@
-import { ArrowBigRightDash } from 'lucide-react';
 import React, { useState } from 'react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../../components/ui/dropdown';
 import { Button } from '../../components/ui/button';

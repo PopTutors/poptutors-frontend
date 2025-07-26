@@ -3,9 +3,7 @@ export type CourseType = {
   title: string;
   date: string;
   subtitle: string;
-  tags: string[
-    { label: string; color: string }
-  ];
+  tags: { label: string; color: string }[];
   price: string;
   duration?: string;
   courseCode?: string;

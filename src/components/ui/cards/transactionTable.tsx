@@ -17,7 +17,7 @@ const TransactionTable: React.FC<{ transactions: TransactionType[] }> = ({ trans
             </tr>
           </thead>
           <tbody>
-            {transactions.map((txn, idx) => (
+            {transactions.map((txn: TransactionType) => (
               <tr
                 key={txn.id}
                 className={`border-b hover:bg-[#e6f9ff] `}

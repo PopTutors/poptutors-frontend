@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "../../assets/Mentoos_logo.svg";
 import notification from "../../assets/notification.svg";
-import { User2, Menu, X } from "lucide-react";
+import { User2} from "lucide-react";
 import SearchInput from "../ui/searchInput";
 import {
   DropdownMenu,
@@ -17,7 +17,7 @@ interface HeaderProps {
   onClose?: () => void
 }
 
-const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen, onClose }) => {
+const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen }) => {
   const handleSelect = (item: string) => {
     console.log("Selected:", item);
   };

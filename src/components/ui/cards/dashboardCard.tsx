@@ -7,7 +7,7 @@ type DashboardCardProps = {
   progress: string;
 };
 
-const DashboardCard = ({ title, label, date, price, status, progress }: DashboardCardProps) => (
+const DashboardCard = ({ title, label, date, price, progress }: DashboardCardProps) => (
   <div className="bg-white rounded-lg shadow p-4">
     <h4 className="text-sm text-gray-700 mb-1">{title}</h4>
     <div className="text-xs bg-red-100 text-red-500 px-2 py-1 rounded w-fit mb-2">{label}</div>

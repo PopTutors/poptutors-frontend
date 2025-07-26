@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import { Button } from "../../components/ui/button";
 import {
@@ -7,6 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown";
+import { useState } from "react";
 
 interface Props {
   completed?: number;

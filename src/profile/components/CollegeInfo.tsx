@@ -1,5 +1,4 @@
 // components/CollegeInfo.tsx
-import React from "react";
 import { FaBriefcase, FaDigitalTachograph, FaPaperPlane, FaStar, FaSyncAlt } from "react-icons/fa";
 
 const CollegeInfo = () => {

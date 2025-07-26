@@ -15,7 +15,7 @@ const CourseCard: React.FC<{ course: CourseType }> = ({ course }) => {
       )}
 
       <div className="flex items-center justify-start space-x-2 text-sm mb-4">
-  {course.tags.map((tag, idx) => (
+  {course.tags.map((tag: { label: string; color: string }, idx: number) => (
     <span
       key={idx}
       className={`font-poppinsregular text-[12px] ${tag.color} flex items-center gap-1`}
