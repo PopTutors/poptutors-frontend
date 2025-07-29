@@ -18,12 +18,13 @@ const TransactionTable: React.FC<{ transactions: TransactionType[] }> = ({ trans
           </thead>
           <tbody>
             {transactions.map((txn: TransactionType) => (
-              <tr
-                key={txn.id}
-                className={`border-b hover:bg-[#e6f9ff] `}
-              >
-                <td className="py-2  text-[#1d2026] font-poppinsmedium text-[12px] whitespace-nowrap ps-4 pe-2">{txn.date}</td>
-                <td className="py-2 px-2 font-poppinsemibold text-[14px] text-primary font-bold">${txn.amount}</td>
+              <tr key={txn.id} className={`border-b hover:bg-[#e6f9ff] `}>
+                <td className="py-2  text-[#1d2026] font-poppinsmedium text-[12px] whitespace-nowrap ps-4 pe-2">
+                  {txn.date}
+                </td>
+                <td className="py-2 px-2 font-poppinsemibold text-[14px] text-primary font-bold">
+                  ${txn.amount}
+                </td>
                 <td className="py-2 px-2 font-poppinsmedium text-[12px]">
                   <span
                     className={`font-medium ${
@@ -35,12 +36,12 @@ const TransactionTable: React.FC<{ transactions: TransactionType[] }> = ({ trans
                 </td>
                 <td className="py-2 ps-2 sm:pe-3 pe-1 ">
                   <Button
-                     className="mt-0 m-0 px-2 py-[3px] font-poppinsmedium text-[12px] "
-                      // onClick={() => onPayNow(index)}
-                      variant="outline_rounded"
-                    >
-                      Pay Now
-                    </Button>
+                    className="mt-0 m-0 px-2 py-[3px] font-poppinsmedium text-[12px] "
+                    // onClick={() => onPayNow(index)}
+                    variant="outline_rounded"
+                  >
+                    Pay Now
+                  </Button>
                 </td>
               </tr>
             ))}

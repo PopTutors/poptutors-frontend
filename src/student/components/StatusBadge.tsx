@@ -1,11 +1,11 @@
 type StatusBadgeProps = {
-  status: "Completed" | "Requested" | "Negotiate";
+  status: 'Completed' | 'Requested' | 'Negotiate';
 };
 
 const statusStyles = {
-  Completed: "bg-green-100 text-green-600",
-  Requested: "bg-blue-100 text-blue-600",
-  Negotiate: "bg-red-100 text-red-600",
+  Completed: 'bg-green-100 text-green-600',
+  Requested: 'bg-blue-100 text-blue-600',
+  Negotiate: 'bg-red-100 text-red-600',
 };
 
 export default function StatusBadge({ status }: StatusBadgeProps) {

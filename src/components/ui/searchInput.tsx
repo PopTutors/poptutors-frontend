@@ -1,7 +1,7 @@
 // components/ui/SearchInput.tsx
 
-import React from "react";
-import { FiSearch } from "react-icons/fi"; // Feather Icons (optional)
+import React from 'react';
+import { FiSearch } from 'react-icons/fi'; // Feather Icons (optional)
 
 const SearchInput: React.FC = () => {
   return (

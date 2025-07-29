@@ -5,62 +5,62 @@
 /* Your custom variables */
 
 @font-face {
-  font-family: "Poppins";
-  src: url("./assets/font/Poppins-SemiBold.ttf") format("truetype");
+  font-family: 'Poppins';
+  src: url('./assets/font/Poppins-SemiBold.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "Poppins regular";
-  src: url("./assets/font/Poppins-Regular.ttf") format("truetype");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Poppins Medium";
-  src: url("./assets/font/Poppins-Medium.ttf") format("truetype");
+  font-family: 'Poppins regular';
+  src: url('./assets/font/Poppins-Regular.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Poppins thin";
-  src: url("./assets/font/Poppins-Thin.ttf") format("truetype");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Poppins Bold";
-  src: url("./assets/font/Poppins-Bold.ttf") format("truetype");
+  font-family: 'Poppins Medium';
+  src: url('./assets/font/Poppins-Medium.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Poppins SemiBold";
-  src: url("./assets/font/Poppins-SemiBold.ttf") format("truetype");
+  font-family: 'Poppins thin';
+  src: url('./assets/font/Poppins-Thin.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poppins Bold';
+  src: url('./assets/font/Poppins-Bold.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Epilogue";
-  src: url("./assets/font/Epilogue-VariableFont_wght.ttf") format("truetype");
+  font-family: 'Poppins SemiBold';
+  src: url('./assets/font/Poppins-SemiBold.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "InterVar";
-  src: url("./assets/font/Inter-VariableFont_opsz-wght.ttf") format("truetype");
+  font-family: 'Epilogue';
+  src: url('./assets/font/Epilogue-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'InterVar';
+  src: url('./assets/font/Inter-VariableFont_opsz-wght.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -113,9 +113,9 @@
   --sidebar-accent-foreground: #1f2937;
   --sidebar-border: #e5e7eb;
   --sidebar-ring: #3b82f6;
-  --font-poppins: "Poppins", sans-serif;
-  --font-sans: "Inter", sans-serif;
-  --font-mono: "Fira Code", monospace;
+  --font-poppins: 'Poppins', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'Fira Code', monospace;
 }
 
 .dark {

@@ -1,27 +1,26 @@
-import { Discord, Facebook, IG, Snapchat, Whatsapp } from "../../assets";
-
+import { Discord, Facebook, IG, Snapchat, Whatsapp } from '../../assets';
 
 const socialLinks = [
   {
-    icon:Whatsapp,
-    url: "https://www.whatsapp.com",
+    icon: Whatsapp,
+    url: 'https://www.whatsapp.com',
   },
   {
     icon: Facebook,
-    url: "https://www.facebook.com",
+    url: 'https://www.facebook.com',
   },
 
   {
     icon: Snapchat,
-    url: "https://www.snapchat.com",
+    url: 'https://www.snapchat.com',
   },
   {
     icon: IG,
-    url: "https://www.instagram.com",
+    url: 'https://www.instagram.com',
   },
   {
     icon: Discord,
-    url: "https://www.discord.gg",
+    url: 'https://www.discord.gg',
   },
 ];
 const SocialLinks = () => {

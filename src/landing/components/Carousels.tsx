@@ -1,37 +1,37 @@
-import { Ananya, Anita, Mehta, Rahul, Rating } from "../../assets";
+import { Ananya, Anita, Mehta, Rahul, Rating } from '../../assets';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "../../components/ui/carousel";
+} from '../../components/ui/carousel';
 
 const testimonials = [
   {
-    name: "Ananya",
+    name: 'Ananya',
     imageSrc: Ananya,
-    place: "Bangalore Univ.",
+    place: 'Bangalore Univ.',
     testimonial: `Pop Tutors saved my GPA—fast, affordable, and plagiarism-free!`,
   },
   {
-    name: "Rahul",
+    name: 'Rahul',
     imageSrc: Rahul,
-    place: "MIT Pune",
+    place: 'MIT Pune',
     testimonial: `On-demand Q&A was a game-changer during finals week.`,
   },
 ];
 const testimonials2 = [
   {
-    name: "Dr. Mehta",
+    name: 'Dr. Mehta',
     imageSrc: Mehta,
-    place: "EduTech Researcher",
+    place: 'EduTech Researcher',
     testimonial: `This platform pairs students with vetted pros—I’ve never had a smoother collaboration.`,
   },
   {
-    name: "Anita",
+    name: 'Anita',
     imageSrc: Anita,
-    place: "Senior Data Scientist",
+    place: 'Senior Data Scientist',
     testimonial: `Clear workflows and milestone payments make Pop Tutors my go-to tutoring network.`,
   },
 ];
@@ -46,9 +46,7 @@ export default function Carousels() {
         Student Testimonials
       </div>
       <CustomCarousel data={testimonials} />
-      <div className="self-start text-[#464646] md:text-lg font-semibold">
-        Expert Endorsements
-      </div>
+      <div className="self-start text-[#464646] md:text-lg font-semibold">Expert Endorsements</div>
       <CustomCarousel data={testimonials2} />
     </div>
   );
@@ -60,10 +58,7 @@ const CustomCarousel = ({ data }: { data: typeof testimonials2 }) => {
       <Carousel>
         <CarouselContent className="shadow-lg">
           {data.map((testimonial, index) => (
-            <CarouselItem
-              key={index}
-              className="basis-full md:basis-1/2 px-2"
-            >
+            <CarouselItem key={index} className="basis-full md:basis-1/2 px-2">
               <CarouselCard
                 imgSrc={testimonial.imageSrc}
                 name={testimonial.name}
@@ -107,7 +102,9 @@ export const CarouselCard = ({
           />
           <div className="flex flex-col items-start justify-center">
             <div className="font-semibold text-[22px] text-[#5F5F7E] md:text-lg">{name}</div>
-            <div className="font-semibold text-[18px] text-[#80819A] text-xs md:text-base">{place}</div>
+            <div className="font-semibold text-[18px] text-[#80819A] text-xs md:text-base">
+              {place}
+            </div>
           </div>
         </div>
         <div className="flex items-center ml-4">

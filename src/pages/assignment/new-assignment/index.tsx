@@ -1,4 +1,4 @@
-import { AssignmentForm } from "../../../components/forms/AssignmentForm";
+import { AssignmentForm } from '../../../components/forms/AssignmentForm';
 
 const NewAssignmentPage = () => {
   return (

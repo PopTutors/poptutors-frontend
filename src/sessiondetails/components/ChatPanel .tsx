@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { FaPaperclip, FaPaperPlane, FaPen } from "react-icons/fa";
+import React, { useState } from 'react';
+import { FaPaperclip, FaPaperPlane, FaPen } from 'react-icons/fa';
 
 const ChatPanel: React.FC = () => {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
 
   return (
     <div className="bg-white rounded-lg shadow-md flex flex-col max-w-md h-[600px]">
@@ -28,7 +28,6 @@ const ChatPanel: React.FC = () => {
         <div className="text-center text-xs text-gray-500">Today</div>
 
         {/* Negotiation Info */}
-        
 
         {/* Negotiation Input */}
         <div className="flex flex-col items-start space-y-2">
@@ -63,16 +62,16 @@ const ChatPanel: React.FC = () => {
       {/* Message Input */}
       <div className="flex items-center font-poppinsregular p-4 border-t">
         <div className="flex items-center flex-grow bg-white border rounded-full px-4 py-2 shadow-sm">
-        <FaPen className="text-cyan-500 mr-2" />
-        <input
-          type="text"
-          placeholder="Type your message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="flex-grow outline-none text-sm text-gray-600 placeholder-gray-400"
-        />
-        <FaPaperclip className="text-cyan-500 ml-2" />
-      </div>
+          <FaPen className="text-cyan-500 mr-2" />
+          <input
+            type="text"
+            placeholder="Type your message"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className="flex-grow outline-none text-sm text-gray-600 placeholder-gray-400"
+          />
+          <FaPaperclip className="text-cyan-500 ml-2" />
+        </div>
         <button className="ml-2 bg-blue-500 p-3 rounded-full text-white">
           <FaPaperPlane />
         </button>

@@ -1,89 +1,91 @@
 export const paths = {
   home: {
-    path: "/dashboard",
-    getHref: () => "/dashboard",
+    path: '/dashboard',
+    getHref: () => '/dashboard',
   },
 
   student: {
     home: {
-      path: "/student/dashboard",
-      getHref: () => "/student/dashboard",
+      path: '/student/dashboard',
+      getHref: () => '/student/dashboard',
     },
     profile: {
-      path: "/student/profile",
-      getHref: () => "/student/profile",
+      path: '/student/profile',
+      getHref: () => '/student/profile',
     },
     dashboard: {
-      path: "/student/dashboard",
-      getHref: () => "/student/dashboard",
+      path: '/student/dashboard',
+      getHref: () => '/student/dashboard',
     },
     assignment: {
-      path: "/student/assignment",
-      getHref: () => "/student/assignment",
+      path: '/student/assignment',
+      getHref: () => '/student/assignment',
       newAssignment: {
-        path: "/student/assignment/new",
-        getHref: () => "/student/assignment/new",
+        path: '/student/assignment/new',
+        getHref: () => '/student/assignment/new',
+      },
+      details: {
+        path: '/student/assignment/:id',
+        getHref: (id: string) => `/student/assignment/${id}`,
       },
     },
     assignmentSubmission: {
-      path: "/student/assignment-submission",
-      getHref: () => "/student/assignment-submission",
+      path: '/student/assignment-submission',
+      getHref: () => '/student/assignment-submission',
     },
-    
+
     assignmentdetails: {
-      path: "/student/assignmentdetails",
-      getHref: () => "/student/assignmentdetails",
+      path: '/student/assignmentdetails',
+      getHref: () => '/student/assignmentdetails',
     },
     livequestion: {
-      path: "/student/live-question",
-      getHref: () => "/student/live-question",
+      path: '/student/live-question',
+      getHref: () => '/student/live-question',
     },
     session: {
-      path: "/student/session",
-      getHref: () => "/student/session",
+      path: '/student/session',
+      getHref: () => '/student/session',
     },
   },
   landing: {
-    path: "/landing",
-    getHref: () => "/landing",
+    path: '/landing',
+    getHref: () => '/landing',
     home: {
-      path: "/",
-      getHref: () => "/",
+      path: '/',
+      getHref: () => '/',
     },
     assignment: {
-      path: "/assignment",
-      getHref: () => "/assignment",
+      path: '/assignment',
+      getHref: () => '/assignment',
     },
     questionSolving: {
-      path: "/question-solving",
-      getHref: () => "/question-solving",
+      path: '/question-solving',
+      getHref: () => '/question-solving',
     },
     session: {
-      path: "/session",
-      getHref: () => "/session",
+      path: '/session',
+      getHref: () => '/session',
     },
     refer: {
-      path: "/refer-and-earn",
-      getHref: () => "/refer-and-earn",
+      path: '/refer-and-earn',
+      getHref: () => '/refer-and-earn',
     },
     contact: {
-      path: "/contact-us",
-      getHref: () => "/contact-us",
+      path: '/contact-us',
+      getHref: () => '/contact-us',
     },
   },
   auth: {
     register: {
-      path: "/register",
+      path: '/register',
       getHref: (redirectTo?: string | null | undefined) =>
-        `/auth/register${
-          redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""
-        }`,
+        `/auth/register${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
     },
     login: {
-      path: "/login",
+      path: '/login',
       getHref: (redirectTo?: string | null | undefined) => {
-        if (!redirectTo || redirectTo === "/auth/login") {
-          return "/auth/login";
+        if (!redirectTo || redirectTo === '/auth/login') {
+          return '/auth/login';
         }
         return `/auth/login?redirectTo=${encodeURIComponent(redirectTo)}`;
       },

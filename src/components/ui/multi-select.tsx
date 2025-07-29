@@ -1,13 +1,7 @@
-import { Fragment } from "react";
-import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Transition,
-} from "@headlessui/react";
-import { Check } from "lucide-react";
-import { cn } from "../../utils/cn";
+import { Fragment } from 'react';
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
+import { Check } from 'lucide-react';
+import { cn } from '../../utils/cn';
 
 type Option = {
   label: string;
@@ -28,7 +22,7 @@ interface MultiSelectProps {
 export function MultiSelect({
   options,
   className,
-  placeholder = "Select options",
+  placeholder = 'Select options',
   value,
   onChange,
   onBlur,
@@ -50,16 +44,16 @@ export function MultiSelect({
   const selectedOptions = options.filter((o) => isSelected(o));
 
   return (
-    <div className={cn("relative w-full", className)}>
+    <div className={cn('relative w-full', className)}>
       <Menu as="div" className="relative w-full" onBlur={onBlur}>
         {() => (
           <>
             <MenuButton
               name={name}
               className={cn(
-                "relative w-full h-[40px] rounded-md border border-gray-300 bg-white",
-                "py-1.5 pl-3 pr-10 text-left text-sm font-normal flex items-center gap-2",
-                "focus:outline-none focus:ring-2 focus:ring-blue-500"
+                'relative w-full h-[40px] rounded-md border border-gray-300 bg-white',
+                'py-1.5 pl-3 pr-10 text-left text-sm font-normal flex items-center gap-2',
+                'focus:outline-none focus:ring-2 focus:ring-blue-500'
               )}
             >
               <div className="flex flex-wrap gap-2 overflow-x-auto">
@@ -106,14 +100,12 @@ export function MultiSelect({
                         type="button"
                         onClick={() => handleToggle(opt)}
                         className={cn(
-                          "group flex w-full items-start justify-between px-3 py-2",
-                          active ? "bg-blue-50 text-blue-900" : "text-gray-900"
+                          'group flex w-full items-start justify-between px-3 py-2',
+                          active ? 'bg-blue-50 text-blue-900' : 'text-gray-900'
                         )}
                       >
                         <span className="font-poppinsregular">{opt.label}</span>
-                        {isSelected(opt) && (
-                          <Check className="h-4 w-4 text-blue-600" />
-                        )}
+                        {isSelected(opt) && <Check className="h-4 w-4 text-blue-600" />}
                       </button>
                     )}
                   </MenuItem>

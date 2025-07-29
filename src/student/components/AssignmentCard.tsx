@@ -1,5 +1,7 @@
 import React from 'react';
 import { Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { paths } from '../../config/path';
 
 type AssignmentStatus = 'Completed' | 'Inprogress';
 
@@ -29,9 +31,14 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({
   statusLabel,
   rating,
   ratingCount,
-  subjectcode
+  subjectcode,
 }) => {
+  const navigate = useNavigate();
   const isCompleted = status === 'Completed';
+
+  const handleViewAssignment = () => {
+    navigate(paths.student.assignment.details.getHref(id.toString()));
+  };
 
   return (
     <div className=" rounded-xl shadow-[0px_3px_12px_rgba(0,0,0,0.07)] mb-4 bg-white">
@@ -42,7 +49,7 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({
             #{id} <span className="font-poppinsregular">{title}</span>
           </h3>
           <p className="text-[10px] text-[#707070] font-poppinsregular mt-1">
-            <span className="py-[2px] px-2 rounded bg-[#e6f9ff] mr-1">{subjectcode}</span> 
+            <span className="py-[2px] px-2 rounded bg-[#e6f9ff] mr-1">{subjectcode}</span>
             {subtitle}
           </p>
         </div>
@@ -65,7 +72,10 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({
           <p className="text-primary font-poppinsbold text-sm">${amount}</p>
           <p className="text-[10px] text-gray-500 font-poppinsmedium">Deadline: {deadline}</p>
         </div>
-        <button className="border border-primary text-primary px-4 py-1 rounded-full text-sm font-poppinsmedium hover:bg-primary hover:text-white whitespace-nowrap">
+        <button
+          onClick={handleViewAssignment}
+          className="border border-primary text-primary px-4 py-1 rounded-full text-sm font-poppinsmedium hover:bg-primary hover:text-white whitespace-nowrap transition-all duration-200"
+        >
           View Assignment
         </button>
       </div>
@@ -74,10 +84,7 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mt-2 bg-[#EDEDED] px-4 py-2 rounded-b-md">
         <div className="flex flex-wrap items-center gap-2 text-[10px] font-poppinsregular text-gray-600">
           {tags.map((tag, index) => (
-            <span
-              key={index}
-              className="bg-white text-[10px] px-[6px] py-1 rounded"
-            >
+            <span key={index} className="bg-white text-[10px] px-[6px] py-1 rounded">
               {tag}
             </span>
           ))}
@@ -86,8 +93,12 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({
         {!isCompleted && rating && ratingCount && (
           <div className="flex items-center text-sm text-gray-600">
             <Star size={16} className="text-orange-400 fill-orange-400 mr-1" />
-            <span className="font-poppinssemibold text-[14px] text-[#1D2026]">{rating.toFixed(1)}</span>
-            <span className="font-poppinsregular text-[10px] ml-1">({ratingCount.toLocaleString()} Rating)</span>
+            <span className="font-poppinssemibold text-[14px] text-[#1D2026]">
+              {rating.toFixed(1)}
+            </span>
+            <span className="font-poppinsregular text-[10px] ml-1">
+              ({ratingCount.toLocaleString()} Rating)
+            </span>
           </div>
         )}
       </div>

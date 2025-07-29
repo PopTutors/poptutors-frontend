@@ -1,29 +1,29 @@
-import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { UploadIcon } from "lucide-react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Select } from "../ui/select";
-import { MultiSelect } from "../ui/multi-select";
-import Textarea from "../ui/textarea";
-import { DateTimeDurationInput } from "../ui/DateTimeDurationInput";
-import FieldError from "../ui/FieldError";
+import { useForm, Controller } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { UploadIcon } from 'lucide-react';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Select } from '../ui/select';
+import { MultiSelect } from '../ui/multi-select';
+import Textarea from '../ui/textarea';
+import { DateTimeDurationInput } from '../ui/DateTimeDurationInput';
+import FieldError from '../ui/FieldError';
 
 // Zod validation schema
 const formSchema = z.object({
-  subject: z.string().min(1, "Subject is required"),
-  topic: z.string().min(1, "Topic is required"),
-  expertiseLevel: z.string().min(1, "Expertise level is required"),
-  skills: z.array(z.string()).min(1, "At least one skill is required"),
-  language: z.string().min(1, "Language is required"),
-  budget: z.string().min(1, "Budget is required"),
-  universityName: z.string().min(1, "University name is required"),
-  sessionAgenda: z.string().min(1, "Session agenda is required"),
+  subject: z.string().min(1, 'Subject is required'),
+  topic: z.string().min(1, 'Topic is required'),
+  expertiseLevel: z.string().min(1, 'Expertise level is required'),
+  skills: z.array(z.string()).min(1, 'At least one skill is required'),
+  language: z.string().min(1, 'Language is required'),
+  budget: z.string().min(1, 'Budget is required'),
+  universityName: z.string().min(1, 'University name is required'),
+  sessionAgenda: z.string().min(1, 'Session agenda is required'),
   additionalServices: z.string().optional(),
-  dateTime: z.date({ required_error: "Date and time is required" }),
-  duration: z.string().min(1, "Duration is required"),
+  dateTime: z.date({ required_error: 'Date and time is required' }),
+  duration: z.string().min(1, 'Duration is required'),
   requirements: z.string().optional(),
 });
 
@@ -35,66 +35,64 @@ const RequestSessionForm = () => {
   } = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subject: "Computer Science",
-      topic: "Case Studies",
-      expertiseLevel: "",
-      skills: ["Python", "React Js", "Node Js"],
-      language: "",
-      budget: "",
-      universityName: "",
-      sessionAgenda: "Subject tutoring",
-      additionalServices: "",
+      subject: 'Computer Science',
+      topic: 'Case Studies',
+      expertiseLevel: '',
+      skills: ['Python', 'React Js', 'Node Js'],
+      language: '',
+      budget: '',
+      universityName: '',
+      sessionAgenda: 'Subject tutoring',
+      additionalServices: '',
       dateTime: new Date(),
-      duration: "1 hour",
-      requirements: "",
+      duration: '1 hour',
+      requirements: '',
     },
   });
 
   const subjects = [
-    { value: "Computer Science", label: "Computer Science" },
-    { value: "Mathematics", label: "Mathematics" },
-    { value: "Physics", label: "Physics" },
-    { value: "Chemistry", label: "Chemistry" },
+    { value: 'Computer Science', label: 'Computer Science' },
+    { value: 'Mathematics', label: 'Mathematics' },
+    { value: 'Physics', label: 'Physics' },
+    { value: 'Chemistry', label: 'Chemistry' },
   ];
 
   const skillOptions = [
-    "Python",
-    "React Js",
-    "Node Js",
-    "JavaScript",
-    "HTML",
-    "CSS",
-    "Angular",
-    "Vue.js",
+    'Python',
+    'React Js',
+    'Node Js',
+    'JavaScript',
+    'HTML',
+    'CSS',
+    'Angular',
+    'Vue.js',
   ];
 
   const languages = [
-    { value: "English", label: "English" },
-    { value: "Spanish", label: "Spanish" },
-    { value: "French", label: "French" },
-    { value: "German", label: "German" },
+    { value: 'English', label: 'English' },
+    { value: 'Spanish', label: 'Spanish' },
+    { value: 'French', label: 'French' },
+    { value: 'German', label: 'German' },
   ];
 
   const agendaOptions = [
-    "Subject tutoring",
-    "Exam Preparation",
-    "Project and Thesis",
-    "Professional Certification Training",
-    "Career Counselling",
-    "Skill Building",
+    'Subject tutoring',
+    'Exam Preparation',
+    'Project and Thesis',
+    'Professional Certification Training',
+    'Career Counselling',
+    'Skill Building',
   ];
 
   const onSubmit = (data: any) => {
-    console.log("Form submitted:", data);
+    console.log('Form submitted:', data);
   };
 
   return (
     <>
       <div>
         <div>
-          <h1 className="text-xl font-semibold text-gray-800">
-            Request Session
-          </h1>
+          <h1 className="text-xl font-semibold text-gray-800">Request Session</h1>
           <hr className="border-t border-[2px] border-gray-200 w-32 mt-[4px]" />
         </div>
         <div className="flex justify-end">
@@ -113,11 +111,7 @@ const RequestSessionForm = () => {
               name="subject"
               control={control}
               render={({ field }) => (
-                <Select
-                  options={subjects}
-                  placeholder="Select Subject"
-                  {...field}
-                />
+                <Select options={subjects} placeholder="Select Subject" {...field} />
               )}
             />
             <FieldError name="subject" errors={errors} />
@@ -130,11 +124,7 @@ const RequestSessionForm = () => {
               name="topic"
               control={control}
               render={({ field }) => (
-                <Select
-                  options={subjects}
-                  placeholder="Select Topic"
-                  {...field}
-                />
+                <Select options={subjects} placeholder="Select Topic" {...field} />
               )}
             />
             <FieldError name="topic" errors={errors} />
@@ -182,11 +172,7 @@ const RequestSessionForm = () => {
               name="language"
               control={control}
               render={({ field }) => (
-                <Select
-                  options={languages}
-                  placeholder="Select Language"
-                  {...field}
-                />
+                <Select options={languages} placeholder="Select Language" {...field} />
               )}
             />
             <FieldError name="language" errors={errors} />
@@ -199,11 +185,7 @@ const RequestSessionForm = () => {
               name="budget"
               control={control}
               render={({ field }) => (
-                <Input
-                  {...field}
-                  type="text"
-                  placeholder="For budget the currency selection"
-                />
+                <Input {...field} type="text" placeholder="For budget the currency selection" />
               )}
             />
             <FieldError name="budget" errors={errors} />
@@ -218,11 +200,7 @@ const RequestSessionForm = () => {
               name="universityName"
               control={control}
               render={({ field }) => (
-                <Input
-                  {...field}
-                  type="text"
-                  placeholder="Enter University Name"
-                />
+                <Input {...field} type="text" placeholder="Enter University Name" />
               )}
             />
             <FieldError name="universityName" errors={errors} />
@@ -277,7 +255,7 @@ const RequestSessionForm = () => {
                   value={field.value}
                   onChange={field.onChange}
                   durationField={{
-                    name: "duration",
+                    name: 'duration',
                     control: control,
                   }}
                 />
@@ -294,9 +272,7 @@ const RequestSessionForm = () => {
           <Controller
             name="requirements"
             control={control}
-            render={({ field }) => (
-              <Textarea {...field} rows={5} placeholder="Write here..." />
-            )}
+            render={({ field }) => <Textarea {...field} rows={5} placeholder="Write here..." />}
           />
           <FieldError name="requirements" errors={errors} />
         </div>

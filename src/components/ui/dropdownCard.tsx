@@ -20,7 +20,7 @@ interface DropdownCardProps {
   customLabelClass?: string;
   isOpen?: boolean;
   onToggle?: () => void;
-  dropdownRef?:  React.RefObject<HTMLDivElement | null>;
+  dropdownRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 const DropdownCard: React.FC<DropdownCardProps> = ({
@@ -33,7 +33,7 @@ const DropdownCard: React.FC<DropdownCardProps> = ({
   customTitleClass = 'text-base font-poppinsmedium text-[#1f2442]',
   customLabelClass = 'text-[11px] text-gray-500 font-poppinsmedium leading-tight',
 }) => {
-  const navigate = useNavigate() 
+  const navigate = useNavigate();
   const handleSelect = (item: string) => {
     onSelect?.(item);
     navigate(`/student/${item}`);
@@ -53,7 +53,7 @@ const DropdownCard: React.FC<DropdownCardProps> = ({
                 className="rounded-full object-cover"
               />
             )}
-            <div  className="hidden sm:block text-sm text-left truncate">
+            <div className="hidden sm:block text-sm text-left truncate">
               {label && <p className={customLabelClass}>{label}</p>}
               <p className={customTitleClass}>{title}</p>
             </div>

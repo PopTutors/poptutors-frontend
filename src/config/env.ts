@@ -1,19 +1,20 @@
-import * as z from "zod";
+import * as z from 'zod';
 
 const createEnv = () => {
   const EnvSchema = z.object({
     API_URL: z.string(),
-    APP_URL: z.string().default("http://localhost:5000/api"),
+    APP_URL: z.string().default('http://localhost:5000/api'),
   });
 
-  const envVars = Object.entries(import.meta.env).reduce<
-    Record<string, string>
-  >((acc, [key, value]) => {
-    if (key.startsWith("VITE_APP_")) {
-      acc[key.replace("VITE_APP_", "")] = value;
-    }
-    return acc;
-  }, {});
+  const envVars = Object.entries(import.meta.env).reduce<Record<string, string>>(
+    (acc, [key, value]) => {
+      if (key.startsWith('VITE_APP_')) {
+        acc[key.replace('VITE_APP_', '')] = value;
+      }
+      return acc;
+    },
+    {}
+  );
 
   const parsedEnv = EnvSchema.safeParse(envVars);
 
@@ -23,7 +24,7 @@ const createEnv = () => {
         parsedEnv.error.flatten().fieldErrors
       )
         .map(([k, v]) => `- ${k}: ${v}`)
-        .join("\n")}`
+        .join('\n')}`
     );
   }
 

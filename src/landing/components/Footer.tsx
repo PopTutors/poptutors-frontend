@@ -1,9 +1,7 @@
-
-import { logowhite } from "../../assets";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import SocialLinks from "./SocialLinks";
-
+import { logowhite } from '../../assets';
+import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
+import SocialLinks from './SocialLinks';
 
 export default function Footer() {
   return (
@@ -25,9 +23,7 @@ export default function Footer() {
               <div className=" font-semibold text-white text-[22px] ">
                 Ready to Level Up Your Learning?
               </div>
-              <div className="text-white text-[18px] font-medium">
-                Get Started on Poptutors.co
-              </div>
+              <div className="text-white text-[18px] font-medium">Get Started on Poptutors.co</div>
             </div>
             <SocialLinks />
           </div>

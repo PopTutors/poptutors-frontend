@@ -1,6 +1,6 @@
 // components/layout/Sidebar.tsx
-import React from "react";
-import SidebarTab from "../../components/ui/sidebarTab";
+import React from 'react';
+import SidebarTab from '../../components/ui/sidebarTab';
 import {
   AssignmentIcon,
   WalletIcon,
@@ -14,9 +14,9 @@ import {
   HelpIconActive,
   WalletIconActive,
   SessionsIconActive,
-} from "../../assets/sidebar-icon";
-import { paths } from "../../config/path";
-import { useLocation } from "react-router-dom";
+} from '../../assets/sidebar-icon';
+import { paths } from '../../config/path';
+import { useLocation } from 'react-router-dom';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -27,28 +27,40 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
 
   const sidebarTabs = [
-    { label: "Dashboard", icon: DashboardIcon, iconActive: DashboardIconActive, path: paths.student.home.getHref() },
-    { label: "Assignment", icon: AssignmentIcon, iconActive: AssignmentIconActive, path: paths.student.assignment.getHref() },
-    { label: "Live Question", icon: LiveQuestionsIcon, iconActive: LiveQuestionsIconActive, path: "/live-question" },
-    { label: "Sessions", icon: SessionsIcon, iconActive: SessionsIconActive, path: "/sessions" },
-    { label: "Wallet", icon: WalletIcon, iconActive: WalletIconActive, path: "/wallet" },
-    { label: "Help & Support", icon: HelpIcon, iconActive: HelpIconActive, path: "/help-support" },
+    {
+      label: 'Dashboard',
+      icon: DashboardIcon,
+      iconActive: DashboardIconActive,
+      path: paths.student.home.getHref(),
+    },
+    {
+      label: 'Assignment',
+      icon: AssignmentIcon,
+      iconActive: AssignmentIconActive,
+      path: paths.student.assignment.getHref(),
+    },
+    {
+      label: 'Live Question',
+      icon: LiveQuestionsIcon,
+      iconActive: LiveQuestionsIconActive,
+      path: '/live-question',
+    },
+    { label: 'Sessions', icon: SessionsIcon, iconActive: SessionsIconActive, path: '/sessions' },
+    { label: 'Wallet', icon: WalletIcon, iconActive: WalletIconActive, path: '/wallet' },
+    { label: 'Help & Support', icon: HelpIcon, iconActive: HelpIconActive, path: '/help-support' },
   ];
 
   return (
     <>
       {/* Overlay on mobile */}
       {isOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black bg-opacity-40 lg:hidden"
-          onClick={onClose}
-        />
+        <div className="fixed inset-0 z-30 bg-black bg-opacity-40 lg:hidden" onClick={onClose} />
       )}
 
       {/* Sidebar */}
       <aside
         className={`fixed top-0 left-0 z-40 h-full bg-white w-[256px] border-r shadow-md overflow-y-auto transform transition-transform duration-300
-        ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:block`}
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:block`}
       >
         <nav className="mt-6 px-4 space-y-2">
           {sidebarTabs.map((tab) => {

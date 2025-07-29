@@ -1,31 +1,31 @@
-import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Select } from "../ui/select";
-import { MultiSelect } from "../ui/multi-select";
-import Textarea from "../ui/textarea";
-import { UploadIcon } from "lucide-react";
-import FieldError from "../ui/FieldError";
+import { useForm, Controller } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Select } from '../ui/select';
+import { MultiSelect } from '../ui/multi-select';
+import Textarea from '../ui/textarea';
+import { UploadIcon } from 'lucide-react';
+import FieldError from '../ui/FieldError';
 
 // 1) Validation schema
 const formSchema = z.object({
-  subject: z.string().min(1, "Academic Subject is required"),
-  assignmentType: z.string().min(1, "Assignment Type is required"),
-  expertiseLevel: z.string().min(1, "Expertise Level is required"),
+  subject: z.string().min(1, 'Academic Subject is required'),
+  assignmentType: z.string().min(1, 'Assignment Type is required'),
+  expertiseLevel: z.string().min(1, 'Expertise Level is required'),
   additionalServices: z.string().optional(),
-  language: z.string().min(1, "Language is required"),
-  skills: z.array(z.string()).min(1, "At least one skill is required"),
-  timeframe: z.string().min(1, "Timeframe is required"),
-  budget: z.string().min(1, "Budget is required"),
-  universityName: z.string().min(1, "University/Organization is required"),
-  courseSubject: z.string().min(1, "Subject is required"),
-  topicName: z.string().min(1, "Topic Name is required"),
-  courseCode: z.string().min(1, "Course Code is required"),
-  professorName: z.string().min(1, "Professor Name is required"),
-  dateTime: z.string().min(1, "Date and Time is required"),
+  language: z.string().min(1, 'Language is required'),
+  skills: z.array(z.string()).min(1, 'At least one skill is required'),
+  timeframe: z.string().min(1, 'Timeframe is required'),
+  budget: z.string().min(1, 'Budget is required'),
+  universityName: z.string().min(1, 'University/Organization is required'),
+  courseSubject: z.string().min(1, 'Subject is required'),
+  topicName: z.string().min(1, 'Topic Name is required'),
+  courseCode: z.string().min(1, 'Course Code is required'),
+  professorName: z.string().min(1, 'Professor Name is required'),
+  dateTime: z.string().min(1, 'Date and Time is required'),
   requirements: z.string().optional(),
 });
 
@@ -37,82 +37,80 @@ export const AssignmentForm = () => {
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subject: "Computer Science",
-      assignmentType: "Case Studies",
-      expertiseLevel: "",
-      additionalServices: "",
-      language: "",
-      skills: ["Python", "React Js", "Node Js"],
-      timeframe: "",
-      budget: "",
-      universityName: "",
-      courseSubject: "",
-      topicName: "",
-      courseCode: "",
-      professorName: "",
-      dateTime: "",
-      requirements: "",
+      subject: 'Computer Science',
+      assignmentType: 'Case Studies',
+      expertiseLevel: '',
+      additionalServices: '',
+      language: '',
+      skills: ['Python', 'React Js', 'Node Js'],
+      timeframe: '',
+      budget: '',
+      universityName: '',
+      courseSubject: '',
+      topicName: '',
+      courseCode: '',
+      professorName: '',
+      dateTime: '',
+      requirements: '',
     },
   });
 
   // --- options ---
   const subjects = [
-    { value: "Computer Science", label: "Computer Science" },
-    { value: "Mathematics", label: "Mathematics" },
-    { value: "Physics", label: "Physics" },
-    { value: "Chemistry", label: "Chemistry" },
+    { value: 'Computer Science', label: 'Computer Science' },
+    { value: 'Mathematics', label: 'Mathematics' },
+    { value: 'Physics', label: 'Physics' },
+    { value: 'Chemistry', label: 'Chemistry' },
   ];
 
   const assignmentTypes = [
-    { value: "Case Studies", label: "Case Studies" },
-    { value: "Algorithms", label: "Algorithms" },
-    { value: "Data Structures", label: "Data Structures" },
-    { value: "Web Development", label: "Web Development" },
+    { value: 'Case Studies', label: 'Case Studies' },
+    { value: 'Algorithms', label: 'Algorithms' },
+    { value: 'Data Structures', label: 'Data Structures' },
+    { value: 'Web Development', label: 'Web Development' },
   ];
 
   const expertiseLevels = [
-    { value: "Beginner", label: "Beginner" },
-    { value: "Intermediate", label: "Intermediate" },
-    { value: "Advanced", label: "Advanced" },
-    { value: "Expert", label: "Expert" },
+    { value: 'Beginner', label: 'Beginner' },
+    { value: 'Intermediate', label: 'Intermediate' },
+    { value: 'Advanced', label: 'Advanced' },
+    { value: 'Expert', label: 'Expert' },
   ];
 
   const languages = [
-    { value: "English", label: "English" },
-    { value: "Spanish", label: "Spanish" },
-    { value: "French", label: "French" },
-    { value: "German", label: "German" },
+    { value: 'English', label: 'English' },
+    { value: 'Spanish', label: 'Spanish' },
+    { value: 'French', label: 'French' },
+    { value: 'German', label: 'German' },
   ];
 
   const timeframeOptions = [
-    { value: "EET", label: "Eastern European Time (EET), Cairo UTC+3" },
-    { value: "IST", label: "India Standard Time (IST), UTC+5:30" },
-    { value: "GMT", label: "Greenwich Mean Time (GMT), UTC+0" },
-    { value: "PST", label: "Pacific Standard Time (PST), UTC−8" },
+    { value: 'EET', label: 'Eastern European Time (EET), Cairo UTC+3' },
+    { value: 'IST', label: 'India Standard Time (IST), UTC+5:30' },
+    { value: 'GMT', label: 'Greenwich Mean Time (GMT), UTC+0' },
+    { value: 'PST', label: 'Pacific Standard Time (PST), UTC−8' },
   ];
 
   const skillOptions = [
-    "Python",
-    "React Js",
-    "Node Js",
-    "JavaScript",
-    "HTML",
-    "CSS",
-    "Angular",
-    "Vue.js",
+    'Python',
+    'React Js',
+    'Node Js',
+    'JavaScript',
+    'HTML',
+    'CSS',
+    'Angular',
+    'Vue.js',
   ];
 
   const onSubmit = (data: any) => {
-    console.log("Form data:", data);
+    console.log('Form data:', data);
   };
 
   return (
     <>
       <div>
         <div>
-          <h1 className="text-xl font-semibold text-gray-800">
-            Submit New Assignment
-          </h1>
+          <h1 className="text-xl font-semibold text-gray-800">Submit New Assignment</h1>
           <hr className="border-t border-[2px] border-gray-200 w-32 mt-[4px]" />
         </div>
         <div className="flex justify-end">
@@ -132,11 +130,7 @@ export const AssignmentForm = () => {
               name="subject"
               control={control}
               render={({ field }) => (
-                <Select
-                  options={subjects}
-                  placeholder="Computer Science"
-                  {...field}
-                />
+                <Select options={subjects} placeholder="Computer Science" {...field} />
               )}
             />
             <FieldError name="subject" errors={errors} />
@@ -149,11 +143,7 @@ export const AssignmentForm = () => {
               name="assignmentType"
               control={control}
               render={({ field }) => (
-                <Select
-                  options={assignmentTypes}
-                  placeholder="Case Studies"
-                  {...field}
-                />
+                <Select options={assignmentTypes} placeholder="Case Studies" {...field} />
               )}
             />
             <FieldError name="assignmentType" errors={errors} />
@@ -168,11 +158,7 @@ export const AssignmentForm = () => {
               name="expertiseLevel"
               control={control}
               render={({ field }) => (
-                <Select
-                  options={expertiseLevels}
-                  placeholder="Select Expertise Level"
-                  {...field}
-                />
+                <Select options={expertiseLevels} placeholder="Select Expertise Level" {...field} />
               )}
             />
             <FieldError name="expertiseLevel" errors={errors} />
@@ -184,9 +170,7 @@ export const AssignmentForm = () => {
             <Controller
               name="additionalServices"
               control={control}
-              render={({ field }) => (
-                <Input {...field} placeholder="Any additional services?" />
-              )}
+              render={({ field }) => <Input {...field} placeholder="Any additional services?" />}
             />
           </div>
         </div>
@@ -199,11 +183,7 @@ export const AssignmentForm = () => {
               name="language"
               control={control}
               render={({ field }) => (
-                <Select
-                  options={languages}
-                  placeholder="Select Language"
-                  {...field}
-                />
+                <Select options={languages} placeholder="Select Language" {...field} />
               )}
             />
             <FieldError name="language" errors={errors} />
@@ -234,11 +214,7 @@ export const AssignmentForm = () => {
               name="timeframe"
               control={control}
               render={({ field }) => (
-                <Select
-                  options={timeframeOptions}
-                  placeholder="Select Timezone"
-                  {...field}
-                />
+                <Select options={timeframeOptions} placeholder="Select Timezone" {...field} />
               )}
             />
             <FieldError name="timeframe" errors={errors} />
@@ -251,10 +227,7 @@ export const AssignmentForm = () => {
               name="budget"
               control={control}
               render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder="For budget the currency selection"
-                />
+                <Input {...field} placeholder="For budget the currency selection" />
               )}
             />
             <FieldError name="budget" errors={errors} />
@@ -268,9 +241,7 @@ export const AssignmentForm = () => {
             <Controller
               name="universityName"
               control={control}
-              render={({ field }) => (
-                <Input {...field} placeholder="Enter University Name" />
-              )}
+              render={({ field }) => <Input {...field} placeholder="Enter University Name" />}
             />
             <FieldError name="universityName" errors={errors} />
           </div>
@@ -282,11 +253,7 @@ export const AssignmentForm = () => {
               name="courseSubject"
               control={control}
               render={({ field }) => (
-                <Select
-                  options={subjects}
-                  placeholder="Select Subject"
-                  {...field}
-                />
+                <Select options={subjects} placeholder="Select Subject" {...field} />
               )}
             />
             <FieldError name="courseSubject" errors={errors} />
@@ -300,9 +267,7 @@ export const AssignmentForm = () => {
             <Controller
               name="topicName"
               control={control}
-              render={({ field }) => (
-                <Input {...field} placeholder="Topic Name" />
-              )}
+              render={({ field }) => <Input {...field} placeholder="Topic Name" />}
             />
             <FieldError name="topicName" errors={errors} />
           </div>
@@ -313,9 +278,7 @@ export const AssignmentForm = () => {
             <Controller
               name="courseCode"
               control={control}
-              render={({ field }) => (
-                <Input {...field} placeholder="Enter Course Code" />
-              )}
+              render={({ field }) => <Input {...field} placeholder="Enter Course Code" />}
             />
             <FieldError name="courseCode" errors={errors} />
           </div>
@@ -328,9 +291,7 @@ export const AssignmentForm = () => {
             <Controller
               name="professorName"
               control={control}
-              render={({ field }) => (
-                <Input {...field} placeholder="Professor Name" />
-              )}
+              render={({ field }) => <Input {...field} placeholder="Professor Name" />}
             />
             <FieldError name="professorName" errors={errors} />
           </div>
@@ -353,9 +314,7 @@ export const AssignmentForm = () => {
           <Controller
             name="requirements"
             control={control}
-            render={({ field }) => (
-              <Textarea {...field} rows={4} placeholder="Write here..." />
-            )}
+            render={({ field }) => <Textarea {...field} rows={4} placeholder="Write here..." />}
           />
         </div>
 

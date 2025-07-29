@@ -1,10 +1,4 @@
-import {
-  CalenderIcon,
-  GroupIcon,
-  Hero,
-  PageIcon,
-  SearchIcon,
-} from "../../assets";
+import { CalenderIcon, GroupIcon, Hero, PageIcon, SearchIcon } from '../../assets';
 
 const HeroSection = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -48,7 +42,6 @@ const HeroSection = ({ children }: { children: React.ReactNode }) => {
         />
 
         {/* Optional second Calendar icon — removed unless needed */}
-        
 
         {/* Dynamic children (e.g. form, text) */}
         {children}

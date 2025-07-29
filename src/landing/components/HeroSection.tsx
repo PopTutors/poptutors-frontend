@@ -1,8 +1,8 @@
-import { Fiverr, PeopleperHour, Phonecall, Teacheron, Upwork, Whatsapp } from "../../assets";
-import { Button } from "../../components/ui/button";
-import { cn } from "../../utils/cn";
-import PersonLinks from "./PersonLinks";
-import SocialLinks from "./SocialLinks";
+import { Fiverr, PeopleperHour, Phonecall, Teacheron, Upwork, Whatsapp } from '../../assets';
+import { Button } from '../../components/ui/button';
+import { cn } from '../../utils/cn';
+import PersonLinks from './PersonLinks';
+import SocialLinks from './SocialLinks';
 
 const gigSites = [
   { image: Upwork },
@@ -18,11 +18,11 @@ const DashboardHero = () => {
         {/* Left Side: Text & Buttons */}
         <div className="flex w-full flex-col items-center md:items-start gap-4 text-center md:text-left">
           <div className="text-4xl mt-6 font-bold text-[#1e2939] sm:text-5xl 2xl:text-6xl ">
-            Get Real-Time <br/> Academic Help
+            Get Real-Time <br /> Academic Help
             <div className="text-primary">Anytime, Anywhere!</div>
             <div className="mt-6 text-base font-normal text-gray-500 sm:text-lg">
-              <span className="font-bold text-gray-600">PopTutors</span>, One stop solution to{" "}
-              <span className="font-bold text-gray-600">Learn</span> and{" "}
+              <span className="font-bold text-gray-600">PopTutors</span>, One stop solution to{' '}
+              <span className="font-bold text-gray-600">Learn</span> and{' '}
               <span className="font-bold text-gray-600">Earn</span>
             </div>
           </div>
@@ -88,10 +88,7 @@ const DashboardHero = () => {
             width={1000}
             height={1000}
             alt={`Gig site ${index + 1}`}
-            className={cn(
-              "h-auto sm:w-[8%] w-[20%] object-contain",
-              index === 2 ? "w-[14%]" : ""
-            )}
+            className={cn('h-auto sm:w-[8%] w-[20%] object-contain', index === 2 ? 'w-[14%]' : '')}
           />
         ))}
       </div>

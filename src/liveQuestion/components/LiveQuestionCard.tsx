@@ -1,5 +1,4 @@
-
-type ColorKey = "purple" | "blue" | "green" | "orange";
+type ColorKey = 'purple' | 'blue' | 'green' | 'orange';
 
 type LiveQuestionCardProps = {
   subject?: string;
@@ -23,54 +22,52 @@ const colorVariants: Record<
   }
 > = {
   purple: {
-    border: "border-purple-400",
-    headerBg: "bg-yellow-100",
-    statusBg: "bg-yellow-200",
-    buttonBorder: "border-blue-400",
-    buttonText: "text-blue-500",
-    priceText: "text-yellow-600",
+    border: 'border-purple-400',
+    headerBg: 'bg-yellow-100',
+    statusBg: 'bg-yellow-200',
+    buttonBorder: 'border-blue-400',
+    buttonText: 'text-blue-500',
+    priceText: 'text-yellow-600',
   },
   blue: {
-    border: "border-blue-400",
-    headerBg: "bg-blue-100",
-    statusBg: "bg-blue-200",
-    buttonBorder: "border-blue-400",
-    buttonText: "text-blue-500",
-    priceText: "text-blue-600",
+    border: 'border-blue-400',
+    headerBg: 'bg-blue-100',
+    statusBg: 'bg-blue-200',
+    buttonBorder: 'border-blue-400',
+    buttonText: 'text-blue-500',
+    priceText: 'text-blue-600',
   },
   green: {
-    border: "border-green-400",
-    headerBg: "bg-green-100",
-    statusBg: "bg-green-200",
-    buttonBorder: "border-blue-400",
-    buttonText: "text-blue-500",
-    priceText: "text-green-600",
+    border: 'border-green-400',
+    headerBg: 'bg-green-100',
+    statusBg: 'bg-green-200',
+    buttonBorder: 'border-blue-400',
+    buttonText: 'text-blue-500',
+    priceText: 'text-green-600',
   },
   orange: {
-    border: "border-orange-400",
-    headerBg: "bg-orange-100",
-    statusBg: "bg-orange-200",
-    buttonBorder: "border-blue-400",
-    buttonText: "text-blue-500",
-    priceText: "text-orange-600",
+    border: 'border-orange-400',
+    headerBg: 'bg-orange-100',
+    statusBg: 'bg-orange-200',
+    buttonBorder: 'border-blue-400',
+    buttonText: 'text-blue-500',
+    priceText: 'text-orange-600',
   },
 };
 
 const LiveQuestionCard = ({
-  subject = "Computer Science",
-  topicName = "Python Programming",
-  timeSlot = "16 March 11 PM -12 PM",
-  hours = "1 hour",
-  price = "$30",
-  status = "Status",
-  mainColor = "purple",
+  subject = 'Computer Science',
+  topicName = 'Python Programming',
+  timeSlot = '16 March 11 PM -12 PM',
+  hours = '1 hour',
+  price = '$30',
+  status = 'Status',
+  mainColor = 'purple',
 }: LiveQuestionCardProps) => {
-  const colors = colorVariants[mainColor ?? "purple"];
+  const colors = colorVariants[mainColor ?? 'purple'];
 
   return (
-    <div
-      className={`w-100 bg-white rounded-lg border-2 p-6 font-sans relative`}
-    >
+    <div className={`w-100 bg-white rounded-lg border-2 p-6 font-sans relative`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className={`${colors.headerBg} px-4 py-2 rounded-lg`}>
@@ -87,9 +84,7 @@ const LiveQuestionCard = ({
       <div className="space-y-4 mb-6">
         <div className="flex justify-between items-start">
           <span className="text-gray-600 font-medium text-sm">Subject</span>
-          <span className="text-gray-800 font-semibold text-sm text-right max-w-48">
-            {subject}
-          </span>
+          <span className="text-gray-800 font-semibold text-sm text-right max-w-48">{subject}</span>
         </div>
 
         <div className="flex justify-between items-start">
@@ -107,12 +102,8 @@ const LiveQuestionCard = ({
         </div>
 
         <div className="flex justify-between items-start">
-          <span className="text-gray-600 font-medium text-sm">
-            No. of Hours
-          </span>
-          <span className="text-gray-800 font-semibold text-sm text-right max-w-48">
-            {hours}
-          </span>
+          <span className="text-gray-600 font-medium text-sm">No. of Hours</span>
+          <span className="text-gray-800 font-semibold text-sm text-right max-w-48">{hours}</span>
         </div>
       </div>
 

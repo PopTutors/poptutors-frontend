@@ -1,5 +1,5 @@
-import React from "react";
-import { FaFileAlt } from "react-icons/fa"; // Using react-icons for file icon
+import React from 'react';
+import { FaFileAlt } from 'react-icons/fa'; // Using react-icons for file icon
 
 type Document = {
   name: string;
@@ -7,8 +7,8 @@ type Document = {
 };
 
 const documents: Document[] = [
-  { name: "Report.pdf", link: "#" },
-  { name: "Report.doc", link: "#" },
+  { name: 'Report.pdf', link: '#' },
+  { name: 'Report.doc', link: '#' },
 ];
 
 const DocumentList: React.FC = () => {

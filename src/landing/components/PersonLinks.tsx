@@ -1,15 +1,19 @@
-import { Arrow, Calenderlanding, Clickhere, LandingPageIcon, Livequestionlanding, MailIcon, Person, Recorder } from "../../assets"
-
+import {
+  Arrow,
+  Calenderlanding,
+  Clickhere,
+  LandingPageIcon,
+  Livequestionlanding,
+  MailIcon,
+  Person,
+  Recorder,
+} from '../../assets';
 
 const PersonLinks = () => {
   return (
     <div className="z-10 flex w-full translate-y-16 justify-center p-12 md:p-2">
       <div className="relative">
-        <img
-          src={Person}
-          alt="person-image"
-          className="w-64 md:w-86 2xl:w-96"
-        />
+        <img src={Person} alt="person-image" className="w-64 md:w-86 2xl:w-96" />
 
         <img
           src={Calenderlanding}
@@ -20,7 +24,6 @@ const PersonLinks = () => {
         <img
           src={Livequestionlanding}
           alt="question-image"
-         
           className="absolute top-20 -right-6 w-12 md:top-28 md:-right-10 md:w-18"
         />
 
@@ -39,16 +42,8 @@ const PersonLinks = () => {
             </div>
           </a>
           <div className="hidden md:block">
-            <img
-              src={Arrow}
-              alt="arrow-image"
-              className="absolute top-20 left-0 w-12"
-            />
-            <img
-              src={Clickhere}
-              alt="arrow-image"
-              className="absolute  top-32 -left-20 w-18"
-            />
+            <img src={Arrow} alt="arrow-image" className="absolute top-20 left-0 w-12" />
+            <img src={Clickhere} alt="arrow-image" className="absolute  top-32 -left-20 w-18" />
           </div>
         </div>
 
@@ -70,14 +65,10 @@ const PersonLinks = () => {
             <img
               src={Arrow}
               alt="arrow-image"
-              style={{ rotate: "72deg", transform: "rotatey(-180deg)" }}
+              style={{ rotate: '72deg', transform: 'rotatey(-180deg)' }}
               className="absolute top-20 left-0 w-12"
             />
-            <img
-              src={Clickhere}
-              alt="arrow-image"
-              className="absolute top-36 -left-5 w-18"
-            />
+            <img src={Clickhere} alt="arrow-image" className="absolute top-36 -left-5 w-18" />
           </div>
         </div>
 
@@ -99,20 +90,15 @@ const PersonLinks = () => {
             <img
               src={Arrow}
               alt="arrow-image"
-                            style={{ rotate: "-10deg", transform: "rotatey(-165deg)" }}
-
+              style={{ rotate: '-10deg', transform: 'rotatey(-165deg)' }}
               className="absolute top-20 right-0 w-18"
             />
-            <img
-              src={Clickhere}
-              alt="arrow-image"
-              className="absolute top-36 -right-8 w-24"
-            />
+            <img src={Clickhere} alt="arrow-image" className="absolute top-36 -right-8 w-24" />
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PersonLinks
+export default PersonLinks;

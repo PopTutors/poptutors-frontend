@@ -1,5 +1,11 @@
-import { Painpoints1, Painpoints2, Painpoints3, Painpoints4, Painpoints5, Painpoints6 } from "../../assets";
-
+import {
+  Painpoints1,
+  Painpoints2,
+  Painpoints3,
+  Painpoints4,
+  Painpoints5,
+  Painpoints6,
+} from '../../assets';
 
 const painPoints = [
   {

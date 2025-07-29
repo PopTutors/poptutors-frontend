@@ -1,25 +1,25 @@
-import React from "react";
-import logo from "../../assets/Mentoos_logo.svg";
-import notification from "../../assets/notification.svg";
-import { User2} from "lucide-react";
-import SearchInput from "../ui/searchInput";
+import React from 'react';
+import logo from '../../assets/Mentoos_logo.svg';
+import notification from '../../assets/notification.svg';
+import { User2 } from 'lucide-react';
+import SearchInput from '../ui/searchInput';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown";
-import Line from "../../assets/line.png";
+} from '../ui/dropdown';
+import Line from '../../assets/line.png';
 
 interface HeaderProps {
   onSidebarToggle?: () => void;
   isOpen?: boolean;
-  onClose?: () => void
+  onClose?: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen }) => {
   const handleSelect = (item: string) => {
-    console.log("Selected:", item);
+    console.log('Selected:', item);
   };
 
   return (
@@ -31,16 +31,19 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen }) => {
           className="relative w-6 h-6 flex flex-col justify-between items-center p-[3px] z-50 lg:hidden"
         >
           <span
-            className={`block h-0.5 w-full bg-black transform transition duration-300 ease-in-out ${isOpen ? "rotate-45 translate-y-2" : ""
-              }`}
+            className={`block h-0.5 w-full bg-black transform transition duration-300 ease-in-out ${
+              isOpen ? 'rotate-45 translate-y-2' : ''
+            }`}
           />
           <span
-            className={`block h-0.5 w-full bg-black transition-opacity duration-300 ease-in-out ${isOpen ? "opacity-0" : "opacity-100"
-              }`}
+            className={`block h-0.5 w-full bg-black transition-opacity duration-300 ease-in-out ${
+              isOpen ? 'opacity-0' : 'opacity-100'
+            }`}
           />
           <span
-            className={`block h-0.5 w-full bg-black transform transition duration-300 ease-in-out ${isOpen ? "-rotate-45 -translate-y-2" : ""
-              }`}
+            className={`block h-0.5 w-full bg-black transform transition duration-300 ease-in-out ${
+              isOpen ? '-rotate-45 -translate-y-2' : ''
+            }`}
           />
         </button>
         <img src={logo} alt="Logo" className="" />
@@ -65,9 +68,7 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen }) => {
                 <User2 className="w-4 h-4 text-black" />
               </div>
               <div className="hidden sm:flex flex-col text-left">
-                <span className="text-[13px] font-medium text-black">
-                  Shubham Gone
-                </span>
+                <span className="text-[13px] font-medium text-black">Shubham Gone</span>
                 <span className="text-[11px] text-gray-500 flex items-center gap-1">
                   Student <span className="w-1 h-1 bg-gray-400 rounded-full" /> 23 Dec, Sun
                 </span>
@@ -75,8 +76,8 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen }) => {
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-48">
-            <DropdownMenuItem onSelect={() => handleSelect("Profile")}>Profile</DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => handleSelect("Logout")}>Logout</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => handleSelect('Profile')}>Profile</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => handleSelect('Logout')}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

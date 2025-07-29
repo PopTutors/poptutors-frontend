@@ -1,4 +1,4 @@
-import RequestSessionForm from "../../components/forms/RequestSessionForm";
+import RequestSessionForm from '../../components/forms/RequestSessionForm';
 
 const SessionPage = () => {
   return (

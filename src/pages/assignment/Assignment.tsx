@@ -1,14 +1,12 @@
-import { AssignmentForm } from "../../components/forms/AssignmentForm";
-import { Button } from "../../components/ui/button";
+import { AssignmentForm } from '../../components/forms/AssignmentForm';
+import { Button } from '../../components/ui/button';
 
 const SessionPage = () => {
   return (
     <div>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-semibold text-gray-800">
-          Submit New Assignment
-        </h1>
+        <h1 className="text-xl font-semibold text-gray-800">Submit New Assignment</h1>
         <Button variant="pill_outline" size="pill">
           Upload File
           <svg

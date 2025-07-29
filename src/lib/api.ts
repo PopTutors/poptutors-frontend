@@ -1,6 +1,6 @@
-import axios from "axios";
-import { env } from "../config/env";
-import { paths } from "../config/path";
+import axios from 'axios';
+import { env } from '../config/env';
+import { paths } from '../config/path';
 
 // Axios instance
 const api = axios.create({
@@ -11,7 +11,7 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use((config) => {
   config.headers = config.headers || {};
-  config.headers["Accept"] = "application/json";
+  config.headers['Accept'] = 'application/json';
   return config;
 });
 
@@ -20,7 +20,7 @@ api.interceptors.response.use(
   (response) => response.data,
   (error) => {
     const message = error.response?.data?.message || error?.message;
-    console.warn("[API Error]", message);
+    console.warn('[API Error]', message);
 
     // Optional: Redirect to login if unauthorized
     if (error.response?.status === 401) {

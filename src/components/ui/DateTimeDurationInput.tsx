@@ -1,7 +1,7 @@
-import { useController, type Control } from "react-hook-form";
-import DatePicker from "react-datepicker";
-import { Calendar } from "lucide-react";
-import "react-datepicker/dist/react-datepicker.css";
+import { useController, type Control } from 'react-hook-form';
+import DatePicker from 'react-datepicker';
+import { Calendar } from 'lucide-react';
+import 'react-datepicker/dist/react-datepicker.css';
 interface DurationFieldProps {
   name: string;
   control: Control<any>;
@@ -18,7 +18,7 @@ export const DateTimeDurationInput = ({
   value,
   onChange,
   durationField,
-  durationOptions = ["15 mins", "30 mins", "1 hour", "2 hours"],
+  durationOptions = ['15 mins', '30 mins', '1 hour', '2 hours'],
 }: Props) => {
   const {
     field: { value: durationValue, onChange: onDurationChange },
@@ -30,7 +30,7 @@ export const DateTimeDurationInput = ({
   return (
     <div className="flex items-center justify-between min-w-full h-[40px] max-w-md border rounded px-3 py-1 bg-white shadow-sm focus-within:ring-2 focus-within:ring-blue-500">
       <div className="flex gap-4">
-        {" "}
+        {' '}
         <DatePicker
           selected={value}
           onChange={onChange}

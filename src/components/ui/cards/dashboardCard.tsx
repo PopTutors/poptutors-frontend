@@ -16,7 +16,9 @@ const DashboardCard = ({ title, label, date, price, progress }: DashboardCardPro
       <span>{price}</span>
     </div>
     <div className="text-xs text-gray-600 mb-2">{progress}</div>
-    <button className="text-blue-600 border border-blue-600 px-4 py-1 rounded text-sm">View Details</button>
+    <button className="text-blue-600 border border-blue-600 px-4 py-1 rounded text-sm">
+      View Details
+    </button>
   </div>
 );
 export default DashboardCard;

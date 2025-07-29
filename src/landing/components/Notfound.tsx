@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 const ComingSoon = () => {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br text-center">
-      <h1 className="text-5xl font-bold text-primary drop-shadow-md">
-        🚧 Coming Soon
-      </h1>
+      <h1 className="text-5xl font-bold text-primary drop-shadow-md">🚧 Coming Soon</h1>
       <p className="mt-4 max-w-md text-[20px] font-semibold  text-[#464646]">
         The page is under construction.
       </p>

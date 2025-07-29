@@ -39,7 +39,9 @@ const CourseCard: React.FC<CourseCardProps> = ({
         ))}
       </div>
 
-      <div className={`inline-block mt-2 px-3 py-[2px] text-[12px] font-semibold rounded-full ${labelBackground} ${labelColor}`}>
+      <div
+        className={`inline-block mt-2 px-3 py-[2px] text-[12px] font-semibold rounded-full ${labelBackground} ${labelColor}`}
+      >
         {label}
       </div>
 

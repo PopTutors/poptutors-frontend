@@ -1,30 +1,28 @@
 // components/SessionCard.tsx
-import TeacherCard from "./components/TeacherCard";
-import { InfoIcon } from "../assets";
-import AssignmentMilestone from "./components/AssignmentMilestone";
-import AssignmentDetails from "./components/AssignmentDetails";
-import DocumentList from "./components/DocumentList";
-import ChatPanel from "./components/ChatPanel ";
+import TeacherCard from './components/TeacherCard';
+import { InfoIcon } from '../assets';
+import AssignmentMilestone from './components/AssignmentMilestone';
+import AssignmentDetails from './components/AssignmentDetails';
+import DocumentList from './components/DocumentList';
+import ChatPanel from './components/ChatPanel ';
 
 const SessionCard = () => {
-
   const skills = [
-    "Project Management",
-    "Copywriting",
-    "English",
-    "Social Media Marketing",
-    "Copy Editing",
+    'Project Management',
+    'Copywriting',
+    'English',
+    'Social Media Marketing',
+    'Copy Editing',
   ];
   const teachers = Array(4).fill({
-    name: "Dianne Russell",
+    name: 'Dianne Russell',
     price: 45,
     rating: 4.8,
     reviews: 451444,
-    image: "https://randomuser.me/api/portraits/women/44.jpg", 
+    image: 'https://randomuser.me/api/portraits/women/44.jpg',
   });
   return (
     <div className="container-fluid mx-auto">
-
       {/* Main grid layout */}
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-6 ">
         {/* Left Column - Filter tabs and content */}
@@ -33,7 +31,8 @@ const SessionCard = () => {
           <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="flex justify-between items-start">
               <h2 className="text-[25px] font-inter font-semibold text-gray-900 max-w-[80%]">
-                Complete Website Responsive Design: from Figma to Webflow to Website Design - Assignment
+                Complete Website Responsive Design: from Figma to Webflow to Website Design -
+                Assignment
               </h2>
 
               <span className="bg-green-500 font-poppinsmedium text-white text-[15px] px-3 py-1 rounded-md">
@@ -47,10 +46,7 @@ const SessionCard = () => {
 
                 <div className="">
                   <p className="text-[17px] text-gray-700 font-inter font-regular">Topic Name</p>
-                  <a
-                    href="#"
-                    className="text-[17px] text-gray-700 font-inter font-regular"
-                  >
+                  <a href="#" className="text-[17px] text-gray-700 font-inter font-regular">
                     Lorem ipsumosdluchowuhvuhvcouvncoujdhvuijohuijwegfoweyefcywociywqfcv
                     wfcvwvicifificbichicidcic
                   </a>
@@ -103,12 +99,11 @@ const SessionCard = () => {
           <div className="bg-gray-100 flex items-center justify-center mt-5">
             <DocumentList />
           </div>
-
         </div>
 
         {/* Right Column - Notifications and Transactions */}
         <div className="lg:col-span-2 ">
-            <ChatPanel />
+          <ChatPanel />
         </div>
       </div>
     </div>

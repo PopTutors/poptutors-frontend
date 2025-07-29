@@ -1,99 +1,100 @@
-
 // Images (adjust path according to where they're stored)
-import NotificationList from "../components/ui/cards/notificationList";
-import TransactionTable from "../components/ui/cards/transactionTable";
-import { MessageIcon, NotificationIcon, RattingIcon } from "../assets";
-import CourseCard from "./components/CourseCard";
-import type { CourseType, TransactionType } from "../types/course";
-import TabHeader from "./components/Tabs";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown";
-import { ChevronDown, Pencil, Tv, Video } from "lucide-react";
+import NotificationList from '../components/ui/cards/notificationList';
+import TransactionTable from '../components/ui/cards/transactionTable';
+import { MessageIcon, NotificationIcon, RattingIcon } from '../assets';
+import CourseCard from './components/CourseCard';
+import type { CourseType, TransactionType } from '../types/course';
+import TabHeader from './components/Tabs';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../components/ui/dropdown';
+import { ChevronDown, Pencil, Tv, Video } from 'lucide-react';
 
 // courseCardData.ts
 
 export const courseCards = [
   {
-    title: "UX Case Study on Mobile Apps",
-    topic: ["Design Thinking", "UI/UX"],
-    date: "12 July, Friday",
-    price: "$45",
+    title: 'UX Case Study on Mobile Apps',
+    topic: ['Design Thinking', 'UI/UX'],
+    date: '12 July, Friday',
+    price: '$45',
     progress: 0,
-    label: "Assignment",
-    labelColor: "#019ACB",
-    labelBackground: "#E6F5F4",
+    label: 'Assignment',
+    labelColor: '#019ACB',
+    labelBackground: '#E6F5F4',
   },
   {
-    title: "Data Structures: Trees & Graphs",
-    topic: ["Computer Science", "DSA"],
-    date: "10 July, Wednesday",
-    price: "$35",
+    title: 'Data Structures: Trees & Graphs',
+    topic: ['Computer Science', 'DSA'],
+    date: '10 July, Wednesday',
+    price: '$35',
     progress: 0,
-    label: "Assignment",
-    labelColor: "#FF7F50",
-    labelBackground: "#FFF4EF",
+    label: 'Assignment',
+    labelColor: '#FF7F50',
+    labelBackground: '#FFF4EF',
   },
   {
-    title: "Live Math Problem Solving",
-    topic: ["Mathematics", "Algebra II"],
-    date: "14 July, Sunday",
-    price: "$25",
+    title: 'Live Math Problem Solving',
+    topic: ['Mathematics', 'Algebra II'],
+    date: '14 July, Sunday',
+    price: '$25',
     progress: 0,
-    label: "Live Question",
-    labelColor: "#F88C3D",
-    labelBackground: "#FFF6E9",
+    label: 'Live Question',
+    labelColor: '#F88C3D',
+    labelBackground: '#FFF6E9',
   },
   {
-    title: "1-on-1 Physics Coaching",
-    topic: ["Physics", "Mechanics"],
-    date: "15 July, Monday",
-    price: "$60",
+    title: '1-on-1 Physics Coaching',
+    topic: ['Physics', 'Mechanics'],
+    date: '15 July, Monday',
+    price: '$60',
     progress: 0,
-    label: "Session",
-    labelColor: "#41BE90",
-    labelBackground: "#ECFDF3",
+    label: 'Session',
+    labelColor: '#41BE90',
+    labelBackground: '#ECFDF3',
   },
 ];
 
 const sampleNotifications = [
   {
-    user: "Kevin",
-    message: "sent you message",
-    action: "What is ux",
-    course: "2024 ui/ux design with figma",
-    time: "Just now",
+    user: 'Kevin',
+    message: 'sent you message',
+    action: 'What is ux',
+    course: '2024 ui/ux design with figma',
+    time: 'Just now',
     icon: MessageIcon,
-    type: "message",
+    type: 'message',
   },
   {
-    user: "John",
-    message: "give a 5 star rating on your assignment",
-    course: "2024 ui/ux design with figma",
-    time: "5 mins ago",
+    user: 'John',
+    message: 'give a 5 star rating on your assignment',
+    course: '2024 ui/ux design with figma',
+    time: '5 mins ago',
     icon: RattingIcon,
-    type: "rating",
+    type: 'rating',
   },
   {
-    user: "Kevin",
-    message: "sent you message",
-    action: "What is ux",
-    course: "2024 ui/ux design with figma",
-    time: "6 mins ago",
+    user: 'Kevin',
+    message: 'sent you message',
+    action: 'What is ux',
+    course: '2024 ui/ux design with figma',
+    time: '6 mins ago',
     icon: NotificationIcon,
-    type: "message",
+    type: 'message',
   },
   {
-    user: "Kevin",
-    message: "sent you message",
-    action: "What is ux",
-    course: "2024 ui/ux design with figma",
-    time: "6 mins ago",
+    user: 'Kevin',
+    message: 'sent you message',
+    action: 'What is ux',
+    course: '2024 ui/ux design with figma',
+    time: '6 mins ago',
     icon: NotificationIcon,
-    type: "message",
+    type: 'message',
   },
-
 ];
-
-
 
 const courses: CourseType[] = [
   {
@@ -205,15 +206,13 @@ const transaction: TransactionType[] = [
 ];
 
 export default function Dashboard() {
+  const options = [
+    { label: 'Assignment', icon: <Pencil className="w-4 h-4 mr-2" /> },
+    { label: 'Live Sessions', icon: <Video className="w-4 h-4 mr-2" /> },
+    { label: 'Live Question', icon: <Tv className="w-4 h-4 mr-2" /> },
+  ];
 
-const options = [
-    { label: "Assignment", icon: <Pencil className="w-4 h-4 mr-2" /> },
-    { label: "Live Sessions", icon: <Video className="w-4 h-4 mr-2" /> },
-    { label: "Live Question", icon: <Tv className="w-4 h-4 mr-2" /> }
-  ]
-
-  const selected = "Live Sessions" // replace with dynamic state if needed
-  
+  const selected = 'Live Sessions'; // replace with dynamic state if needed
 
   return (
     <div>
@@ -222,40 +221,40 @@ const options = [
           <span className="text-[12px] font-poppinsregular font-light text-gray-500">
             Welcome back,
           </span>
-          <div className="text-[16px]  mb-4 font-poppinssemibold">
-            Shubham Gone
-          </div>
+          <div className="text-[16px]  mb-4 font-poppinssemibold">Shubham Gone</div>
         </div>
         <div className="w-[280px]">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button className="w-full text-left bg-[#007A99] border-[3px] border-white text-white p-3 rounded-xl shadow-md flex justify-between items-center focus:outline-none">
-            <div>
-              <p className="font-poppinssemibold">Request Now</p>
-              <p className="text-[11px] text-white/80 font-poppinsregular">Select your request type</p>
-            </div>
-            <ChevronDown className="w-5 h-5 text-white" />
-          </button>
-        </DropdownMenuTrigger>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="w-full text-left bg-[#007A99] border-[3px] border-white text-white p-3 rounded-xl shadow-md flex justify-between items-center focus:outline-none">
+                <div>
+                  <p className="font-poppinssemibold">Request Now</p>
+                  <p className="text-[11px] text-white/80 font-poppinsregular">
+                    Select your request type
+                  </p>
+                </div>
+                <ChevronDown className="w-5 h-5 text-white" />
+              </button>
+            </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="w-full w-[280px]  rounded-xl border shadow-md bg-white p-0 overflow-hidden">
-          {options.map(({ label, icon }) => (
-            <DropdownMenuItem
-              key={label}
-              className={`flex items-center px-4 py-3 text-[15px] font-poppinsmedium cursor-pointer ${
-                selected === label
-                  ? "bg-[#E6F6FF] text-[#007A99]"
-                  : "text-gray-700 hover:bg-gray-100"
-              }`}
-              onSelect={() => console.log("Selected:", label)}
-            >
-              {icon}
-              {label}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+            <DropdownMenuContent className="w-full w-[280px]  rounded-xl border shadow-md bg-white p-0 overflow-hidden">
+              {options.map(({ label, icon }) => (
+                <DropdownMenuItem
+                  key={label}
+                  className={`flex items-center px-4 py-3 text-[15px] font-poppinsmedium cursor-pointer ${
+                    selected === label
+                      ? 'bg-[#E6F6FF] text-[#007A99]'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                  onSelect={() => console.log('Selected:', label)}
+                >
+                  {icon}
+                  {label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-7 gap-6 ">

@@ -1,15 +1,13 @@
-import { Button } from "../../components/ui/button";
-import { Checkbox } from "../../components/ui/checkbox";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
+import { Button } from '../../components/ui/button';
+import { Checkbox } from '../../components/ui/checkbox';
+import { Input } from '../../components/ui/input';
+import { Label } from '../../components/ui/label';
 
 const SignupForm = () => {
   return (
     <div className="flex w-full flex-col items-center gap-4 text-gray-600">
       <div className="text-2xl font-bold md:text-3xl">Sign Up your Account</div>
-      <div className="md:text-md text-center">
-        Showcase your talent & expertise with Poptutors
-      </div>
+      <div className="md:text-md text-center">Showcase your talent & expertise with Poptutors</div>
 
       <div className="flex w-full flex-col gap-2">
         <Label htmlFor="name" className="font-semibold">
@@ -84,7 +82,7 @@ const SignupForm = () => {
         Sign Up
       </Button>
       <div className="text-sm font-semibold text-gray-400">
-        Already have an account?{" "}
+        Already have an account?{' '}
         <span className="text-blue-500 hover:text-blue-600">
           <a href="/login">Login</a>
         </span>

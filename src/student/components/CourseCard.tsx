@@ -1,12 +1,10 @@
-import type { CourseType } from "../../types/course";
+import type { CourseType } from '../../types/course';
 
 const CourseCard: React.FC<{ course: CourseType }> = ({ course }) => {
   return (
     <div className="border border-gray-200 rounded-xl py-[17px] px-3 bg-white shadow-sm">
       <div className="flex justify-between items-start mb-1">
-        <h3 className="text-[16px] font-semibold text-gray-900 leading-snug">
-          {course.title}
-        </h3>
+        <h3 className="text-[16px] font-semibold text-gray-900 leading-snug">{course.title}</h3>
         <span className="text-[10px] font-poppinsregular  text-gray-500">{course.date}</span>
       </div>
 
@@ -15,16 +13,16 @@ const CourseCard: React.FC<{ course: CourseType }> = ({ course }) => {
       )}
 
       <div className="flex items-center justify-start space-x-2 text-sm mb-4">
-  {course.tags.map((tag: { label: string; color: string }, idx: number) => (
-    <span
-      key={idx}
-      className={`font-poppinsregular text-[12px] ${tag.color} flex items-center gap-1`}
-    >
-      <span className="text-[#A8ADB7]">{idx % 2 === 0 ? "" : "•"}</span>
-      {tag.label}
-    </span>
-  ))}
-</div>
+        {course.tags.map((tag: { label: string; color: string }, idx: number) => (
+          <span
+            key={idx}
+            className={`font-poppinsregular text-[12px] ${tag.color} flex items-center gap-1`}
+          >
+            <span className="text-[#A8ADB7]">{idx % 2 === 0 ? '' : '•'}</span>
+            {tag.label}
+          </span>
+        ))}
+      </div>
 
       <div className="bg-[#e6f9ff] p-2 rounded-xl flex items-center justify-between">
         <div>

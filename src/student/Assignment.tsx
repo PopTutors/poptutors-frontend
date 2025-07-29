@@ -1,39 +1,39 @@
-import { useEffect, useRef } from "react";
-import AssignmentCard from "./components/AssignmentCard";
-import { Button } from "../components/ui/button";
-import FilterTabs from "../components/ui/filterTabs";
-import NotificationList from "../components/ui/cards/notificationList";
-import TransactionTable from "../components/ui/cards/transactionTable";
-import { MessageIcon, NotificationIcon, RattingIcon } from "../assets";
-import FilterBar from "./components/Filterbar";
-import type { TransactionType } from "../types/course";
+import { useEffect, useRef } from 'react';
+import AssignmentCard from './components/AssignmentCard';
+import { Button } from '../components/ui/button';
+import FilterTabs from '../components/ui/filterTabs';
+import NotificationList from '../components/ui/cards/notificationList';
+import TransactionTable from '../components/ui/cards/transactionTable';
+import { MessageIcon, NotificationIcon, RattingIcon } from '../assets';
+import FilterBar from './components/Filterbar';
+import type { TransactionType } from '../types/course';
 
 const sampleNotifications = [
   {
-    user: "Kevin",
-    message: "sent you message",
-    action: "What is ux",
-    course: "2024 ui/ux design with figma",
-    time: "Just now",
+    user: 'Kevin',
+    message: 'sent you message',
+    action: 'What is ux',
+    course: '2024 ui/ux design with figma',
+    time: 'Just now',
     icon: MessageIcon,
-    type: "message",
+    type: 'message',
   },
   {
-    user: "John",
-    message: "give a 5 star rating on your assignment",
-    course: "2024 ui/ux design with figma",
-    time: "5 mins ago",
+    user: 'John',
+    message: 'give a 5 star rating on your assignment',
+    course: '2024 ui/ux design with figma',
+    time: '5 mins ago',
     icon: RattingIcon,
-    type: "rating",
+    type: 'rating',
   },
   {
-    user: "Kevin",
-    message: "sent you message",
-    action: "What is ux",
-    course: "2024 ui/ux design with figma",
-    time: "6 mins ago",
+    user: 'Kevin',
+    message: 'sent you message',
+    action: 'What is ux',
+    course: '2024 ui/ux design with figma',
+    time: '6 mins ago',
     icon: NotificationIcon,
-    type: "message",
+    type: 'message',
   },
 ];
 
@@ -49,56 +49,53 @@ const transaction: TransactionType[] = [
 
 // Assignment component for dashboard
 export default function Assignment() {
-
-
-
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Handle selection from dropdown
 
   // Handle tab change from FilterTabs
   const handleTabChange = (tab: string) => {
-    console.log("Selected Tab:", tab);
+    console.log('Selected Tab:', tab);
   };
 
   // Close dropdown when clicking outside of it
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   // Format a date string to "Day Month, Weekday" format
-
 
   return (
     <div>
       {/* Top summary bar */}
       <div className="flex wrap justify-between gap-2 my-2 ">
-        <div className="text-[22px] text-black mb-4 font-poppinssemibold">
-          My Assignment
-        </div>
+        <div className="text-[22px] text-black mb-4 font-poppinssemibold">My Assignment</div>
 
         <div className="flex items-center justify-between gap-6 p-6 bg-white rounded-lg shadow-sm border border-gray-200">
           <div>
-            <h2 className="text-lg font-poppinsmedium text-[18px] text-gray-900">Request New Assignment</h2>
+            <h2 className="text-lg font-poppinsmedium text-[18px] text-gray-900">
+              Request New Assignment
+            </h2>
             <p className="text-[10px] text-gray-400">Fill the form to request an Assignment</p>
           </div>
 
-          <Button className=" mt-0 py-2 px-4 font-poppinsmedium text-[16px]" variant={"outline_rounded"} >Request</Button>
+          <Button
+            className=" mt-0 py-2 px-4 font-poppinsmedium text-[16px]"
+            variant={'outline_rounded'}
+          >
+            Request
+          </Button>
         </div>
       </div>
 
-      <div>
-      </div>
+      <div></div>
       <FilterTabs
-        tabs={["ALL", "Requested", "In Progress", "Completed", "Rejected"]}
+        tabs={['ALL', 'Requested', 'In Progress', 'Completed', 'Rejected']}
         defaultTab="Assignments"
         onTabChange={handleTabChange}
       />
@@ -108,8 +105,6 @@ export default function Assignment() {
         {/* Left Column - Filter tabs and content */}
 
         <div className="lg:col-span-5">
-
-
           <div className="bg-white md:h-[706px] h-full scrollbar-thin rounded-md  md:overflow-y-scroll overflow-none py-2 mb-2">
             <div className="max-w-4xl px-6 mx-auto">
               <FilterBar />
@@ -121,11 +116,16 @@ export default function Assignment() {
                 subjectcode="CS1013"
                 amount={150}
                 deadline="30 Aug 2025"
-                tags={['Python', 'Computer Science', 'Coding', 'Application Development', 'React Native']}
+                tags={[
+                  'Python',
+                  'Computer Science',
+                  'Coding',
+                  'Application Development',
+                  'React Native',
+                ]}
                 status="Completed"
-                statusLabel={["Completed", "Under Review"]}
+                statusLabel={['Completed', 'Under Review']}
               />
-
 
               <AssignmentCard
                 id={61436}
@@ -134,10 +134,16 @@ export default function Assignment() {
                 subjectcode="CS1013"
                 amount={150}
                 deadline="30 Aug 2025"
-                tags={['Python', 'Computer Science', 'Coding', 'Application Development', 'React Native']}
+                tags={[
+                  'Python',
+                  'Computer Science',
+                  'Coding',
+                  'Application Development',
+                  'React Native',
+                ]}
                 status="Inprogress"
                 // statusLabel="Inprogress • Milestone 1"
-                statusLabel={["Inprogress", "Milestone 1"]}
+                statusLabel={['Inprogress', 'Milestone 1']}
                 milestone="Milestone 1"
                 rating={4.8}
                 ratingCount={451444}
@@ -149,10 +155,16 @@ export default function Assignment() {
                 subjectcode="CS1013"
                 amount={150}
                 deadline="30 Aug 2025"
-                tags={['Python', 'Computer Science', 'Coding', 'Application Development', 'React Native']}
+                tags={[
+                  'Python',
+                  'Computer Science',
+                  'Coding',
+                  'Application Development',
+                  'React Native',
+                ]}
                 status="Inprogress"
                 // statusLabel="Inprogress • Milestone 1"
-                statusLabel={["Inprogress", "Milestone 1"]}
+                statusLabel={['Inprogress', 'Milestone 1']}
                 milestone="Milestone 1"
                 rating={4.8}
                 ratingCount={451444}
@@ -164,10 +176,16 @@ export default function Assignment() {
                 subjectcode="CS1013"
                 amount={150}
                 deadline="30 Aug 2025"
-                tags={['Python', 'Computer Science', 'Coding', 'Application Development', 'React Native']}
+                tags={[
+                  'Python',
+                  'Computer Science',
+                  'Coding',
+                  'Application Development',
+                  'React Native',
+                ]}
                 status="Inprogress"
                 // statusLabel="Inprogress • Milestone 1"
-                statusLabel={["Inprogress", "Milestone 1"]}
+                statusLabel={['Inprogress', 'Milestone 1']}
                 milestone="Milestone 1"
                 rating={4.8}
                 ratingCount={451444}
@@ -176,11 +194,7 @@ export default function Assignment() {
                 <Button variant="ghost">See More</Button>
               </div>
             </div>
-
-
           </div>
-
-
         </div>
 
         {/* Right Column - Notifications and Transactions */}

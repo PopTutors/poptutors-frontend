@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from "react";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
-import { Checkbox } from "../../components/ui/checkbox";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { google } from "../../assets";
+import { useState } from 'react';
+import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
+import { Label } from '../../components/ui/label';
+import { Checkbox } from '../../components/ui/checkbox';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { google } from '../../assets';
 
 // ✅ Define login payload type
 type LoginPayload = {
@@ -16,57 +16,53 @@ type LoginPayload = {
 };
 
 const LoginForm = () => {
-  const [form, setForm] = useState<LoginPayload>({ email: "", password: "" });
-  const [error, setError] = useState("");
+  const [form, setForm] = useState<LoginPayload>({ email: '', password: '' });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-//    axios.post(
-//   'http://localhost:5000/api/auth/login',
-//   { email: form.email, password: form.password },
-//   { withCredentials: true }
-// );
+  //    axios.post(
+  //   'http://localhost:5000/api/auth/login',
+  //   { email: form.email, password: form.password },
+  //   { withCredentials: true }
+  // );
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!form.email || !form.password) {
-    setError("Please enter email and password.");
-    return;
-  }
-
-  try {
-    const response = await axios.post(
-      'http://localhost:5000/api/auth/login',
-      {
-        email: form.email,
-        password: form.password,
-      },
-      {
-        withCredentials: true, // ✅ for sending/receiving cookies
-      }
-    );
-
-    console.log("Login successful:", response.data);
-    setError("");
-
-    // ✅ Redirect after successful login
-    navigate("/student/dashboard");
-
-  } catch (err: any) {
-    console.error("Login error:", err);
-    if (err.response?.data?.message) {
-      setError(err.response.data.message);
-    } else {
-      setError("Login failed. Please try again.");
+    if (!form.email || !form.password) {
+      setError('Please enter email and password.');
+      return;
     }
-  }
-};
+
+    try {
+      const response = await axios.post(
+        'http://localhost:5000/api/auth/login',
+        {
+          email: form.email,
+          password: form.password,
+        },
+        {
+          withCredentials: true, // ✅ for sending/receiving cookies
+        }
+      );
+
+      console.log('Login successful:', response.data);
+      setError('');
+
+      // ✅ Redirect after successful login
+      navigate('/student/dashboard');
+    } catch (err: any) {
+      console.error('Login error:', err);
+      if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else {
+        setError('Login failed. Please try again.');
+      }
+    }
+  };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex w-full flex-col items-center gap-5 text-gray-600"
-    >
+    <form onSubmit={handleSubmit} className="flex w-full flex-col items-center gap-5 text-gray-600">
       <div className="text-[36px] font-semibold md:text-3xl">Login to your Account</div>
       <div className="text-[16px] font-regular">Complete your on going assignments</div>
 
@@ -74,13 +70,8 @@ const LoginForm = () => {
         type="button"
         className="hover:bg-accent flex w-full items-center border bg-white py-6 font-semibold text-gray-500"
       >
-        <img
-          src={google}
-          alt="google-logo"
-          width={30}
-          height={30}
-        />
-       <span className="text-[14px] text-[#A1A1A1] font-medium">Continue with Google </span> 
+        <img src={google} alt="google-logo" width={30} height={30} />
+        <span className="text-[14px] text-[#A1A1A1] font-medium">Continue with Google </span>
       </Button>
 
       <div className="flex w-8/12 items-center justify-center">
@@ -132,9 +123,7 @@ const LoginForm = () => {
         </div>
       </div>
 
-      {error && (
-        <div className="text-red-500 font-medium w-full text-left">{error}</div>
-      )}
+      {error && <div className="text-red-500 font-medium w-full text-left">{error}</div>}
 
       <Button
         type="submit"
@@ -144,7 +133,7 @@ const LoginForm = () => {
       </Button>
 
       <div className="mt-8 text-sm font-semibold text-gray-400">
-        Not Registered Yet?{" "}
+        Not Registered Yet?{' '}
         <span className="text-primary hover:text-primary">
           <a href="/auth/signup">Create an Account</a>
         </span>

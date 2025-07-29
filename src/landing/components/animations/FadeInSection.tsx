@@ -1,6 +1,6 @@
-import { useInView } from "react-intersection-observer";
-import { motion } from "framer-motion";
-import React from "react";
+import { useInView } from 'react-intersection-observer';
+import { motion } from 'framer-motion';
+import React from 'react';
 
 interface FadeInSectionProps {
   children: React.ReactNode;

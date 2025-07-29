@@ -1,43 +1,42 @@
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "../../utils/cn";
+import * as React from 'react';
+import { Slot } from '@radix-ui/react-slot';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../utils/cn';
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
     variants: {
       variant: {
-        default: "bg-[#4db8da] text-white  rounded font-poppinsmedium ",
+        default: 'bg-[#4db8da] text-white  rounded font-poppinsmedium ',
         destructive:
-          "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+          'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
         outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
-        secondary: "bg-secondary text-secondary-foreground shadow-xs",
-        ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline",
+          'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
+        secondary: 'bg-secondary text-secondary-foreground shadow-xs',
+        ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
+        link: 'text-primary underline-offset-4 hover:underline',
         outline_rounded:
-          "mt-4  font-semibold border border-[#00bcd4] text-[#00bcd4] py-2 rounded-full text-sm font-medium hover:bg-[#00bcd4] hover:text-white transition-all",
+          'mt-4  font-semibold border border-[#00bcd4] text-[#00bcd4] py-2 rounded-full text-sm font-medium hover:bg-[#00bcd4] hover:text-white transition-all',
         outline_rounded_1:
-          " bg-[#00bcd4] py-4 font-semibold border border-[#00bcd4] text-[#00bcd4] py-2 rounded-full text-sm font-medium text-white transition-all",
+          ' bg-[#00bcd4] py-4 font-semibold border border-[#00bcd4] text-[#00bcd4] py-2 rounded-full text-sm font-medium text-white transition-all',
         pill_outline:
-          "border border-[#00bcd4] text-[#00bcd4] font-medium rounded-full px-5 py-1 inline-flex items-center gap-2 hover:bg-[#00bcd4] hover:text-white transition-all",
+          'border border-[#00bcd4] text-[#00bcd4] font-medium rounded-full px-5 py-1 inline-flex items-center gap-2 hover:bg-[#00bcd4] hover:text-white transition-all',
 
         pill_solid:
-          "bg-[#00bcd4] text-white font-medium rounded-full px-6 py-1 transition-all hover:bg-[#009db6]",
+          'bg-[#00bcd4] text-white font-medium rounded-full px-6 py-1 transition-all hover:bg-[#009db6]',
       },
       size: {
-        default: "text-[11px] px-4 py-1 mx-2  has-[>svg]:px-3",
-        sm: "h-8 rounded-md gap-1.5 px-1 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        icon: "size-9",
-        pill: "text-[14px] px-6 py-3 has-[>svg]:pl-4 has-[>svg]:pr-5",
+        default: 'text-[11px] px-4 py-1 mx-2  has-[>svg]:px-3',
+        sm: 'h-8 rounded-md gap-1.5 px-1 has-[>svg]:px-2.5',
+        lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
+        icon: 'size-9',
+        pill: 'text-[14px] px-6 py-3 has-[>svg]:pl-4 has-[>svg]:pr-5',
       },
     },
     defaultVariants: {
-      variant: "default",
-      size: "default",
+      variant: 'default',
+      size: 'default',
     },
   }
 );
@@ -48,11 +47,11 @@ function Button({
   size,
   asChild = false,
   ...props
-}: React.ComponentProps<"button"> &
+}: React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
   }) {
-  const Comp = asChild ? Slot : "button";
+  const Comp = asChild ? Slot : 'button';
 
   return (
     <Comp

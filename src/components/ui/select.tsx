@@ -4,10 +4,10 @@ import {
   ListboxOption,
   ListboxOptions,
   Transition,
-} from "@headlessui/react";
-import { Check } from "lucide-react";
-import { cn } from "../../utils/cn";
-import { Fragment } from "react";
+} from '@headlessui/react';
+import { Check } from 'lucide-react';
+import { cn } from '../../utils/cn';
+import { Fragment } from 'react';
 
 type Option = {
   label: string;
@@ -23,9 +23,9 @@ interface BaseProps {
 export function Select({
   options,
   className,
-  placeholder = "Select an option",
+  placeholder = 'Select an option',
   ...props
-}: BaseProps & Omit<React.ComponentProps<typeof Listbox>, "children">) {
+}: BaseProps & Omit<React.ComponentProps<typeof Listbox>, 'children'>) {
   const { value } = props;
 
   return (
@@ -34,15 +34,15 @@ export function Select({
         <div className="relative w-full">
           <ListboxButton
             className={cn(
-              "relative w-full h-[40px] cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm",
-              props["aria-invalid"] &&
-                "border-destructive ring-destructive/20 dark:ring-destructive/40",
+              'relative w-full h-[40px] cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm',
+              props['aria-invalid'] &&
+                'border-destructive ring-destructive/20 dark:ring-destructive/40',
               className
             )}
           >
             <span
               className={`block truncate text-${
-                (value as Option)?.label ? "primary" : "muted"
+                (value as Option)?.label ? 'primary' : 'muted'
               } font-poppinsregular`}
             >
               {(value as Option)?.label ?? placeholder}
@@ -73,8 +73,8 @@ export function Select({
                   value={option}
                   className={({ active }) =>
                     cn(
-                      "relative cursor-default select-none py-2 pl-3 pr-9",
-                      active ? "bg-blue-50 text-blue-900" : "text-gray-900"
+                      'relative cursor-default select-none py-2 pl-3 pr-9',
+                      active ? 'bg-blue-50 text-blue-900' : 'text-gray-900'
                     )
                   }
                 >
@@ -82,8 +82,8 @@ export function Select({
                     <>
                       <span
                         className={cn(
-                          "block truncate font-poppinsregular text-muted_dark",
-                          selected ? "font-medium" : "font-normal"
+                          'block truncate font-poppinsregular text-muted_dark',
+                          selected ? 'font-medium' : 'font-normal'
                         )}
                       >
                         {option.label}

@@ -47,19 +47,15 @@ const SidebarTab: React.FC<SidebarTabProps> = ({
         alt={`${label} icon`}
         className="object-contain w-6  h-6 mr-3 transition duration-200"
       />
-      <span className={`text-base  ${active ? "font-poppinsmedium":"font-poppinsregular"}`}>{label}</span>
+      <span className={`text-base  ${active ? 'font-poppinsmedium' : 'font-poppinsregular'}`}>
+        {label}
+      </span>
     </div>
   );
 
   return (
     <div>
-      {redirectPath && !subTabs ? (
-        <Link to={redirectPath}>
-          {TabContent}
-        </Link>
-      ) : (
-        TabContent
-      )}
+      {redirectPath && !subTabs ? <Link to={redirectPath}>{TabContent}</Link> : TabContent}
 
       {isOpen && subTabs && (
         <div className="ml-8 mt-1 space-y-1">

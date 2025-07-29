@@ -1,15 +1,12 @@
-import React from "react";
-import { ArrowRightHalf } from "../../assets";
+import React from 'react';
+import { ArrowRightHalf } from '../../assets';
 
 type MilestoneProps = {
   totalSteps: number;
   completedSteps: number;
 };
 
-const AssignmentMilestone: React.FC<MilestoneProps> = ({
-  totalSteps,
-  completedSteps,
-}) => {
+const AssignmentMilestone: React.FC<MilestoneProps> = ({ totalSteps, completedSteps }) => {
   const percentage = Math.round((completedSteps / totalSteps) * 100);
 
   return (
@@ -33,11 +30,9 @@ const AssignmentMilestone: React.FC<MilestoneProps> = ({
       <div className="flex items-center gap-4">
         <span className="text-sm text-gray-400">{percentage}% Completed</span>
         <span className="text-lg">
-            <img src={ArrowRightHalf} alt="" />
+          <img src={ArrowRightHalf} alt="" />
         </span>
       </div>
-
-      
     </div>
   );
 };
