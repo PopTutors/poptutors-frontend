@@ -1,10 +1,7 @@
 // import RequestSessionForm from "../../components/forms/RequestSessionForm";
-
-import { Button } from "../components/ui/button";
-import FilterTabs from "../components/ui/filterTabs";
-import FilterBar from "../student/components/Filterbar";
-import { LiveQuestionCard } from "./components/LiveQuestionCard";
-
+import { Button } from "../../components/ui/button";
+import FilterTabs from "../../components/ui/filterTabs";
+import FilterBar from "../../student/components/Filterbar";
 
 const LiveQuestions = () => {
   const handleTabChange = (tab: string) => {
@@ -47,44 +44,7 @@ const LiveQuestions = () => {
         <div className=" px-4 mx-auto">
           <FilterBar />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <LiveQuestionCard
-              status="budget"
-              title="Live Exam Help Type"
-              subject="Computer Science"
-              topic="Python Programming"
-              hours={1}
-              time="16 Mar 11 PM –12 PM"
-              startNote="Starting in 4hrs"
-            />
-            <LiveQuestionCard
-              status="confirmed"
-              title="Live Exam Help Type"
-              subject="Computer Science"
-              topic="Python Programming"
-              hours={1}
-              time="16 Mar 11 PM –12 PM"
-              startNote="Starting in 4hrs"
-            />
-            <LiveQuestionCard
-              status="completed"
-              title="Live Exam Help Type"
-              subject="Computer Science"
-              topic="Python Programming"
-              hours={1}
-              rating={4.8}
-              // ratingCount={451444}
-              showRecording={true}
-              time=""
-            />
-            <LiveQuestionCard
-              status="rejected"
-              title="Live Exam Help Type"
-              subject="Computer Science"
-              topic="Python Programming"
-              hours={1}
-              time="16 Mar 11 PM –12 PM"
-              startNote="Starting in 4hrs"
-            />
+            
           </div>
 
           <div className="flex font-poppinssemibold text-[13px] justify-center text-primary">

@@ -73,20 +73,22 @@ export default function Assignment() {
   return (
     <div>
       {/* Top summary bar */}
-      <div className="flex wrap justify-between gap-2 my-2 ">
-        <div className="text-[22px] text-black mb-4 font-poppinssemibold">My Assignment</div>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 my-6">
+        {/* Left: Title */}
+        <div className="text-[22px] text-black font-poppinssemibold">
+          My Assignment
+        </div>
 
-        <div className="flex items-center justify-between gap-6 p-6 bg-white rounded-lg shadow-sm border border-gray-200">
+        {/* Right: Request Box */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200 w-full sm:w-auto">
           <div>
-            <h2 className="text-lg font-poppinsmedium text-[18px] text-gray-900">
-              Request New Assignment
-            </h2>
-            <p className="text-[10px] text-gray-400">Fill the form to request an Assignment</p>
+            <h2 className="text-[14px] sm:text-[16px] font-poppinssemibold text-gray-900">Request New Assignment</h2>
+            <p className="text-[11px] font-poppinsregular text-gray-400">Fill the form to request an Assignment</p>
           </div>
 
           <Button
-            className=" mt-0 py-2 px-4 font-poppinsmedium text-[16px]"
-            variant={'outline_rounded'}
+            className="py-2 px-4 m-0 text-[16px] font-poppinsmedium"
+            variant="outline_rounded"
           >
             Request
           </Button>

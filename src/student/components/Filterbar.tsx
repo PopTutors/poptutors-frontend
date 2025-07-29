@@ -1,53 +1,53 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '../../components/ui/dropdown';
-import { Button } from '../../components/ui/button';
-import { FiChevronDown } from 'react-icons/fi';
-import { Arrowright } from '../../assets';
+} from "../../components/ui/dropdown";
+import { Button } from "../../components/ui/button";
+import { FiChevronDown, FiCalendar } from "react-icons/fi";
+import { Arrowright } from "../../assets";
 
 const FilterBar: React.FC = () => {
-  const filterOptions = ['C Programming'];
-
-  const [open, setOpen] = React.useState(false);
-  const [selectedOption, setSelectedOption] = useState<string>(filterOptions[0]);
+  const filterOptions = ["C Programming"];
+  const [open, setOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(filterOptions[0]);
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
     setOpen(false);
   };
 
+  const startDateRef = useRef<HTMLInputElement>(null);
+  const endDateRef = useRef<HTMLInputElement>(null);
+
+  // Hide browser date icon style
+  const hideDefaultDateIcon = "appearance-none [&::-webkit-calendar-picker-indicator]:hidden";
+
   return (
-    <div className="flex sm:flex-row flex-col gap-4 mb-6 mt-4">
-      <div className="flex items-center gap-2">
-        <label className="text-[14px] font-poppinsregular  rounded text-[#262626]">
-          Subject :{' '}
-        </label>
+    <div className="flex flex-col sm:flex-row flex-wrap gap-4 mb-6 mt-4">
+      {/* Subject dropdown */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+        <label className="text-[14px] font-poppinsregular text-[#262626]">Subject:</label>
         <DropdownMenu open={open} onOpenChange={setOpen}>
           <DropdownMenuTrigger asChild>
-            <div
-              className="flex  items-center gap-1 font-poppinsregular px-2 py-[2px] rounded border rounded-lg  font-poppinsregular bg-gray-50 text-gray-600"
-              data-state={open ? 'open' : 'closed'}
+            <Button
+              variant="outline"
+              className="flex items-center justify-between gap-2 border px-3 py-2 rounded-lg text-sm text-[#262626] bg-gray-50"
             >
-              <Button size="sm" variant="ghost">
-                {selectedOption}
-              </Button>
+              {selectedOption}
               <FiChevronDown
-                className={`ml-1 text-lg text-[#262626] transition-transform duration-200 ${
-                  open ? 'rotate-180' : 'rotate-0'
-                }`}
+                className={`transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
               />
-            </div>
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {filterOptions.map((option) => (
               <DropdownMenuItem
                 key={option}
                 onSelect={() => handleSelect(option)}
-                className="cursor-pointer font-poppinsregular text-[#262626]"
+                className="cursor-pointer text-[14px] font-poppinsregular text-[#262626]"
               >
                 {option}
               </DropdownMenuItem>
@@ -56,24 +56,46 @@ const FilterBar: React.FC = () => {
         </DropdownMenu>
       </div>
 
-      <div className="flex items-center gap-2">
-        <label className="text-[14px] font-poppinsregular  py-[10px] rounded-lg text-[#262626]">
-          Date :
-        </label>
+      {/* Date Range */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+        <label className="text-[14px] font-poppinsregular text-[#262626]">Date:</label>
 
-        <input
-          type="date"
-          className="border rounded-lg  font-poppinsregular text-[#262626] px-2 py-2 text-sm"
-        />
+        {/* Start Date */}
+        <div className="relative">
+          <button
+            type="button"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 focus:outline-none"
+            onClick={() => startDateRef.current?.showPicker()}
+          >
+            <FiCalendar />
+          </button>
+          <input
+            ref={startDateRef}
+            type="date"
+            className={`pl-10 pr-3 py-2 border rounded-lg text-[14px] font-poppinsregular bg-white ${hideDefaultDateIcon}`}
+          />
+        </div>
 
-        <span className="flex items-center justify-center  bg-white px-2 w-[30px] py-4">
-          <img src={Arrowright} alt="Arrow" className="" />
+        {/* Arrow Icon */}
+        <span className="flex items-center justify-center px-2 py-2">
+          <img src={Arrowright} alt="Arrow" className="w-4 h-4" />
         </span>
 
-        <input
-          type="date"
-          className="border rounded-lg  font-poppinsregular text-[#262626] px-2 py-2 text-sm"
-        />
+        {/* End Date */}
+        <div className="relative">
+          <button
+            type="button"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 focus:outline-none"
+            onClick={() => endDateRef.current?.showPicker()}
+          >
+            <FiCalendar />
+          </button>
+          <input
+            ref={endDateRef}
+            type="date"
+            className={`pl-10 pr-3 py-2 border rounded-lg text-[14px] font-poppinsregular bg-white ${hideDefaultDateIcon}`}
+          />
+        </div>
       </div>
     </div>
   );

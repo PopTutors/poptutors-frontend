@@ -1,21 +1,21 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from "react-router-dom";
 // import { lazy } from "react";
 // import ProtectedRoute from "./ProtectedRoute";
-import { paths } from './config/path';
-import Login from './auth/login';
-import Signup from './auth/signup';
-import Landing from './landing/Landing';
-import HomeContent from './components/layout/Mainlayout';
-import Student from './student/Student';
-import NotFound from './landing/components/Notfound';
-import Assignment from './student/Assignment';
-import Profile from './profile/Profile';
-import SessionCard from './sessiondetails/SessionDetails';
-import SessionPage from './pages/session/Session';
+import { paths } from "./config/path";
+import Login from "./auth/login";
+import Signup from "./auth/signup";
+import Landing from "./landing/Landing";
+import HomeContent from "./components/layout/Mainlayout";
+import Student from "./student/Student";
+import NotFound from "./landing/components/Notfound";
+import Assignment from "./student/Assignment";
+import Profile from "./profile/Profile";
+import SessionCard from "./sessiondetails/SessionDetails";
+import SessionPage from "./pages/session/Session";
 // import SubmitAssignmentPage from "./student/components/SubmitAssignment";
-import BookExpertPage from './pages/live-question/book-expert';
-import NewAssignmentPage from './pages/assignment/new-assignment';
-import AssignmentDetailsPage from './pages/student/assignment/details';
+import BookExpertPage from "./pages/live-question/book-expert";
+import NewAssignmentPage from "./pages/assignment/new-assignment";
+import LiveQuestion from "./liveQuestion/LiveQuestion";
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -45,10 +45,10 @@ export const createAppRouter = createBrowserRouter([
             path: paths.student.dashboard.path,
             element: <Student />,
           },
-          {
-            path: paths.student.livequestion.path,
-            element: <BookExpertPage />,
-          },
+          // {
+          //   path: paths.student.livequestion.path,
+          //   element: <BookExpertPage />,
+          // },
           {
             path: paths.student.assignment.path,
             element: <Assignment />,
@@ -62,19 +62,19 @@ export const createAppRouter = createBrowserRouter([
             element: <NewAssignmentPage />,
           },
           {
-            path: paths.student.assignment.details.path,
-            element: <AssignmentDetailsPage />,
+            path: paths.student.assignmentdetails.path,
+            element: <SessionCard />,
           },
           {
             path: paths.student.livequestion.path,
-            element: <BookExpertPage />,
+            element: <LiveQuestion />,
           },
           {
             path: paths.student.session.path,
             element: <SessionPage />,
           },
           {
-            path: '*',
+            path: "*",
             element: <NotFound />,
           },
         ],
@@ -83,7 +83,7 @@ export const createAppRouter = createBrowserRouter([
   },
 
   {
-    path: '*',
+    path: "*",
     element: <NotFound />,
   },
 ]);

@@ -1,128 +1,156 @@
-type ColorKey = 'purple' | 'blue' | 'green' | 'orange';
+import type { FC } from 'react';
+import { ArrowRight } from 'lucide-react';
+import clsx from 'clsx';
 
-type LiveQuestionCardProps = {
-  subject?: string;
-  topicName?: string;
-  timeSlot?: string;
-  hours?: string;
-  price?: string;
-  status?: string;
-  mainColor?: ColorKey;
-};
+type StatusType = 'budget' | 'confirmed' | 'completed' | 'rejected';
+interface SessionCardProps {
+  title: string;
+  status: StatusType;
+  subject: string;
+  topic: string;
+  hours: number;
+  time?: string;
+  timezone?: string;
+  startsIn?: string;
+  startNote?: string;
+  rating?: number;
+  showRecording?: boolean;
+}
 
-const colorVariants: Record<
-  ColorKey,
-  {
-    border: string;
-    headerBg: string;
-    statusBg: string;
-    buttonBorder: string;
-    buttonText: string;
-    priceText: string;
-  }
-> = {
-  purple: {
-    border: 'border-purple-400',
-    headerBg: 'bg-yellow-100',
-    statusBg: 'bg-yellow-200',
-    buttonBorder: 'border-blue-400',
-    buttonText: 'text-blue-500',
-    priceText: 'text-yellow-600',
+const statusStyles = {
+  budget: {
+    label: 'Budget decided',
+    bg: 'bg-[#fcf6e9]',
+    text: 'text-[#DDA31E]',
   },
-  blue: {
-    border: 'border-blue-400',
-    headerBg: 'bg-blue-100',
-    statusBg: 'bg-blue-200',
-    buttonBorder: 'border-blue-400',
-    buttonText: 'text-blue-500',
-    priceText: 'text-blue-600',
+  confirmed: {
+    label: 'Confirmed',
+    bg: 'bg-[#edf7fa]',
+    text: 'text-[#197B9B]',
   },
-  green: {
-    border: 'border-green-400',
-    headerBg: 'bg-green-100',
-    statusBg: 'bg-green-200',
-    buttonBorder: 'border-blue-400',
-    buttonText: 'text-blue-500',
-    priceText: 'text-green-600',
+  completed: {
+    label: 'Completed',
+    bg: 'bg-[#ECF6EC]',
+    text: 'text-[#229126]',
   },
-  orange: {
-    border: 'border-orange-400',
-    headerBg: 'bg-orange-100',
-    statusBg: 'bg-orange-200',
-    buttonBorder: 'border-blue-400',
-    buttonText: 'text-blue-500',
-    priceText: 'text-orange-600',
+  rejected: {
+    label: 'Stage where it got rejected',
+    bg: 'bg-[#FFEDED]',
+    text: 'text-[#D22525]',
   },
 };
 
-const LiveQuestionCard = ({
-  subject = 'Computer Science',
-  topicName = 'Python Programming',
-  timeSlot = '16 March 11 PM -12 PM',
-  hours = '1 hour',
-  price = '$30',
-  status = 'Status',
-  mainColor = 'purple',
-}: LiveQuestionCardProps) => {
-  const colors = colorVariants[mainColor ?? 'purple'];
+export const LiveQuestionCard: FC<SessionCardProps> = ({
+  status,
+  subject,
+  topic,
+  hours,
+  rating,
+  showRecording,
+}) => {
+  const isCompleted = status === 'completed';
+  const isRejected = status === 'rejected';
+  const statusInfo = statusStyles[status];
 
   return (
-    <div className={`w-100 bg-white rounded-lg border-2 p-6 font-sans relative`}>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className={`${colors.headerBg} px-4 py-2 rounded-lg`}>
-          <h2 className="text-lg font-semibold text-gray-800">Help Type</h2>
+    <div className="rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className={clsx('flex items-center justify-between py-[18px] px-4', statusInfo.bg)}>
+        <div>
+          <h3 className="font-poppinssemibold text-[18px] text-gray-800">Live Exam Help Type</h3>
+          <p className="text-sm mt-1">
+            <span className={clsx('font-poppinssmedium font-[14px] ', statusInfo.text)}>{statusInfo.label}</span>
+            <span className="text-[#707070] font-poppinssregular font-[14px]"> • Description - Problem solving on library</span>
+          </p>
         </div>
-        <div className="flex space-x-1">
-          <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-          <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-          <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-        </div>
+        <ArrowRight className="text-[#00A5EC] w-[24px] h-[24px] mt-1 cursor-pointer" />
+
       </div>
 
-      {/* Content */}
-      <div className="space-y-4 mb-6">
-        <div className="flex justify-between items-start">
-          <span className="text-gray-600 font-medium text-sm">Subject</span>
-          <span className="text-gray-800 font-semibold text-sm text-right max-w-48">{subject}</span>
+      <div className="p-4 space-y-1 text-[14px]">
+        <div className="flex justify-between">
+          <span className="text-[#707070] font-poppinsregular">Subject:</span>
+          <span className="text-[#111111] font-poppinsmedium text-gray-800">{subject}</span>
         </div>
+        <div className="flex justify-between">
+          <span className="text-[#707070] font-poppinsregular">Topic Name:</span>
+          <span className="text-[#111111] font-poppinsmedium text-gray-800">{topic}</span>
+        </div>
+        <div className="flex justify-between pb-3">
+          <span className="text-[#707070] font-poppinsregular">No. of Hours:</span>
+          <span className="text-[#111111] font-poppinsmedium text-gray-800">{hours}</span>
+        </div>
+        <hr className="mt-3" />
+        {/* Time Info */}
 
-        <div className="flex justify-between items-start">
-          <span className="text-gray-600 font-medium text-sm">Topic Name</span>
-          <span className="text-gray-800 font-semibold text-sm text-right max-w-48">
-            {topicName}
-          </span>
-        </div>
+        {!isCompleted && !isRejected && (
+          <>
+            <div className='flex pt-3 justify-between'>
+              <div>
+                <p className="text-[18px] font-poppinssemibold text-[#212121]">16 Mar 11 PM -12 PM</p>
+                <p className="text-[14px] font-poppinsregular text-[#111111]">
+                  (EET), <span className="font-poppinsregular">Cairo UTC +3</span>
+                </p>
+                <p className="text-[14px] font-poppinsregular text-gray-400">Starting in 4hrs</p>
+              </div>
+              {/* Button */}
+              <div className="pt-3">
+                <button className="border w-[160px] border-primary  px-4 py-[9px] rounded-full text-[14px] font-poppinsmedium bg-primary text-white whitespace-nowrap">
+                  Reschedule
+                </button>
+              </div>
+            </div>
+          </>
+        )}
 
-        <div className="flex justify-between items-start">
-          <span className="text-gray-600 font-medium text-sm">Time Slot</span>
-          <span className="text-gray-800 font-semibold text-sm text-right max-w-48">
-            {timeSlot}
-          </span>
-        </div>
 
-        <div className="flex justify-between items-start">
-          <span className="text-gray-600 font-medium text-sm">No. of Hours</span>
-          <span className="text-gray-800 font-semibold text-sm text-right max-w-48">{hours}</span>
-        </div>
+        {/* {!isCompleted && !isRejected && (
+          <>
+            <div className="font-semibold text-base text-black">{time}</div>
+            <div className="text-sm text-gray-500">{timezone}</div>
+            <div className="text-sm text-gray-400 mb-3">{startsIn}</div>
+            <button className="bg-sky-500 text-white px-4 py-2 rounded-full hover:bg-sky-600 text-sm">
+              Reschedule
+            </button>
+          </>
+        )} */}
+
+        {isCompleted && (
+          <div className="flex justify-between h-[76px] items-center">
+            <div>
+            <div className="font-semibold text-base text-black">1hrs Sessions</div>
+            <div className="text-sm text-gray-600 flex items-center gap-1">
+              <span className="text-orange-500 font-semibold">{rating}</span>
+              <span className="text-gray-400">(451,444 Rating)</span>
+            </div>
+            </div>
+            {showRecording && (
+              <button className="border w-[160px] border-primary  px-4 py-[9px] rounded-full text-[14px] font-poppinsmedium bg-primary text-white whitespace-nowrap">
+                View Recordings
+              </button>
+            )}
+          </div>
+        )}
+
+        {isRejected && (
+          <>
+            <div className='flex pt-3 justify-between opacity-20'>
+              <div>
+                <p className="text-[18px] font-poppinssemibold text-[#212121]">16 Mar 11 PM -12 PM</p>
+                <p className="text-[14px] font-poppinsregular text-[#111111]">
+                  (EET), <span className="font-poppinsregular">Cairo UTC +3</span>
+                </p>
+                <p className="text-[14px] font-poppinsregular text-gray-400">Starting in 4hrs</p>
+              </div>
+              {/* Button */}
+              <div className="pt-3">
+                <button className="border w-[160px] pointer-events-none border-primary  px-4 py-[9px] rounded-full text-[14px] font-poppinsmedium bg-primary text-white whitespace-nowrap">
+                  Cancelled
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
-
-      {/* Bottom Section */}
-      <div className="flex items-center justify-between mb-4">
-        <div className={`${colors.statusBg} px-4 py-2 rounded-lg`}>
-          <span className="text-sm font-semibold text-gray-700">{status}</span>
-        </div>
-        <div className={`text-2xl font-bold ${colors.priceText}`}>{price}</div>
-      </div>
-
-      {/* Button */}
-      <button
-        className={`w-full py-3 px-4 rounded-full border-2 ${colors.buttonBorder} bg-white ${colors.buttonText} font-semibold text-sm hover:bg-gray-50 transition-colors`}
-      >
-        View Details
-      </button>
     </div>
   );
 };
-
-export default LiveQuestionCard;
