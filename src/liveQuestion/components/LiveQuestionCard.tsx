@@ -58,12 +58,16 @@ export const LiveQuestionCard: FC<SessionCardProps> = ({
         <div>
           <h3 className="font-poppinssemibold text-[18px] text-gray-800">Live Exam Help Type</h3>
           <p className="text-sm mt-1">
-            <span className={clsx('font-poppinssmedium font-[14px] ', statusInfo.text)}>{statusInfo.label}</span>
-            <span className="text-[#707070] font-poppinssregular font-[14px]"> • Description - Problem solving on library</span>
+            <span className={clsx('font-poppinssmedium font-[14px] ', statusInfo.text)}>
+              {statusInfo.label}
+            </span>
+            <span className="text-[#707070] font-poppinssregular font-[14px]">
+              {' '}
+              • Description - Problem solving on library
+            </span>
           </p>
         </div>
         <ArrowRight className="text-[#00A5EC] w-[24px] h-[24px] mt-1 cursor-pointer" />
-
       </div>
 
       <div className="p-4 space-y-1 text-[14px]">
@@ -84,9 +88,11 @@ export const LiveQuestionCard: FC<SessionCardProps> = ({
 
         {!isCompleted && !isRejected && (
           <>
-            <div className='flex pt-3 justify-between'>
+            <div className="flex pt-3 justify-between">
               <div>
-                <p className="text-[18px] font-poppinssemibold text-[#212121]">16 Mar 11 PM -12 PM</p>
+                <p className="text-[18px] font-poppinssemibold text-[#212121]">
+                  16 Mar 11 PM -12 PM
+                </p>
                 <p className="text-[14px] font-poppinsregular text-[#111111]">
                   (EET), <span className="font-poppinsregular">Cairo UTC +3</span>
                 </p>
@@ -102,7 +108,6 @@ export const LiveQuestionCard: FC<SessionCardProps> = ({
           </>
         )}
 
-
         {/* {!isCompleted && !isRejected && (
           <>
             <div className="font-semibold text-base text-black">{time}</div>
@@ -117,11 +122,11 @@ export const LiveQuestionCard: FC<SessionCardProps> = ({
         {isCompleted && (
           <div className="flex justify-between h-[76px] items-center">
             <div>
-            <div className="font-semibold text-base text-black">1hrs Sessions</div>
-            <div className="text-sm text-gray-600 flex items-center gap-1">
-              <span className="text-orange-500 font-semibold">{rating}</span>
-              <span className="text-gray-400">(451,444 Rating)</span>
-            </div>
+              <div className="font-semibold text-base text-black">1hrs Sessions</div>
+              <div className="text-sm text-gray-600 flex items-center gap-1">
+                <span className="text-orange-500 font-semibold">{rating}</span>
+                <span className="text-gray-400">(451,444 Rating)</span>
+              </div>
             </div>
             {showRecording && (
               <button className="border w-[160px] border-primary  px-4 py-[9px] rounded-full text-[14px] font-poppinsmedium bg-primary text-white whitespace-nowrap">
@@ -133,9 +138,11 @@ export const LiveQuestionCard: FC<SessionCardProps> = ({
 
         {isRejected && (
           <>
-            <div className='flex pt-3 justify-between opacity-20'>
+            <div className="flex pt-3 justify-between opacity-20">
               <div>
-                <p className="text-[18px] font-poppinssemibold text-[#212121]">16 Mar 11 PM -12 PM</p>
+                <p className="text-[18px] font-poppinssemibold text-[#212121]">
+                  16 Mar 11 PM -12 PM
+                </p>
                 <p className="text-[14px] font-poppinsregular text-[#111111]">
                   (EET), <span className="font-poppinsregular">Cairo UTC +3</span>
                 </p>

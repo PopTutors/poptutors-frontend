@@ -6,8 +6,8 @@ const AssignmentCard = () => {
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-lg font-poppinssemibold mb-2">
-          <span className="text-primary font-poppinsbold">#81436</span> New swift assignment –
-          iOS Programming New swift assignment – iOS Programming
+          <span className="text-primary font-poppinsbold">#81436</span> New swift assignment – iOS
+          Programming New swift assignment – iOS Programming
         </h2>
         <div className="flex items-center gap-3 mt-2">
           <span className="text-xs font-poppinsmedium text-gray-500 bg-[#e6f9ff] rounded px-3 py-1">
@@ -19,34 +19,34 @@ const AssignmentCard = () => {
 
       {/* Metadata Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center justify-start gap-2">
-              <Clock className="w-4 h-4 text-gray-400" />
-              <p className="text-sm font-poppinsregular text-gray-500">Time</p>
-            </div>
-            <p className="text-sm font-poppinsmedium text-gray-900">20 April 2024</p>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-start gap-2">
+            <Clock className="w-4 h-4 text-gray-400" />
+            <p className="text-sm font-poppinsregular text-gray-500">Time</p>
           </div>
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center justify-start gap-2">
+          <p className="text-sm font-poppinsmedium text-gray-900">20 April 2024</p>
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-start gap-2">
             <BarChartHorizontal className="w-4 h-4 text-gray-400" />
             <p className="text-sm font-poppinsregular text-gray-500">Assignment Type</p>
-            </div>
-            <p className="text-sm font-poppinsmedium text-gray-900">Lab Work</p>
           </div>
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center justify-start gap-2">
-              <Calendar className="w-4 h-4 text-gray-400" />
-              <p className="text-sm font-poppinsregular text-gray-500">Deadline</p>
-            </div>
-            <p className="text-sm font-poppinsmedium text-gray-900">25 April 2024</p>
+          <p className="text-sm font-poppinsmedium text-gray-900">Lab Work</p>
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-start gap-2">
+            <Calendar className="w-4 h-4 text-gray-400" />
+            <p className="text-sm font-poppinsregular text-gray-500">Deadline</p>
           </div>
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center justify-start gap-2">
-              <FilePlus className="w-4 h-4 text-gray-400" />
-              <p className="text-sm font-poppinsregular text-gray-500">Additional Services</p>
-            </div>
-            <p className="text-sm font-poppinsmedium text-gray-900">English</p>
+          <p className="text-sm font-poppinsmedium text-gray-900">25 April 2024</p>
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-start gap-2">
+            <FilePlus className="w-4 h-4 text-gray-400" />
+            <p className="text-sm font-poppinsregular text-gray-500">Additional Services</p>
           </div>
+          <p className="text-sm font-poppinsmedium text-gray-900">English</p>
+        </div>
       </div>
 
       {/* Description */}
@@ -67,7 +67,6 @@ const AssignmentCard = () => {
         </div>
       </div>
       <div className="border-b border-gray-200 mb-4"></div>
-
 
       {/* Skills */}
       <div>

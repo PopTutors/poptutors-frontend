@@ -1,4 +1,4 @@
-import { Button } from '../../../../../components/ui/button';
+import { Button } from '../ui/button';
 
 const PriceSection = () => {
   return (
@@ -13,17 +13,13 @@ const PriceSection = () => {
 
         <div className="border-b border-gray-200 mb-4"></div>
 
-
         <div className="px-5 pb-5">
           <div className="bg-[#F5F5F599] rounded-lg p-5">
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-3">
-                  <span className="w-1 h-1 bg-gray-700 rounded-full">
-                  </span>
-                  <span className="text-sm font-poppinsmedium text-gray-700">
-                    Total Price
-                  </span>
+                  <span className="w-1 h-1 bg-gray-700 rounded-full"></span>
+                  <span className="text-sm font-poppinsmedium text-gray-700">Total Price</span>
                 </div>
                 <span className="text-md font-poppinsbold text-gray-900">$1500</span>
               </div>
@@ -37,16 +33,15 @@ const PriceSection = () => {
               ></div>
 
               <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-3">
-                  <span className="w-1 h-1 bg-gray-700 rounded-full">
-                  </span>
-                  <span className="text-sm font-poppinsmedium text-gray-700">
-                    Total amount paid
-                  </span>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-3">
+                    <span className="w-1 h-1 bg-gray-700 rounded-full"></span>
+                    <span className="text-sm font-poppinsmedium text-gray-700">
+                      Total amount paid
+                    </span>
+                  </div>
+                  <span className="text-md font-poppinsbold text-gray-900">$1100</span>
                 </div>
-                <span className="text-md font-poppinsbold text-gray-900">$1100</span>
-              </div>
                 <div className="flex ml-4 justify-between items-center">
                   <span className="text-xs font-poppinsregular text-gray-600">Service</span>
                   <span className="text-xs font-poppinsmedium text-gray-800">$250</span>
@@ -64,11 +59,8 @@ const PriceSection = () => {
           </div>
           <div className="flex justify-between items-center bg-[#e6f9ff] py-2 pl-3 rounded-lg mt-1">
             <div className="flex items-center gap-3">
-              <span className="w-1 h-1 bg-gray-700 rounded-full">
-              </span>
-              <span className="text-sm font-poppinsmedium text-gray-700">
-                Remaining Payment
-              </span>
+              <span className="w-1 h-1 bg-gray-700 rounded-full"></span>
+              <span className="text-sm font-poppinsmedium text-gray-700">Remaining Payment</span>
             </div>
             <Button
               variant="outline_rounded_1"

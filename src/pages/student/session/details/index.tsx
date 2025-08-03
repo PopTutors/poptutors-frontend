@@ -1,12 +1,15 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import AssignmentCard from './components/AssignmentCard';
 import { MoveLeft } from 'lucide-react';
 import ChatSection from '../../../../components/ChatSection';
+import { Button } from '../../../../components/ui/button';
 import SelectTeacher from '../../../../components/student/SelectTeacher';
 import PriceSection from '../../../../components/student/PriceSection';
 import DocumentTable from '../../../../components/student/DocumentTable';
+import SessionCard from './components/SessionCard';
+import ReviewSection from './components/ReviewSection';
+import SessionNotes from './components/SessionNotes';
 
-const AssignmentDetailsPage = () => {
+const SessionDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -27,32 +30,41 @@ const AssignmentDetailsPage = () => {
           >
             <MoveLeft strokeWidth={3} className="w-6 h-6" />
           </button>
-          <h1 className="text-xl font-poppinssemibold">Assignment Details</h1>
+          <h1 className="text-xl font-poppinssemibold">Session Details</h1>
         </div>
 
-        <div className="flex flex-col items-start bg-white border border-gray-200 rounded-lg px-4 py-3 shadow-sm">
+        <Button
+          variant="pill_solid"
+          className="font-poppinsmedium py-3 px-10 text-sm bg-primary text-white"
+        >
+          Reshedule
+        </Button>
+
+        {/* <div className="flex flex-col items-start bg-white border border-gray-200 rounded-lg px-4 py-3 shadow-sm">
           <div className="flex items-center gap-2">
             <span className="font-poppinssemibold text-sm text-primary">Inprogress</span>
             <span className="text-gray-400">•</span>
             <span className="font-poppinsregular text-sm text-primary">Milestone 1</span>
           </div>
           <span className="font-poppinsregular text-xs text-gray-600 mt-1">Downpayment Paid</span>
-        </div>
+        </div> */}
       </header>
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <div className="xl:col-span-2 gap-5 flex flex-col">
-          <AssignmentCard />
+          <SessionCard />
           <SelectTeacher />
+          <ReviewSection />
           {/* <AllotedTutor /> */}
           <PriceSection />
           <DocumentTable />
         </div>
-        <div>
+        <div className="flex flex-col gap-5">
           <ChatSection />
+          <SessionNotes />
         </div>
       </div>
     </div>
   );
 };
 
-export default AssignmentDetailsPage;
+export default SessionDetailsPage;

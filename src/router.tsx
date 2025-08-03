@@ -1,21 +1,24 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter } from 'react-router-dom';
 // import { lazy } from "react";
 // import ProtectedRoute from "./ProtectedRoute";
-import { paths } from "./config/path";
-import Login from "./auth/login";
-import Signup from "./auth/signup";
-import Landing from "./landing/Landing";
-import HomeContent from "./components/layout/Mainlayout";
-import Student from "./student/Student";
-import NotFound from "./landing/components/Notfound";
-import Assignment from "./student/Assignment";
-import Profile from "./profile/Profile";
-import SessionCard from "./sessiondetails/SessionDetails";
-import SessionPage from "./pages/session/Session";
+import { paths } from './config/path';
+import Login from './auth/login';
+import Signup from './auth/signup';
+import Landing from './landing/Landing';
+import HomeContent from './components/layout/Mainlayout';
+import Student from './student/Student';
+import NotFound from './landing/components/Notfound';
+import Assignment from './student/Assignment';
+import Profile from './profile/Profile';
+import SessionCard from './sessiondetails/SessionDetails';
+import SessionPage from './pages/session/Session';
 // import SubmitAssignmentPage from "./student/components/SubmitAssignment";
-import NewAssignmentPage from "./pages/assignment/new-assignment";
-import LiveQuestion from "./liveQuestion/LiveQuestion";
 import TransactionDashboard from "./student/Wallet";
+import BookExpertPage from './pages/live-question/book-expert';
+import NewAssignmentPage from './pages/assignment/new-assignment';
+import LiveQuestion from './liveQuestion/LiveQuestion';
+import AssignmentDetailsPage from './pages/student/assignment/details';
+import SessionDetailsPage from './pages/student/session/details';
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -62,6 +65,10 @@ export const createAppRouter = createBrowserRouter([
             element: <NewAssignmentPage />,
           },
           {
+            path: paths.student.assignment.assignmentDetails.path,
+            element: <AssignmentDetailsPage />,
+          },
+          {
             path: paths.student.assignmentdetails.path,
             element: <SessionCard />,
           },
@@ -78,7 +85,11 @@ export const createAppRouter = createBrowserRouter([
             element: <TransactionDashboard />,
           },
           {
-            path: "*",
+            path: paths.student.session.sessionDetails.path,
+            element: <SessionDetailsPage />,
+          },
+          {
+            path: '*',
             element: <NotFound />,
           },
         ],
@@ -87,7 +98,7 @@ export const createAppRouter = createBrowserRouter([
   },
 
   {
-    path: "*",
+    path: '*',
     element: <NotFound />,
   },
 ]);

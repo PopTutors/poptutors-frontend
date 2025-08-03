@@ -75,15 +75,17 @@ export default function Assignment() {
       {/* Top summary bar */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 my-6">
         {/* Left: Title */}
-        <div className="text-[22px] text-black font-poppinssemibold">
-          My Assignment
-        </div>
+        <div className="text-[22px] text-black font-poppinssemibold">My Assignment</div>
 
         {/* Right: Request Box */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200 w-full sm:w-auto">
           <div>
-            <h2 className="text-[14px] sm:text-[16px] font-poppinssemibold text-gray-900">Request New Assignment</h2>
-            <p className="text-[11px] font-poppinsregular text-gray-400">Fill the form to request an Assignment</p>
+            <h2 className="text-[14px] sm:text-[16px] font-poppinssemibold text-gray-900">
+              Request New Assignment
+            </h2>
+            <p className="text-[11px] font-poppinsregular text-gray-400">
+              Fill the form to request an Assignment
+            </p>
           </div>
 
           <Button

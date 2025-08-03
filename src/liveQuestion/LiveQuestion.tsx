@@ -1,29 +1,30 @@
 // import RequestSessionForm from "../../components/forms/RequestSessionForm";
 
-import { Button } from "../components/ui/button";
-import FilterTabs from "../components/ui/filterTabs";
-import FilterBar from "../student/components/Filterbar";
-import { LiveQuestionCard } from "./components/LiveQuestionCard";
-
+import { Button } from '../components/ui/button';
+import FilterTabs from '../components/ui/filterTabs';
+import FilterBar from '../student/components/Filterbar';
+import { LiveQuestionCard } from './components/LiveQuestionCard';
 
 const LiveQuestions = () => {
   const handleTabChange = (tab: string) => {
-    console.log("Selected Tab:", tab);
+    console.log('Selected Tab:', tab);
   };
   return (
     <div>
       {/* Top summary bar */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 my-6">
         {/* Left: Title */}
-        <div className="text-[22px] text-black font-poppinssemibold">
-          Live Exam Help
-        </div>
+        <div className="text-[22px] text-black font-poppinssemibold">Live Exam Help</div>
 
         {/* Right: Request Box */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200 w-full sm:w-auto">
           <div>
-            <h2 className="text-[14px] sm:text-[16px] font-poppinssemibold text-gray-900">Request Live Question Help</h2>
-            <p className="text-[11px] font-poppinsregular text-gray-400">Requesting a new session to clear up ur doubts.</p>
+            <h2 className="text-[14px] sm:text-[16px] font-poppinssemibold text-gray-900">
+              Request Live Question Help
+            </h2>
+            <p className="text-[11px] font-poppinsregular text-gray-400">
+              Requesting a new session to clear up ur doubts.
+            </p>
           </div>
 
           <Button
@@ -37,7 +38,7 @@ const LiveQuestions = () => {
 
       <div></div>
       <FilterTabs
-        tabs={["ALL", "Requested", "In Progress", "Completed", "Rejected"]}
+        tabs={['ALL', 'Requested', 'In Progress', 'Completed', 'Rejected']}
         defaultTab="Assignments"
         onTabChange={handleTabChange}
       />
@@ -91,8 +92,6 @@ const LiveQuestions = () => {
             <Button variant="ghost">See More</Button>
           </div>
         </div>
-
-
       </div>
     </div>
   );

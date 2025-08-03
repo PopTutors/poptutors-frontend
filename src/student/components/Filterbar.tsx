@@ -1,16 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../components/ui/dropdown";
-import { Button } from "../../components/ui/button";
-import { FiChevronDown, FiCalendar } from "react-icons/fi";
-import { Arrowright } from "../../assets";
+} from '../../components/ui/dropdown';
+import { Button } from '../../components/ui/button';
+import { FiChevronDown, FiCalendar } from 'react-icons/fi';
+import { Arrowright } from '../../assets';
 
 const FilterBar: React.FC = () => {
-  const filterOptions = ["C Programming"];
+  const filterOptions = ['C Programming'];
   const [open, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(filterOptions[0]);
 
@@ -23,7 +23,7 @@ const FilterBar: React.FC = () => {
   const endDateRef = useRef<HTMLInputElement>(null);
 
   // Hide browser date icon style
-  const hideDefaultDateIcon = "appearance-none [&::-webkit-calendar-picker-indicator]:hidden";
+  const hideDefaultDateIcon = 'appearance-none [&::-webkit-calendar-picker-indicator]:hidden';
 
   return (
     <div className="flex flex-col sm:flex-row flex-wrap gap-4 mb-6 mt-4">
@@ -38,7 +38,7 @@ const FilterBar: React.FC = () => {
             >
               {selectedOption}
               <FiChevronDown
-                className={`transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
+                className={`transition-transform duration-200 ${open ? 'rotate-180' : 'rotate-0'}`}
               />
             </Button>
           </DropdownMenuTrigger>
