@@ -108,7 +108,7 @@ export default function Assignment() {
 
         <div className="lg:col-span-5">
           <div className="bg-white md:h-[706px] h-full scrollbar-thin rounded-md  md:overflow-y-scroll overflow-none py-2 mb-2">
-            <div className="max-w-4xl px-6 mx-auto">
+            <div className=" px-4 mx-auto">
               <FilterBar />
 
               <AssignmentCard
@@ -126,7 +126,7 @@ export default function Assignment() {
                   'React Native',
                 ]}
                 status="Completed"
-                statusLabel={['Completed', 'Under Review']}
+                statusLabel={['Completed']}
               />
 
               <AssignmentCard
@@ -145,7 +145,7 @@ export default function Assignment() {
                 ]}
                 status="Inprogress"
                 // statusLabel="Inprogress • Milestone 1"
-                statusLabel={['Inprogress', 'Milestone 1']}
+                statusLabel={['Inprogress']}
                 milestone="Milestone 1"
                 rating={4.8}
                 ratingCount={451444}
@@ -166,7 +166,7 @@ export default function Assignment() {
                 ]}
                 status="Inprogress"
                 // statusLabel="Inprogress • Milestone 1"
-                statusLabel={['Inprogress', 'Milestone 1']}
+                statusLabel={['Inprogress']}
                 milestone="Milestone 1"
                 rating={4.8}
                 ratingCount={451444}

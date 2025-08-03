@@ -46,6 +46,10 @@ export const paths = {
         getHref: () => "/student/session-submit",
       },
     },
+    wallet: {
+      path: "/student/wallet",
+      getHref: () => "/student/wallet",
+    },
   },
   landing: {
     path: "/landing",

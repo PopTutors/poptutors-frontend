@@ -31,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { label: "Assignment", icon: AssignmentIcon, iconActive: AssignmentIconActive, path: paths.student.assignment.getHref() },
     { label: "Live Question", icon: LiveQuestionsIcon, iconActive: LiveQuestionsIconActive, path:paths.student.livequestion.getHref() },
     { label: "Sessions", icon: SessionsIcon, iconActive: SessionsIconActive, path:paths.student.session.getHref() },
-    { label: "Wallet", icon: WalletIcon, iconActive: WalletIconActive, path: "/wallet" },
+    { label: "Wallet", icon: WalletIcon, iconActive: WalletIconActive, path: paths.student.wallet.getHref() },
     { label: "Help & Support", icon: HelpIcon, iconActive: HelpIconActive, path: "/help-support" },
   ];
 

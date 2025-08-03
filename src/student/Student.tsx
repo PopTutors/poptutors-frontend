@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '../components/ui/dropdown';
 import { ChevronDown, Pencil, Tv, Video } from 'lucide-react';
+import UpcommingExamCard from './components/UpcommingExamCard';
 
 // courseCardData.ts
 
@@ -75,15 +76,6 @@ const sampleNotifications = [
     time: '5 mins ago',
     icon: RattingIcon,
     type: 'rating',
-  },
-  {
-    user: 'Kevin',
-    message: 'sent you message',
-    action: 'What is ux',
-    course: '2024 ui/ux design with figma',
-    time: '6 mins ago',
-    icon: NotificationIcon,
-    type: 'message',
   },
   {
     user: 'Kevin',
@@ -199,10 +191,21 @@ const transaction: TransactionType[] = [
   { id: 't1', date: '21 Dec, 2021', amount: '534', status: 'Pending' },
   { id: 't2', date: '21 Sep, 2021', amount: '99', status: 'Pending' },
   { id: 't3', date: '21 Sep, 2021', amount: '202', status: 'Completed' },
-  { id: 't4', date: '21 Sep, 2021', amount: '20', status: 'Pending' },
-  { id: 't5', date: '21 Sep, 2021', amount: '53', status: 'Pending' },
-  { id: 't6', date: '21 Sep, 2021', amount: '888', status: 'Pending' },
-  { id: 't7', date: '21 Sep, 2021', amount: '20', status: 'Pending' },
+];
+
+const upcommingExams = [
+  {
+    title: 'Social Media Course Lorem Ipsum Dolor',
+    time: '11 PM - 12 PM',
+    status: 'Starting in 2 Hrs',
+    actionLabel: 'Reschedule',
+  },
+  {
+    title: 'Social Media Course Lorem Ipsum Dolor',
+    time: '11 PM - 12 PM',
+    status: 'Starting in 20 Mins',
+    actionLabel: 'Join Now',
+  },
 ];
 
 export default function Dashboard() {
@@ -261,7 +264,10 @@ export default function Dashboard() {
         {/* Left Column */}
         <div className="lg:col-span-5 ">
           <TabHeader />
-          <div className="bg-white rounded-b-lg p-4  h-full md:overflow-y-scroll overflow-none md:h-[830px] scrollbar-thin scrollbar-track-gray-50 scrollbar-thumb-gray-300">
+          <div className="bg-white rounded-b-lg p-4
+    max-h-none overflow-y-visible   // Mobile: container grows with content, no scroll
+    sm:max-h-[788px] sm:overflow-y-scroll
+    scrollbar-thin scrollbar-track-gray-50 scrollbar-thumb-gray-300">
             <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
               {courses.map((course) => (
                 <CourseCard key={course.id} course={course} />
@@ -273,6 +279,21 @@ export default function Dashboard() {
         {/* Right Column */}
         <div className="lg:col-span-2">
           <NotificationList notifications={sampleNotifications} />
+
+          <div className="bg-white rounded-xl p-4 mt-4 shadow-md w-full  mx-auto">
+      <h2 className="text-[16px] font-poppinssemibold text-gray-900 mb-4">Upcoming Sessions & Exams</h2>
+      <hr className="mb-4" />
+
+      {upcommingExams.map((session, index) => (
+        <UpcommingExamCard
+          key={index}
+          title={session.title}
+          time={session.time}
+          status={session.status}
+          actionLabel={session.actionLabel}
+        />
+      ))}
+    </div>
           <div className="mt-6">
             <TransactionTable transactions={transaction} />
           </div>

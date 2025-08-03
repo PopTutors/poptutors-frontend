@@ -55,15 +55,18 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({
         </div>
 
         <div className="font-poppinsmedium text-[12px] text-left sm:text-right">
-          <p className={`${isCompleted ? 'text-green-600' : 'text-primary'} flex flex-wrap `}>
-            {statusLabel.map((label, index) => (
-              <span key={index} className="flex items-center">
-                {label}
-                {index !== statusLabel.length - 1 && <span className="mx-3 text-gray-500">•</span>}
-              </span>
-            ))}
-          </p>
-        </div>
+  <div className={`flex flex-col gap-1 ${isCompleted ? 'text-[#39A340]' : 'text-primary'}`}>
+    {statusLabel.map((label, index) => (
+      <div
+        key={index}
+        className={`py-[2px] px-2 rounded ${isCompleted ? 'bg-[#39A3401A]' : 'bg-[#e6f9ff]'}`}
+      >
+        {label}
+      </div>
+    ))}
+  </div>
+</div>
+
       </div>
 
       {/* Middle Section */}

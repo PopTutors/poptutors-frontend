@@ -13,9 +13,9 @@ import Profile from "./profile/Profile";
 import SessionCard from "./sessiondetails/SessionDetails";
 import SessionPage from "./pages/session/Session";
 // import SubmitAssignmentPage from "./student/components/SubmitAssignment";
-import BookExpertPage from "./pages/live-question/book-expert";
 import NewAssignmentPage from "./pages/assignment/new-assignment";
 import LiveQuestion from "./liveQuestion/LiveQuestion";
+import TransactionDashboard from "./student/Wallet";
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -72,6 +72,10 @@ export const createAppRouter = createBrowserRouter([
           {
             path: paths.student.session.path,
             element: <SessionPage />,
+          },
+          {
+            path: paths.student.wallet.path,
+            element: <TransactionDashboard />,
           },
           {
             path: "*",

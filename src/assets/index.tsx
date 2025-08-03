@@ -55,6 +55,7 @@ import BarChart from '../assets/bar-chart.png';
 import User from '../assets/Users.png';
 import Clock from '../assets/Clock.png';
 import SelectDwn from '../assets/selectdown.png';
+import Wallet from "../assets/wallet.png"
 
 export {
   SelectDwn,
@@ -114,4 +115,5 @@ export {
   Anita,
   Rating,
   livequestionshelp,
+  Wallet
 };
