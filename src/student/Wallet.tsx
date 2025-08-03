@@ -172,7 +172,11 @@ const TransactionDashboard: React.FC = () => {
 
     return (
         <div className="">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="text-[22px] text-black font-poppinssemibold">
+                Wallet Data
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                 {/* Left: 2x2 Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
                     {cardData.map((item) => (
@@ -202,16 +206,16 @@ const TransactionDashboard: React.FC = () => {
                 <div className=" rounded-[8px] flex flex-col justify-between border border-[#e5e5e5] bg-white border-[1px] px-6 py-[30px] col-span-1  shadow-sm">
                     {/* Title and Description */}
                     <div className="flex justify-between">
-                    <div className="mb-4">
-                        <div className="text-[20px] font-poppinssemibold  text-gray-900">Total Spent</div>
-                        <div className="text-sm font-poppinsregular text-gray-400">Lorem ipsum dolor vae</div>
-                    </div>
+                        <div className="mb-4">
+                            <div className="text-[20px] font-poppinssemibold  text-gray-900">Total Spent</div>
+                            <div className="text-sm font-poppinsregular text-gray-400">Lorem ipsum dolor vae</div>
+                        </div>
 
-                    {/* Main Amount (Left Aligned) */}
-                    <div className="  text-gray-900 mb-6">
-                        <span className="font-poppinssemibold text-[24px] sm:text-[30px]">$11,742</span>
-                        <span className="text-gray-400 font-poppinsregular text-[18px] sm:text-[24px]">.00</span>
-                    </div>
+                        {/* Main Amount (Left Aligned) */}
+                        <div className="  text-gray-900 mb-6">
+                            <span className="font-poppinssemibold text-[24px] sm:text-[30px]">$11,742</span>
+                            <span className="text-gray-400 font-poppinsregular text-[18px] sm:text-[24px]">.00</span>
+                        </div>
                     </div>
 
                     {/* Earned and Other */}
@@ -264,14 +268,12 @@ const TransactionDashboard: React.FC = () => {
                         </div>
                     </div>
                 </div>
-
-
             </div>
 
 
 
 
-            <div className="bg-[#F7F8FA] flex flex-col sm:flex-row justify-between items-center  py-3  sm:py-4">
+            <div className="bg-[#F7F8FA] flex flex-col sm:flex-row justify-between items-center  py-3  sm:py-4 mt-6">
                 <h2 className="font-poppinssemibold text-[18px] mb-2 sm:mb-0">Transactions</h2>
                 <div className="flex flex-wrap sm:flex-nowrap justify-center sm:justify-end gap-2 w-full sm:w-auto">
                     {tabs.map((tab) => (
