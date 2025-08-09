@@ -37,7 +37,7 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({
   const isCompleted = status === 'Completed';
 
   const handleViewAssignment = () => {
-    navigate(paths.student.assignment.details.getHref(id.toString()));
+    navigate(paths.student.assignment.path);
   };
 
   return (

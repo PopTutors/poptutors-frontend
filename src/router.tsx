@@ -14,7 +14,6 @@ import SessionCard from './sessiondetails/SessionDetails';
 import SessionPage from './pages/session/Session';
 // import SubmitAssignmentPage from "./student/components/SubmitAssignment";
 import TransactionDashboard from "./student/Wallet";
-import BookExpertPage from './pages/live-question/book-expert';
 import NewAssignmentPage from './pages/assignment/new-assignment';
 import LiveQuestion from './liveQuestion/LiveQuestion';
 import AssignmentDetailsPage from './pages/student/assignment/details';

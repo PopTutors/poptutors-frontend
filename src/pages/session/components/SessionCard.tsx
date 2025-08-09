@@ -42,8 +42,6 @@ const SessionCard: React.FC<SessionCardProps> = ({
   rating,
   ratingCount,
   ctaType,
-  disabled,
-  onClick,
   timeNote,
 }) => {
   const isCompleted = status === 'completed';

@@ -1,10 +1,18 @@
-// src/components/TabHeader.tsx
-import { ChevronDown, SlidersHorizontal } from 'lucide-react';
-import { useState } from 'react';
+import { useState } from "react";
 
-const TabHeader = () => {
+// src/components/TabHeader.tsx
+type TabHeaderProps = {
+  onTabChange: (tab: string) => void;
+};
+
+const TabHeader = ({ onTabChange }: TabHeaderProps) => {
   const tabs = ['All', 'Assignment', 'Live Questions', 'Sessions'];
   const [activeTab, setActiveTab] = useState('All');
+
+  const handleTabClick = (tab: string) => {
+    setActiveTab(tab);
+    onTabChange(tab);
+  };
 
   return (
     <div className="flex items-center border-b border-gray-200 justify-between bg-white rounded-t-lg  shadow">
@@ -12,7 +20,7 @@ const TabHeader = () => {
         {tabs.map((tab) => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => handleTabClick(tab)}
             className={` font-poppinsregular  border-b-2 transition-all duration-200 ${
               activeTab === tab
                 ? 'text-primary border-sky-500 bg-blue-50 p-[11px] font-poppinssemibold'
@@ -23,11 +31,7 @@ const TabHeader = () => {
           </button>
         ))}
       </div>
-      <button className="md:flex my-[6px] hidden items-center gap-1 font-poppinsregular mr-2 p-[10px] text-sm text-gray-500 px-3 py-1.5 rounded-lg shadow-sm bg-[#f2f2f2]">
-        <SlidersHorizontal className="p-0" />
-        Filter & Sort
-        <ChevronDown className="" />
-      </button>
+      {/* Optional filter */}
     </div>
   );
 };

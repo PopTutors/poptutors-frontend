@@ -1,61 +1,33 @@
-// Images (adjust path according to where they're stored)
-import NotificationList from '../components/ui/cards/notificationList';
-import TransactionTable from '../components/ui/cards/transactionTable';
-import { MessageIcon, NotificationIcon, RattingIcon } from '../assets';
-import CourseCard from './components/CourseCard';
-import type { CourseType, TransactionType } from '../types/course';
-import TabHeader from './components/Tabs';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../components/ui/dropdown';
-import { ChevronDown, Pencil, Tv, Video } from 'lucide-react';
-import UpcommingExamCard from './components/UpcommingExamCard';
+import { ChevronDown, Pencil, Tv, Video } from "lucide-react";
+import {  useFetch} from "../api";
+import TransactionTable from "../components/ui/cards/transactionTable";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown";
+import type { TransactionType } from "../types/course";
+import TabHeader from "./components/Tabs";
+import CourseCard from "./components/CourseCard";
+import NotificationList from "../components/ui/cards/notificationList";
+import UpcommingExamCard from "./components/UpcommingExamCard";
+import { useState } from "react";
+import { MessageIcon, NotificationIcon, RattingIcon } from "../assets";
 
-// courseCardData.ts
+const transaction: TransactionType[] = [
+  { id: 't1', date: '21 Dec, 2021', amount: '534', status: 'Pending' },
+  { id: 't2', date: '21 Sep, 2021', amount: '99', status: 'Pending' },
+  { id: 't3', date: '21 Sep, 2021', amount: '202', status: 'Completed' },
+];
 
-export const courseCards = [
+const upcommingExams = [
   {
-    title: 'UX Case Study on Mobile Apps',
-    topic: ['Design Thinking', 'UI/UX'],
-    date: '12 July, Friday',
-    price: '$45',
-    progress: 0,
-    label: 'Assignment',
-    labelColor: '#019ACB',
-    labelBackground: '#E6F5F4',
+    title: 'Social Media Course Lorem Ipsum Dolor',
+    time: '11 PM - 12 PM',
+    status: 'Starting in 2 Hrs',
+    actionLabel: 'Reschedule',
   },
   {
-    title: 'Data Structures: Trees & Graphs',
-    topic: ['Computer Science', 'DSA'],
-    date: '10 July, Wednesday',
-    price: '$35',
-    progress: 0,
-    label: 'Assignment',
-    labelColor: '#FF7F50',
-    labelBackground: '#FFF4EF',
-  },
-  {
-    title: 'Live Math Problem Solving',
-    topic: ['Mathematics', 'Algebra II'],
-    date: '14 July, Sunday',
-    price: '$25',
-    progress: 0,
-    label: 'Live Question',
-    labelColor: '#F88C3D',
-    labelBackground: '#FFF6E9',
-  },
-  {
-    title: '1-on-1 Physics Coaching',
-    topic: ['Physics', 'Mechanics'],
-    date: '15 July, Monday',
-    price: '$60',
-    progress: 0,
-    label: 'Session',
-    labelColor: '#41BE90',
-    labelBackground: '#ECFDF3',
+    title: 'Social Media Course Lorem Ipsum Dolor',
+    time: '11 PM - 12 PM',
+    status: 'Starting in 20 Mins',
+    actionLabel: 'Join Now',
   },
 ];
 
@@ -88,134 +60,65 @@ const sampleNotifications = [
   },
 ];
 
-const courses: CourseType[] = [
-  {
-    id: '1',
-    title: 'Social Media Course Lorem Ipsum Dolor',
-    date: '25/10/2024',
-    subtitle: 'Lorem ipsum dolor sit amet consectetur',
-    tags: [
-      { label: 'Live Question', color: 'text-red-500' },
-      { label: 'Milestone 1', color: 'text-green-600' },
-    ],
-    price: '$50/hr',
-    duration: '2 hours',
-  },
-  {
-    id: '1',
-    title: 'Social Media Course Lorem Ipsum Dolor',
-    date: '25/10/2024',
-    subtitle: 'Lorem ipsum dolor sit amet consectetur',
-    tags: [
-      { label: 'Live Question', color: 'text-red-500' },
-      { label: 'Milestone 1', color: 'text-green-600' },
-    ],
-    price: '$50/hr',
-    duration: '2 hours',
-  },
-  {
-    id: '1',
-    title: 'Social Media Course Lorem Ipsum Dolor',
-    date: '25/10/2024',
-    subtitle: 'Lorem ipsum dolor sit amet consectetur',
-    tags: [
-      { label: 'Live Question', color: 'text-red-500' },
-      { label: 'Milestone 1', color: 'text-green-600' },
-    ],
-    price: '$50/hr',
-    duration: '2 hours',
-  },
-  {
-    id: '1',
-    title: 'Social Media Course Lorem Ipsum Dolor',
-    date: '25/10/2024',
-    subtitle: 'Lorem ipsum dolor sit amet consectetur',
-    tags: [
-      { label: 'Live Question', color: 'text-red-500' },
-      { label: 'Milestone 1', color: 'text-green-600' },
-    ],
-    price: '$50/hr',
-    duration: '2 hours',
-  },
-  {
-    id: '1',
-    title: 'Social Media Course Lorem Ipsum Dolor',
-    date: '25/10/2024',
-    subtitle: 'Lorem ipsum dolor sit amet consectetur',
-    tags: [
-      { label: 'Live Question', color: 'text-red-500' },
-      { label: 'Milestone 1', color: 'text-green-600' },
-    ],
-    price: '$50/hr',
-    duration: '2 hours',
-  },
-  {
-    id: '1',
-    title: 'Social Media Course Lorem Ipsum Dolor',
-    date: '25/10/2024',
-    subtitle: 'Lorem ipsum dolor sit amet consectetur',
-    tags: [
-      { label: 'Live Question', color: 'text-red-500' },
-      { label: 'Milestone 1', color: 'text-green-600' },
-    ],
-    price: '$50/hr',
-    duration: '2 hours',
-  },
-  {
-    id: '1',
-    title: 'Social Media Course Lorem Ipsum Dolor',
-    date: '25/10/2024',
-    subtitle: 'Lorem ipsum dolor sit amet consectetur',
-    tags: [
-      { label: 'Live Question', color: 'text-red-500' },
-      { label: 'Milestone 1', color: 'text-green-600' },
-    ],
-    price: '$50/hr',
-    duration: '2 hours',
-  },
-  {
-    id: '1',
-    title: 'Social Media Course Lorem Ipsum Dolor',
-    date: '25/10/2024',
-    subtitle: 'Lorem ipsum dolor sit amet consectetur',
-    tags: [
-      { label: 'Live Question', color: 'text-red-500' },
-      { label: 'Milestone 1', color: 'text-green-600' },
-    ],
-    price: '$50/hr',
-    duration: '2 hours',
-  },
-];
-
-const transaction: TransactionType[] = [
-  { id: 't1', date: '21 Dec, 2021', amount: '534', status: 'Pending' },
-  { id: 't2', date: '21 Sep, 2021', amount: '99', status: 'Pending' },
-  { id: 't3', date: '21 Sep, 2021', amount: '202', status: 'Completed' },
-];
-
-const upcommingExams = [
-  {
-    title: 'Social Media Course Lorem Ipsum Dolor',
-    time: '11 PM - 12 PM',
-    status: 'Starting in 2 Hrs',
-    actionLabel: 'Reschedule',
-  },
-  {
-    title: 'Social Media Course Lorem Ipsum Dolor',
-    time: '11 PM - 12 PM',
-    status: 'Starting in 20 Mins',
-    actionLabel: 'Join Now',
-  },
-];
-
-export default function Dashboard() {
-  const options = [
+ const options = [
     { label: 'Assignment', icon: <Pencil className="w-4 h-4 mr-2" /> },
     { label: 'Live Sessions', icon: <Video className="w-4 h-4 mr-2" /> },
     { label: 'Live Question', icon: <Tv className="w-4 h-4 mr-2" /> },
   ];
 
-  const selected = 'Live Sessions'; // replace with dynamic state if needed
+
+export default function Dashboard() {
+  
+  const [selectedTab, setSelectedTab] = useState('All');
+
+  const enableAll = selectedTab === 'All';
+  const enableAssignments = selectedTab === 'Assignment' || enableAll;
+  const enableLive = selectedTab === 'Live Questions' || enableAll;
+  const enableSessions = selectedTab === 'Sessions' || enableAll;
+
+  const {
+    data: assignments = [],
+    // isLoading: loadingAssignments,
+    // error: assignmentsError
+  } = useFetch<any>(
+    ['assignments'], // ✅ QueryKey should be an array
+    '/dashboard/assignments',
+    enableAssignments
+  );
+
+  const {
+    data: liveQuestions = [],
+    // isLoading: loadingLive,
+    // error: liveError
+  } = useFetch<any>(
+    ['live-questions'], // ✅ array query key
+    '/dashboard/live-helps',
+    enableLive
+  );
+
+  const {
+    data: sessions = [],
+    // isLoading: loadingSessions,
+    // error: sessionsError
+  } = useFetch<any>(
+    ['sessions'], // ✅ array query key
+    '/dashboard/sessions',
+    enableSessions
+  );
+
+
+  let filteredCourses = [];
+
+  if (selectedTab === 'Assignment') {
+    filteredCourses = assignments;
+  } else if (selectedTab === 'Live Questions') {
+    filteredCourses = liveQuestions;
+  } else if (selectedTab === 'Sessions') {
+    filteredCourses = sessions;
+  } else if (selectedTab === 'All') {
+    filteredCourses = [...assignments, ...liveQuestions, ...sessions];
+  }
+const selected = 'Live Sessions';
 
   return (
     <div>
@@ -244,11 +147,10 @@ export default function Dashboard() {
               {options.map(({ label, icon }) => (
                 <DropdownMenuItem
                   key={label}
-                  className={`flex items-center px-4 py-3 text-[15px] font-poppinsmedium cursor-pointer ${
-                    selected === label
-                      ? 'bg-[#E6F6FF] text-[#007A99]'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`}
+                  className={`flex items-center px-4 py-3 text-[15px] font-poppinsmedium cursor-pointer ${selected === label
+                    ? 'bg-[#E6F6FF] text-[#007A99]'
+                    : 'text-gray-700 hover:bg-gray-100'
+                    }`}
                   onSelect={() => console.log('Selected:', label)}
                 >
                   {icon}
@@ -263,13 +165,13 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-7 gap-6 ">
         {/* Left Column */}
         <div className="lg:col-span-5 ">
-          <TabHeader />
+          <TabHeader onTabChange={setSelectedTab} />
           <div className="bg-white rounded-b-lg p-4
     max-h-none overflow-y-visible   // Mobile: container grows with content, no scroll
     sm:max-h-[788px] sm:overflow-y-scroll
     scrollbar-thin scrollbar-track-gray-50 scrollbar-thumb-gray-300">
-            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
-              {courses.map((course) => (
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 mt-4">
+              {filteredCourses?.map((course: any) => (
                 <CourseCard key={course.id} course={course} />
               ))}
             </div>
@@ -281,19 +183,19 @@ export default function Dashboard() {
           <NotificationList notifications={sampleNotifications} />
 
           <div className="bg-white rounded-xl p-4 mt-4 shadow-md w-full  mx-auto">
-      <h2 className="text-[16px] font-poppinssemibold text-gray-900 mb-4">Upcoming Sessions & Exams</h2>
-      <hr className="mb-4" />
+            <h2 className="text-[16px] font-poppinssemibold text-gray-900 mb-4">Upcoming Sessions & Exams</h2>
+            <hr className="mb-4" />
 
-      {upcommingExams.map((session, index) => (
-        <UpcommingExamCard
-          key={index}
-          title={session.title}
-          time={session.time}
-          status={session.status}
-          actionLabel={session.actionLabel}
-        />
-      ))}
-    </div>
+            {upcommingExams.map((session, index) => (
+              <UpcommingExamCard
+                key={index}
+                title={session.title}
+                time={session.time}
+                status={session.status}
+                actionLabel={session.actionLabel}
+              />
+            ))}
+          </div>
           <div className="mt-6">
             <TransactionTable transactions={transaction} />
           </div>

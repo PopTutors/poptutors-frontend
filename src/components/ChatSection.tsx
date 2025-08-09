@@ -1,10 +1,7 @@
 import {
-  ChevronDown,
   Menu,
   Check,
-  X,
   Paperclip,
-  Send,
   SendHorizontal,
   RotateCw,
 } from 'lucide-react';

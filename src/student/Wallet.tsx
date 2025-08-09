@@ -7,7 +7,6 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
 } from "../components/ui/dropdown";
-import { FaArrowAltCircleRight, FaMoneyBillWave, FaRegArrowAltCircleRight } from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";
 import { AssignmentIcon } from "../assets/sidebar-icon";
 // FiArrowDownRight
