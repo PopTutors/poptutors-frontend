@@ -1,10 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import AssignmentCard from './components/AssignmentCard';
 import { MoveLeft } from 'lucide-react';
-import ChatSection from '../../../../components/ChatSection';
 import SelectTeacher from '../../../../components/student/SelectTeacher';
 import PriceSection from '../../../../components/student/PriceSection';
 import DocumentTable from '../../../../components/student/DocumentTable';
+import ChatSection from '../../../../components/ChatSection';
 
 const AssignmentDetailsPage = () => {
   const { id } = useParams();
@@ -47,7 +47,7 @@ const AssignmentDetailsPage = () => {
           <PriceSection />
           <DocumentTable />
         </div>
-        <div>
+        <div className="flex flex-col gap-5">
           <ChatSection />
         </div>
       </div>
