@@ -13,11 +13,12 @@ import Profile from './profile/Profile';
 import SessionCard from './sessiondetails/SessionDetails';
 import SessionPage from './pages/session/Session';
 // import SubmitAssignmentPage from "./student/components/SubmitAssignment";
-import TransactionDashboard from "./student/Wallet";
+import TransactionDashboard from './student/Wallet';
 import NewAssignmentPage from './pages/assignment/new-assignment';
 import LiveQuestion from './liveQuestion/LiveQuestion';
 import AssignmentDetailsPage from './pages/student/assignment/details';
 import SessionDetailsPage from './pages/student/session/details';
+import GoogleCallback from './auth/google-callback';
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ export const createAppRouter = createBrowserRouter([
   {
     path: paths.auth.register.path,
     element: <Signup />,
+  },
+  {
+    path: paths.auth.googleCallback.path,
+    element: <GoogleCallback />,
   },
   {
     path: paths.landing.home.path,

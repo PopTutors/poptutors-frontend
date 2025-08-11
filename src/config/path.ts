@@ -102,5 +102,10 @@ export const paths = {
         return `/auth/login?redirectTo=${encodeURIComponent(redirectTo)}`;
       },
     },
+    googleCallback: {
+      path: '/auth/google-callback',
+      getHref: (role?: string) =>
+        role ? `/auth/google-callback?role=${encodeURIComponent(role)}` : '/auth/google-callback',
+    },
   },
 } as const;

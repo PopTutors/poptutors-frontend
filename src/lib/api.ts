@@ -13,12 +13,12 @@ api.interceptors.request.use((config) => {
   config.headers = config.headers || {};
   config.headers['Accept'] = 'application/json';
 
-  // 🔒 Get token from localStorage
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODUyZDE1YTliZDMxNTE5NWViNDI0MWMiLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc1NDc2MDYxNCwiZXhwIjoxNzU0NzY0MjE0fQ.8n_1aapRh0T6sX2t83M8ijcP4e3VymywUW6gWKEeYDE"; // adjust if you're using cookies instead
+  // // 🔒 Get token from localStorage
+  // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODUyZDE1YTliZDMxNTE5NWViNDI0MWMiLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc1NDc2MDYxNCwiZXhwIjoxNzU0NzY0MjE0fQ.8n_1aapRh0T6sX2t83M8ijcP4e3VymywUW6gWKEeYDE"; // adjust if you're using cookies instead
 
-  if (token) {
-    config.headers['Authorization'] = `Bearer ${token}`;
-  }
+  // if (token) {
+  //   config.headers['Authorization'] = `Bearer ${token}`;
+  // }
 
   return config;
 });
