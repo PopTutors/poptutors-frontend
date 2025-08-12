@@ -71,7 +71,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
         </DropdownMenu>
       </div>
 
-      {notifications.map((item, idx) => (
+      {notifications?.map((item, idx) => (
         <div key={idx} className="flex items-start space-x-3 py-2">
           <div className="w-[52px] h-[32px]">
             <img src={item?.icon} alt="" />

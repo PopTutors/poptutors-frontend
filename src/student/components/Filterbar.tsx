@@ -9,20 +9,26 @@ import { Button } from '../../components/ui/button';
 import { FiChevronDown, FiCalendar } from 'react-icons/fi';
 import { Arrowright } from '../../assets';
 
-const FilterBar: React.FC = () => {
-  const filterOptions = ['C Programming'];
-  const [open, setOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(filterOptions[0]);
+interface FilterBarProps {
+  selectedOption: string;
+  onSubjectChange: (subject: string) => void;
+  startDate: string;
+  endDate: string;
+  onDateChange: (type: 'start' | 'end', value: string) => void;
+}
 
-  const handleSelect = (option: string) => {
-    setSelectedOption(option);
-    setOpen(false);
-  };
+const FilterBar: React.FC<FilterBarProps> = ({
+  selectedOption,
+  onSubjectChange,
+  startDate,
+  endDate,
+  onDateChange
+}) => {
+  const filterOptions = ['Mathematics', 'Physics', 'Chemistry'];
+  const [open, setOpen] = useState(false);
 
   const startDateRef = useRef<HTMLInputElement>(null);
   const endDateRef = useRef<HTMLInputElement>(null);
-
-  // Hide browser date icon style
   const hideDefaultDateIcon = 'appearance-none [&::-webkit-calendar-picker-indicator]:hidden';
 
   return (
@@ -46,7 +52,7 @@ const FilterBar: React.FC = () => {
             {filterOptions.map((option) => (
               <DropdownMenuItem
                 key={option}
-                onSelect={() => handleSelect(option)}
+                onSelect={() => onSubjectChange(option)}
                 className="cursor-pointer text-[14px] font-poppinsregular text-[#262626]"
               >
                 {option}
@@ -64,7 +70,7 @@ const FilterBar: React.FC = () => {
         <div className="relative">
           <button
             type="button"
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 focus:outline-none"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
             onClick={() => startDateRef.current?.showPicker()}
           >
             <FiCalendar />
@@ -72,6 +78,8 @@ const FilterBar: React.FC = () => {
           <input
             ref={startDateRef}
             type="date"
+            value={startDate}
+            onChange={(e) => onDateChange('start', e.target.value)}
             className={`pl-10 pr-3 py-2 border rounded-lg text-[14px] font-poppinsregular bg-white ${hideDefaultDateIcon}`}
           />
         </div>
@@ -85,7 +93,7 @@ const FilterBar: React.FC = () => {
         <div className="relative">
           <button
             type="button"
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 focus:outline-none"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
             onClick={() => endDateRef.current?.showPicker()}
           >
             <FiCalendar />
@@ -93,6 +101,8 @@ const FilterBar: React.FC = () => {
           <input
             ref={endDateRef}
             type="date"
+            value={endDate}
+            onChange={(e) => onDateChange('end', e.target.value)}
             className={`pl-10 pr-3 py-2 border rounded-lg text-[14px] font-poppinsregular bg-white ${hideDefaultDateIcon}`}
           />
         </div>

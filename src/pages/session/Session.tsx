@@ -1,13 +1,28 @@
 // import RequestSessionForm from "../../components/forms/RequestSessionForm";
+import { useState } from 'react';
 import { Button } from '../../components/ui/button';
 import FilterTabs from '../../components/ui/filterTabs';
 import FilterBar from '../../student/components/Filterbar';
 import SessionCard from './components/SessionCard';
+import { useFetch } from '../../api';
 
 const SessionPage = () => {
+  const [subject, setSubject] = useState('Mathematics');
+  const [startDate, setStartDate] = useState('2024-01-11');
+  const [endDate, setEndDate] = useState('2025-10-14');
   const handleTabChange = (tab: string) => {
     console.log('Selected Tab:', tab);
   };
+  const {
+    data: sessions = [],
+    isLoading,
+    error
+  } = useFetch<any>(
+    ['sessions', subject, startDate, endDate], // react-query key
+    `/sessions/by-date?startDate=${startDate}&endDate=${endDate}`,
+    true,
+    { requiresAuth: true }
+  );
   return (
     <div>
       {/* Top summary bar */}
@@ -45,8 +60,35 @@ const SessionPage = () => {
       {/* Main grid layout */}
       <div className="bg-white mt-2 md:h-[706px] h-full scrollbar-thin rounded-md  md:overflow-y-scroll overflow-none py-2 mb-2">
         <div className=" px-4 mx-auto">
-          <FilterBar />
+          <FilterBar
+            selectedOption={subject}
+            onSubjectChange={setSubject}
+            startDate={startDate}
+            endDate={endDate}
+            onDateChange={(type, value) =>
+              type === 'start' ? setStartDate(value) : setEndDate(value)
+            }
+          />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {isLoading && <p>Loading...</p>}
+            {error && <p className="text-red-500">Error loading sessions</p>}
+            {sessions?.map((session: any) => {
+              const start = new Date(session.startTime);
+              const end = new Date(session.endTime);
+              return (
+                <SessionCard
+                  key={session._id}
+                  title={`${session.subject} - ${session.topic}`}
+                  subtitle={`Language: ${session.language}, Level: ${session.expertiseLevel}`}
+                  status={session.status || 'budget'} // if you have a status in API
+                  datetime={`${start.toLocaleDateString()} ${start.toLocaleTimeString()} – ${end.toLocaleTimeString()}`}
+                  timezone={`(${session.timezone})`}
+                  timeNote="Starting soon" // you can calculate exact difference
+                  ctaType="join" // or reschedule, recordings, etc. depending on status
+                  onClick={() => alert(`Joining ${session.topic}`)}
+                />
+              )
+            })}
             <SessionCard
               title="Lorem ipsum dolor sit amet consectetur. Velit mole amet adeiscing etiam nam"
               subtitle="Description - Problem solving on library"
@@ -81,7 +123,7 @@ const SessionPage = () => {
             />
 
             <SessionCard
-              title="Lorem ipsum dolor sit amet consectetur. Velit mole amet adeiscing etiam nam"
+              title="Lorem ipsum dolor sit amet consectetur."
               subtitle="Description - Problem solving on library"
               status="budget"
               datetime="16 Mar – 11 PM – 12 PM"

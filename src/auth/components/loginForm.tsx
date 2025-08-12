@@ -7,9 +7,9 @@ import { useGenericMutation } from '../../api/useGenericMutation';
 import { useFetch } from '../../api/UseFetch';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { google } from '../../assets';
+// import { google } from '../../assets';
 import { GoogleLogin } from '@react-oauth/google';
-import jwtDecode from 'jwt-decode';
+// import jwtDecode from 'jwt-decode';
 
 type LoginPayload = {
   email: string;

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import AssignmentCard from './components/AssignmentCard';
 import { Button } from '../components/ui/button';
 import FilterTabs from '../components/ui/filterTabs';
@@ -7,6 +7,7 @@ import TransactionTable from '../components/ui/cards/transactionTable';
 import { MessageIcon, NotificationIcon, RattingIcon } from '../assets';
 import FilterBar from './components/Filterbar';
 import type { TransactionType } from '../types/course';
+import { useFetch } from '../api';
 
 const sampleNotifications = [
   {
@@ -49,7 +50,22 @@ const transaction: TransactionType[] = [
 
 // Assignment component for dashboard
 export default function Assignment() {
+  const [subject, setSubject] = useState('Mathematics');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const {
+    data: assignments = [],
+    isLoading,
+    error
+  } = useFetch<any>(
+    ['assignments', subject, startDate, endDate], // react-query key
+    `/assignments/filter?subject=${subject}&startDate=${startDate}&endDate=${endDate}`,
+    true,
+    { requiresAuth: true }
+  );
+  console.log("🚀 ~ Assignment ~ assignments:", assignments)
 
   // Handle selection from dropdown
 
@@ -111,92 +127,46 @@ export default function Assignment() {
         <div className="lg:col-span-5">
           <div className="bg-white md:h-[706px] h-full scrollbar-thin rounded-md  md:overflow-y-scroll overflow-none py-2 mb-2">
             <div className=" px-4 mx-auto">
-              <FilterBar />
+              <FilterBar
+                selectedOption={subject}
+                onSubjectChange={setSubject}
+                startDate={startDate}
+                endDate={endDate}
+                onDateChange={(type, value) =>
+                  type === 'start' ? setStartDate(value) : setEndDate(value)
+                }
+              />
+              {isLoading && <p>Loading...</p>}
+              {error && <p className="text-red-500">Error loading assignments</p>}
 
-              <AssignmentCard
-                id={61436}
-                title="New swift assignment – iOS Programming"
-                subtitle="Subject Name Lorem ipsum dolor sit"
-                subjectcode="CS1013"
-                amount={150}
-                deadline="30 Aug 2025"
-                tags={[
-                  'Python',
-                  'Computer Science',
-                  'Coding',
-                  'Application Development',
-                  'React Native',
-                ]}
-                status="Completed"
-                statusLabel={['Completed']}
-              />
-
-              <AssignmentCard
-                id={61436}
-                title="Lorem ipsum dolor sit amet consectetur."
-                subtitle="Subject Name Lorem ipsum dolor sit"
-                subjectcode="CS1013"
-                amount={150}
-                deadline="30 Aug 2025"
-                tags={[
-                  'Python',
-                  'Computer Science',
-                  'Coding',
-                  'Application Development',
-                  'React Native',
-                ]}
-                status="Inprogress"
-                // statusLabel="Inprogress • Milestone 1"
-                statusLabel={['Inprogress']}
-                milestone="Milestone 1"
-                rating={4.8}
-                ratingCount={451444}
-              />
-              <AssignmentCard
-                id={61436}
-                title="Lorem ipsum dolor sit amet consectetur."
-                subtitle="Subject Name Lorem ipsum dolor sit"
-                subjectcode="CS1013"
-                amount={150}
-                deadline="30 Aug 2025"
-                tags={[
-                  'Python',
-                  'Computer Science',
-                  'Coding',
-                  'Application Development',
-                  'React Native',
-                ]}
-                status="Inprogress"
-                // statusLabel="Inprogress • Milestone 1"
-                statusLabel={['Inprogress']}
-                milestone="Milestone 1"
-                rating={4.8}
-                ratingCount={451444}
-              />
-              <AssignmentCard
-                id={61436}
-                title="Lorem ipsum dolor sit amet consectetur."
-                subtitle="Subject Name Lorem ipsum dolor sit"
-                subjectcode="CS1013"
-                amount={150}
-                deadline="30 Aug 2025"
-                tags={[
-                  'Python',
-                  'Computer Science',
-                  'Coding',
-                  'Application Development',
-                  'React Native',
-                ]}
-                status="Inprogress"
-                // statusLabel="Inprogress • Milestone 1"
-                statusLabel={['Inprogress', 'Milestone 1']}
-                milestone="Milestone 1"
-                rating={4.8}
-                ratingCount={451444}
-              />
-              <div className="flex font-poppinssemibold text-[13px] justify-center text-primary">
-                <Button variant="ghost">See More</Button>
-              </div>
+              {assignments.length > 0 ? (
+                assignments.map((item: any) => (
+                  <AssignmentCard
+                    key={item._id}
+                    id={item._id}
+                    title={item.title}
+                    subtitle={item.description}
+                    subjectcode={item.courseCode}
+                    amount={item.studentPrice}
+                    deadline={new Date(item.createdAt).toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric'
+                    })}
+                    tags={[item.subject, item.course]}
+                    status={item.status}
+                    statusLabel={[item.status]}
+                    milestone={item.milestones?.[0]?.description}
+                    rating={4.8}
+                    ratingCount={120}
+                  />
+                )
+                )
+              ) : (
+                <div className="text-center py-4 text-gray-400">
+                  No assignments found
+                </div>
+              )}
             </div>
           </div>
         </div>
