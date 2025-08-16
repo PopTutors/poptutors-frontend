@@ -33,7 +33,7 @@ export function useFetch<T>(
     onSuccessCallback,
     onErrorCallback,
     useTokenFromCookie = false,
-    cookieName = 'authToken',
+    cookieName = 'token',
     requiresAuth = true,
     ...queryOptions
   } = options || {};

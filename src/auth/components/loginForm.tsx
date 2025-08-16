@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button } from '../../components/ui/button';
 import { Checkbox } from '../../components/ui/checkbox';
 import { Input } from '../../components/ui/input';
@@ -7,7 +7,7 @@ import { useGenericMutation } from '../../api/useGenericMutation';
 import { useFetch } from '../../api/UseFetch';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-// import { google } from '../../assets';
+import { google } from '../../assets';
 import { GoogleLogin } from '@react-oauth/google';
 // import jwtDecode from 'jwt-decode';
 
@@ -34,7 +34,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role }) => {
   const loginMutation = useGenericMutation<{ token: string }>();
   const forgotPasswordMutation = useGenericMutation();
   const googleLoginMutation = useGenericMutation<{ token: string }>();
-
+  const googleButtonRef = useRef<HTMLDivElement>(null);
   const { refetch: fetchUserProfile } = useFetch<any>(
     ['user-profile', form.email],
     `/users/profile`,
@@ -92,10 +92,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ role }) => {
       successMessage: `Welcome back! 🎉`,
       errorMessage: 'Login failed! Please check your credentials.',
       onSuccessCallback: (data) => {
+        console.log('Login successful:', data);
         if (data?.token) {
-          remember
-            ? localStorage.setItem('authToken', data.token)
-            : sessionStorage.setItem('authToken', data.token);
+          localStorage.setItem('token', data.token);
         }
         fetchUserProfile();
         setTimeout(() => {
@@ -123,23 +122,39 @@ const LoginForm: React.FC<LoginFormProps> = ({ role }) => {
 
   return (
     <form onSubmit={handleSubmit} className="flex w-full flex-col gap-5">
-      <div className="text-[36px] font-semibold md:text-3xl">Login to your Account</div>
-      <div className="text-[16px]">Complete your ongoing assignments</div>
+      <div className="text-[36px] font-semibold md:text-3xl text-center">Login to your Account</div>
+      <div className="text-[16px] text-center">Complete your ongoing assignments</div>
 
       {/* Google login button */}
-      <GoogleLogin
-        onSuccess={(credResponse) => {
-          if (credResponse.credential) {
-            handleGoogleLogin(credResponse.credential);
-          }
-        }}
-        onError={() => {
-          toast.error('Google login failed! Please try again.');
-        }}
-        useOneTap={false} // set true if you want one-tap
-      />
+      {/* Hidden Google Login - so we can click programmatically */}
+      <div ref={googleButtonRef} style={{ display: 'none' }}>
+        <GoogleLogin
+          onSuccess={(credResponse) => {
+            if (credResponse.credential) {
+              handleGoogleLogin(credResponse.credential);
+            }
+          }}
+          onError={() => {
+            toast.error('Google login failed! Please try again.');
+          }}
+          useOneTap={false}
+        />
+      </div>
 
-      <div className="flex w-8/12 items-center justify-center">
+      {/* Custom Google login button */}
+      <Button
+        type="button"
+        onClick={() => {
+          const googleBtn = googleButtonRef.current?.querySelector('div[role="button"]');
+          (googleBtn as HTMLDivElement)?.click();
+        }}
+        className="hover:bg-accent flex w-full h-[50px] items-center border bg-white py-6 font-semibold text-gray-500"
+      >
+        <img src={google} alt="google-logo" width={30} height={30} />
+        <span className="text-[14px] text-[#A1A1A1] font-medium">Continue with Google</span>
+      </Button>
+
+      <div className="flex w-12/12 items-center justify-center">
         <div className="flex-grow border-t border-dashed" />
         <div className="px-1 text-[12px]">or Sign in with Email</div>
         <div className="flex-grow border-t border-dashed" />
@@ -169,7 +184,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role }) => {
 
       {/* Remember + Forgot */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center gap-2">
           <Checkbox checked={remember} onCheckedChange={(val) => setRemember(!!val)} />
           <Label>Remember me</Label>
         </div>
@@ -179,12 +194,22 @@ const LoginForm: React.FC<LoginFormProps> = ({ role }) => {
       </div>
 
       {/* Error */}
-      {error && <div className="text-red-500">{error}</div>}
+      {error && <div className="text-red-500 text-center">{error}</div>}
 
       {/* Submit */}
-      <Button type="submit" disabled={loginMutation.isLoading || googleLoginMutation.isLoading}>
+      <Button
+        className="bg-primary hover:bg-foreground w-full py-6 font-bold text-white h-[50px]"
+        type="submit"
+        disabled={loginMutation.isLoading || googleLoginMutation.isLoading}
+      >
         {loginMutation.isLoading ? 'Logging in...' : 'Login'}
       </Button>
+      <div className="mt-8 text-sm font-semibold text-gray-400 text-center">
+        Not Registered Yet?{' '}
+        <span className="text-primary hover:text-primary">
+          <a href="/auth/signup">Create an Account</a>
+        </span>
+      </div>
     </form>
   );
 };

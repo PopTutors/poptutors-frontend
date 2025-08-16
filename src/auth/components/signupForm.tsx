@@ -5,6 +5,7 @@ import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
 import { useGenericMutation } from '../../api/useGenericMutation';
 import { useFetch } from '../../api/UseFetch';
+import toast from 'react-hot-toast';
 
 type SignupFormProps = {
   onAuthRequestSuccess: (email: string) => void;

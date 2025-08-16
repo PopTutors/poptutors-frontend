@@ -19,6 +19,8 @@ import LiveQuestion from './liveQuestion/LiveQuestion';
 import AssignmentDetailsPage from './pages/student/assignment/details';
 import SessionDetailsPage from './pages/student/session/details';
 import GoogleCallback from './auth/google-callback';
+import ProtectedRoute from './protectedRoute';
+import RequestSessionForm from './components/forms/RequestSessionForm';
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -39,7 +41,7 @@ export const createAppRouter = createBrowserRouter([
   },
 
   {
-    // element: <ProtectedRoute />,
+    element: <ProtectedRoute />,
     children: [
       {
         element: <HomeContent />,
@@ -75,6 +77,10 @@ export const createAppRouter = createBrowserRouter([
           {
             path: paths.student.assignmentdetails.path,
             element: <SessionCard />,
+          },
+          {
+            path: paths.student.session.sessionSubmit.path,
+            element: <RequestSessionForm />,
           },
           {
             path: paths.student.livequestion.path,

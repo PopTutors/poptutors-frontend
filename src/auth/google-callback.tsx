@@ -18,7 +18,7 @@ export default function GoogleCallback() {
 
     if (!idToken) {
       toast.error('Google login failed. No token received.');
-      navigate('/auth/login');
+      navigate('/login');
       return;
     }
 

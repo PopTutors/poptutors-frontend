@@ -2,7 +2,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import api from '../lib/api';
-
+// Simple cookie reader (non-HttpOnly cookies)
+function getCookie(name: string) {
+  console.log("Getting cookie:", name);
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : null;
+}
 // Generic mutation data type
 interface MutationData {
   endpoint: string;
@@ -34,9 +39,21 @@ export function useGenericMutation<TResponse = any>() {
       // Set headers if auth is not required (override default auth)
       if (!requiresAuth) {
         config.headers = {
-          Authorization: '', // Clear auth header
+          'Authorization': '', // Clear auth header
+
         };
       }
+      // else {
+      //     // If authentication IS required
+      //     const token = localStorage.token; // Change this name to your cookie’s name
+      //     if (token) {
+      //         config.headers['Authorization'] = `Bearer ${token}`;
+      //     }
+      //     // Ensure cookies are sent with the request
+      //     config.withCredentials = true;
+      // }
+
+      console.log("Making API request:", config);
 
       let response;
 

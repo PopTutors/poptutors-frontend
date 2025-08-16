@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown';
 import Line from '../../assets/line.png';
+import { useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   onSidebarToggle?: () => void;
@@ -18,14 +19,34 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen }) => {
+  const navigate = useNavigate();
+
+  const clearAllCookies = () => {
+    document.cookie.split(';').forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, '')
+        .replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`);
+    });
+  };
+
   const handleSelect = (item: string) => {
-    console.log('Selected:', item);
+    if (item === 'Logout') {
+      // Clear all storage
+      localStorage.clear();
+      sessionStorage.clear();
+      clearAllCookies();
+
+      // Redirect to login page
+      navigate('/login', { replace: true });
+    } else {
+      console.log('Selected:', item);
+    }
   };
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm h-[75px] flex items-center px-4">
       {/* Left: Logo + Menu Button (Mobile) */}
-      <div className="flex items-center  md:justify-center  gap-1 w-[220px]">
+      <div className="flex items-center md:justify-center gap-1 w-[220px]">
         <button
           onClick={onSidebarToggle}
           className="relative w-6 h-6 flex flex-col justify-between items-center p-[3px] z-50 lg:hidden"
@@ -46,7 +67,7 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen }) => {
             }`}
           />
         </button>
-        <img src={logo} alt="Logo" className="" />
+        <img src={logo} alt="Logo" />
       </div>
 
       {/* Center: Search bar */}

@@ -12,9 +12,9 @@ const ProtectedRoute = () => {
 
       console.log('✅ [getUser] Response:', response);
 
-      if (response?.data?.success && response?.data?.data) {
-        return response.data.data;
-      }
+      //     if (response?.data?.success && response?.data?.data) {
+      //       return response.data.data;
+      //     }
 
       throw new Error('User not authenticated');
     } catch (error) {
@@ -35,13 +35,13 @@ const ProtectedRoute = () => {
     refetchOnWindowFocus: false,
   });
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <span className="text-gray-500">Checking authentication...</span>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex items-center justify-center min-h-screen">
+  //       <span className="text-gray-500">Checking authentication...</span>
+  //     </div>
+  //   );
+  // }
 
   if (isError || !user) {
     console.warn('🚫 Not authenticated:', error);
