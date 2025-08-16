@@ -18,25 +18,25 @@ const LiveQuestions = () => {
   const {
     data: liveHelpData = [],
     isLoading,
-    error
+    error,
   } = useFetch<any>(
     ['livehelp', subject, startDate, endDate], // react-query key
     `/live-help?startDate=${startDate}&endDate=${endDate}`,
     true,
     { requiresAuth: true }
   );
-  console.log("🚀 ~ LiveQuestions ~ liveHelpData:", liveHelpData)
+  console.log('🚀 ~ LiveQuestions ~ liveHelpData:', liveHelpData);
 
   function mapStatus(apiStatus: string) {
     switch (apiStatus) {
-      case "requested":
-        return "budget"; // or your UI's equivalent
-      case "confirmed":
-        return "confirmed";
-      case "completed":
-        return "completed";
+      case 'requested':
+        return 'budget'; // or your UI's equivalent
+      case 'confirmed':
+        return 'confirmed';
+      case 'completed':
+        return 'completed';
       default:
-        return "budget";
+        return 'budget';
     }
   }
 
@@ -107,7 +107,7 @@ const LiveQuestions = () => {
                 status={mapStatus(help.status)}
                 title={help.title}
                 subject={help.description} // or a dedicated subject field if available
-                topic={help.topic || "General"}
+                topic={help.topic || 'General'}
                 hours={help.liveHelpHours}
                 time={formatTimeRange(help.createdAt, help.liveHelpHours)}
                 startNote={getStartNote(help.createdAt)}

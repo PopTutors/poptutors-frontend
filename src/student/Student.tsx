@@ -14,8 +14,7 @@ import NotificationList from '../components/ui/cards/notificationList';
 import UpcommingExamCard from './components/UpcommingExamCard';
 import { useState } from 'react';
 import { MessageIcon, NotificationIcon, RattingIcon } from '../assets';
-import dayjs from "dayjs";
-
+import dayjs from 'dayjs';
 
 const transaction: TransactionType[] = [
   { id: 't1', date: '21 Dec, 2021', amount: '534', status: 'Pending' },
@@ -132,8 +131,7 @@ export default function Dashboard() {
       requiresAuth: true,
     }
   );
-    console.log("🚀 ~ Dashboard ~ notifications:", notifications)
-
+  console.log('🚀 ~ Dashboard ~ notifications:', notifications);
 
   let filteredCourses = [];
 
@@ -148,18 +146,17 @@ export default function Dashboard() {
   }
   const selected = 'Live Sessions';
 
-
   const alerts = notifications; // from your JSON above
 
-const mappedNotifications = alerts?.map((alert: any) => ({
-  user: alert.from === "system" ? "System" : alert.from, // sender
-  message: alert.description, // main text
-  action: null, // you don't have 'action' in your API
-  course: "", // no course data in API
-  time: dayjs(alert.createdAt).format("DD MMM YYYY, hh:mm A"), // nice format
-  icon: MessageIcon, // put your icon path
-  type: alert.type || "alert",
-}));
+  const mappedNotifications = alerts?.map((alert: any) => ({
+    user: alert.from === 'system' ? 'System' : alert.from, // sender
+    message: alert.description, // main text
+    action: null, // you don't have 'action' in your API
+    course: '', // no course data in API
+    time: dayjs(alert.createdAt).format('DD MMM YYYY, hh:mm A'), // nice format
+    icon: MessageIcon, // put your icon path
+    type: alert.type || 'alert',
+  }));
 
   return (
     <div>
@@ -188,10 +185,11 @@ const mappedNotifications = alerts?.map((alert: any) => ({
               {options.map(({ label, icon }) => (
                 <DropdownMenuItem
                   key={label}
-                  className={`flex items-center px-4 py-3 text-[15px] font-poppinsmedium cursor-pointer ${selected === label
+                  className={`flex items-center px-4 py-3 text-[15px] font-poppinsmedium cursor-pointer ${
+                    selected === label
                       ? 'bg-[#E6F6FF] text-[#007A99]'
                       : 'text-gray-700 hover:bg-gray-100'
-                    }`}
+                  }`}
                   onSelect={() => console.log('Selected:', label)}
                 >
                   {icon}
@@ -227,7 +225,7 @@ const mappedNotifications = alerts?.map((alert: any) => ({
             title="Alerts"
             notifications={mappedNotifications}
             onFilterChange={(value) => {
-              console.log("Filter changed:", value);
+              console.log('Filter changed:', value);
             }}
           />
 

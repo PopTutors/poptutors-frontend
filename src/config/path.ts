@@ -55,8 +55,8 @@ export const paths = {
       },
     },
     wallet: {
-      path: "/student/wallet",
-      getHref: () => "/student/wallet",
+      path: '/student/wallet',
+      getHref: () => '/student/wallet',
     },
   },
   landing: {

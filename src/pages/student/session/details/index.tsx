@@ -8,16 +8,66 @@ import DocumentTable from '../../../../components/student/DocumentTable';
 import SessionCard from './components/SessionCard';
 import ReviewSection from './components/ReviewSection';
 import SessionNotes from './components/SessionNotes';
+import { useFetch } from '../../../../api';
+
+// Using any type for now as requested
 
 const SessionDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // Fetch session details
+  const {
+    data: session,
+    isLoading,
+    error,
+    hasError,
+  } = useFetch<any>(
+    ['session', id], // react-query key
+    `/sessions/${id}`,
+    !!id, // Only fetch if id exists
+    {
+      requiresAuth: true,
+      onErrorCallback: (error) => {
+        console.error('Error fetching session details:', error);
+      },
+    }
+  );
+
+  console.log(session);
+
   const handleGoBack = () => {
     navigate(-1); // Go back to previous page
   };
 
-  console.log(id);
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="w-full flex items-center justify-center min-h-[400px]">
+        <div className="text-lg">Loading session details...</div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (hasError || error) {
+    return (
+      <div className="w-full flex items-center justify-center min-h-[400px]">
+        <div className="text-lg text-red-600">
+          {error?.message || 'Failed to load session details'}
+        </div>
+      </div>
+    );
+  }
+
+  // Show not found state
+  if (!session) {
+    return (
+      <div className="w-full flex items-center justify-center min-h-[400px]">
+        <div className="text-lg">Session not found</div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
@@ -39,28 +89,19 @@ const SessionDetailsPage = () => {
         >
           Reshedule
         </Button>
-
-        {/* <div className="flex flex-col items-start bg-white border border-gray-200 rounded-lg px-4 py-3 shadow-sm">
-          <div className="flex items-center gap-2">
-            <span className="font-poppinssemibold text-sm text-primary">Inprogress</span>
-            <span className="text-gray-400">•</span>
-            <span className="font-poppinsregular text-sm text-primary">Milestone 1</span>
-          </div>
-          <span className="font-poppinsregular text-xs text-gray-600 mt-1">Downpayment Paid</span>
-        </div> */}
       </header>
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <div className="xl:col-span-2 gap-5 flex flex-col">
-          <SessionCard />
-          <SelectTeacher />
+          <SessionCard session={session} />
+          <SelectTeacher id={id} usedAt="session" />
           <ReviewSection />
           {/* <AllotedTutor /> */}
           <PriceSection />
-          <DocumentTable />
+          <DocumentTable documents={session?.documents || []} />
         </div>
         <div className="flex flex-col gap-5">
           <ChatSection />
-          <SessionNotes />
+          <SessionNotes session={session} />
         </div>
       </div>
     </div>

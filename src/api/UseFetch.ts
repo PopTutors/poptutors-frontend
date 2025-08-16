@@ -43,7 +43,7 @@ export function useFetch<T>(
     queryFn: async () => {
       // Create config object for the request
       const config: any = {
-        headers: {}
+        headers: {},
       };
 
       // Handle authentication token
@@ -132,18 +132,13 @@ export function useFetchWithAuth<T>(
     enabled = true,
     useTokenFromCookie = false,
     cookieName = 'authToken',
-    fallbackToStorage = true
+    fallbackToStorage = true,
   } = authConfig || {};
 
-  return useFetch<T>(
-    queryKey,
-    url,
-    enabled,
-    {
-      ...options,
-      useTokenFromCookie,
-      cookieName,
-      requiresAuth: true,
-    }
-  );
+  return useFetch<T>(queryKey, url, enabled, {
+    ...options,
+    useTokenFromCookie,
+    cookieName,
+    requiresAuth: true,
+  });
 }

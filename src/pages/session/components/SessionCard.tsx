@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 type SessionStatus = 'budget' | 'completed';
 type CtaType = 'reschedule' | 'join' | 'recordings';
@@ -17,6 +18,7 @@ interface SessionCardProps {
   disabled?: boolean;
   onClick?: () => void;
   timeNote?: string;
+  sessionId?: string;
 }
 
 const getCtaLabel = (type: CtaType) => {
@@ -43,6 +45,7 @@ const SessionCard: React.FC<SessionCardProps> = ({
   ratingCount,
   ctaType,
   timeNote,
+  sessionId,
 }) => {
   const isCompleted = status === 'completed';
   const ctaLabel = getCtaLabel(ctaType);
@@ -61,7 +64,9 @@ const SessionCard: React.FC<SessionCardProps> = ({
             <span className="text-[#9197B3]"> • {subtitle}</span>
           </p>
         </div>
-        <ArrowRight className="text-[#00A5EC] w-[24px] h-[24px] mt-1 cursor-pointer" />
+        <Link to={`/student/session/${sessionId}`}>
+          <ArrowRight className="text-[#00A5EC] w-[24px] h-[24px] mt-1 cursor-pointer" />
+        </Link>
       </div>
 
       <div className="mt-4 h-[100px] bg-[#E9F8FE] rounded-lg px-4 py-3 flex justify-between items-center">

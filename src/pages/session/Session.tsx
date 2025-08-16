@@ -16,7 +16,7 @@ const SessionPage = () => {
   const {
     data: sessions = [],
     isLoading,
-    error
+    error,
   } = useFetch<any>(
     ['sessions', subject, startDate, endDate], // react-query key
     `/sessions/by-date?startDate=${startDate}&endDate=${endDate}`,
@@ -85,9 +85,10 @@ const SessionPage = () => {
                   timezone={`(${session.timezone})`}
                   timeNote="Starting soon" // you can calculate exact difference
                   ctaType="join" // or reschedule, recordings, etc. depending on status
+                  sessionId={session._id}
                   onClick={() => alert(`Joining ${session.topic}`)}
                 />
-              )
+              );
             })}
             <SessionCard
               title="Lorem ipsum dolor sit amet consectetur. Velit mole amet adeiscing etiam nam"

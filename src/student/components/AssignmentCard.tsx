@@ -37,7 +37,7 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({
   const isCompleted = status === 'Completed';
 
   const handleViewAssignment = () => {
-    navigate(paths.student.assignment.path);
+    navigate(paths.student.assignment.assignmentDetails.getHref(id.toString()));
   };
 
   return (
@@ -55,18 +55,17 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({
         </div>
 
         <div className="font-poppinsmedium text-[12px] text-left sm:text-right">
-  <div className={`flex flex-col gap-1 ${isCompleted ? 'text-[#39A340]' : 'text-primary'}`}>
-    {statusLabel.map((label, index) => (
-      <div
-        key={index}
-        className={`py-[2px] px-2 rounded ${isCompleted ? 'bg-[#39A3401A]' : 'bg-[#e6f9ff]'}`}
-      >
-        {label}
-      </div>
-    ))}
-  </div>
-</div>
-
+          <div className={`flex flex-col gap-1 ${isCompleted ? 'text-[#39A340]' : 'text-primary'}`}>
+            {statusLabel.map((label, index) => (
+              <div
+                key={index}
+                className={`py-[2px] px-2 rounded ${isCompleted ? 'bg-[#39A3401A]' : 'bg-[#e6f9ff]'}`}
+              >
+                {label}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Middle Section */}

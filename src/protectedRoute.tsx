@@ -1,24 +1,24 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { paths } from "./config/path";
-import api from "./lib/api";
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { paths } from './config/path';
+import api from './lib/api';
 
 const ProtectedRoute = () => {
   const location = useLocation();
 
   const getUser = async () => {
     try {
-      const response = await api.get("/auth/me");
+      const response = await api.get('/auth/me');
 
-      console.log("✅ [getUser] Response:", response);
+      console.log('✅ [getUser] Response:', response);
 
       if (response?.data?.success && response?.data?.data) {
         return response.data.data;
       }
 
-      throw new Error("User not authenticated");
+      throw new Error('User not authenticated');
     } catch (error) {
-      console.error("❌ Error fetching user:", error);
+      console.error('❌ Error fetching user:', error);
       throw error;
     }
   };
@@ -29,7 +29,7 @@ const ProtectedRoute = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["authenticatedUser"],
+    queryKey: ['authenticatedUser'],
     queryFn: getUser,
     retry: false,
     refetchOnWindowFocus: false,
@@ -44,10 +44,8 @@ const ProtectedRoute = () => {
   }
 
   if (isError || !user) {
-    console.warn("🚫 Not authenticated:", error);
-    const redirectTo = paths.auth.login.getHref(
-      location.pathname + location.search
-    );
+    console.warn('🚫 Not authenticated:', error);
+    const redirectTo = paths.auth.login.getHref(location.pathname + location.search);
     return <Navigate to={redirectTo} replace />;
   }
 

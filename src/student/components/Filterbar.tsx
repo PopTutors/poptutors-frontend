@@ -22,7 +22,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
   onSubjectChange,
   startDate,
   endDate,
-  onDateChange
+  onDateChange,
 }) => {
   const filterOptions = ['Mathematics', 'Physics', 'Chemistry'];
   const [open, setOpen] = useState(false);

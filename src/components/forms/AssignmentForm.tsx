@@ -1,15 +1,15 @@
-import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Select } from "../ui/select";
-import { MultiSelect } from "../ui/multi-select";
-import Textarea from "../ui/textarea";
-import { UploadIcon } from "lucide-react";
-import FieldError from "../ui/FieldError";
-import { useGenericMutation } from "../../api/useGenericMutation";
+import { useForm, Controller } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Select } from '../ui/select';
+import { MultiSelect } from '../ui/multi-select';
+import Textarea from '../ui/textarea';
+import { UploadIcon } from 'lucide-react';
+import FieldError from '../ui/FieldError';
+import { useGenericMutation } from '../../api/useGenericMutation';
 
 // ✅ Validation schema
 const formSchema = z.object({
@@ -17,16 +17,16 @@ const formSchema = z.object({
   assignmentType: z.string(),
   expertiseLevel: z.string(),
   additionalServices: z.string().optional(),
-  language: z.string().min(1, "Language is required"),
+  language: z.string().min(1, 'Language is required'),
   skills: z.array(z.string()),
   timeframe: z.string(),
   budget: z.string(),
   universityName: z.string(),
   courseSubject: z.string(),
-  topicName: z.string().min(1, "Topic Name is required"),
-  courseCode: z.string().min(1, "Course Code is required"),
-  professorName: z.string().min(1, "Professor Name is required"),
-  dateTime: z.string().min(1, "Date and Time is required"),
+  topicName: z.string().min(1, 'Topic Name is required'),
+  courseCode: z.string().min(1, 'Course Code is required'),
+  professorName: z.string().min(1, 'Professor Name is required'),
+  dateTime: z.string().min(1, 'Date and Time is required'),
   requirements: z.string().optional(),
 });
 
@@ -38,91 +38,90 @@ export const AssignmentForm = () => {
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subject: "",
-      assignmentType: "",
-      expertiseLevel: "",
-      additionalServices: "",
-      language: "",
+      subject: '',
+      assignmentType: '',
+      expertiseLevel: '',
+      additionalServices: '',
+      language: '',
       skills: [],
-      timeframe: "",
-      budget: "",
-      universityName: "",
-      courseSubject: "",
-      topicName: "",
-      courseCode: "",
-      professorName: "",
-      dateTime: "",
-      requirements: "",
+      timeframe: '',
+      budget: '',
+      universityName: '',
+      courseSubject: '',
+      topicName: '',
+      courseCode: '',
+      professorName: '',
+      dateTime: '',
+      requirements: '',
     },
   });
 
   // ✅ Options
   const subjects = [
-    { value: "Computer Science", label: "Computer Science" },
-    { value: "Mathematics", label: "Mathematics" },
-    { value: "Physics", label: "Physics" },
-    { value: "Chemistry", label: "Chemistry" },
+    { value: 'Computer Science', label: 'Computer Science' },
+    { value: 'Mathematics', label: 'Mathematics' },
+    { value: 'Physics', label: 'Physics' },
+    { value: 'Chemistry', label: 'Chemistry' },
   ];
 
   const assignmentTypes = [
-    { value: "Case Studies", label: "Case Studies" },
-    { value: "Algorithms", label: "Algorithms" },
-    { value: "Data Structures", label: "Data Structures" },
-    { value: "Web Development", label: "Web Development" },
+    { value: 'Case Studies', label: 'Case Studies' },
+    { value: 'Algorithms', label: 'Algorithms' },
+    { value: 'Data Structures', label: 'Data Structures' },
+    { value: 'Web Development', label: 'Web Development' },
   ];
 
   const expertiseLevels = [
-    { value: "Beginner", label: "Beginner" },
-    { value: "Intermediate", label: "Intermediate" },
-    { value: "Advanced", label: "Advanced" },
-    { value: "Expert", label: "Expert" },
+    { value: 'Beginner', label: 'Beginner' },
+    { value: 'Intermediate', label: 'Intermediate' },
+    { value: 'Advanced', label: 'Advanced' },
+    { value: 'Expert', label: 'Expert' },
   ];
 
   const languages = [
-    { value: "English", label: "English" },
-    { value: "Spanish", label: "Spanish" },
-    { value: "French", label: "French" },
-    { value: "German", label: "German" },
+    { value: 'English', label: 'English' },
+    { value: 'Spanish', label: 'Spanish' },
+    { value: 'French', label: 'French' },
+    { value: 'German', label: 'German' },
   ];
 
   const timeframeOptions = [
-    { value: "EET", label: "Eastern European Time (EET), Cairo UTC+3" },
-    { value: "IST", label: "India Standard Time (IST), UTC+5:30" },
-    { value: "GMT", label: "Greenwich Mean Time (GMT), UTC+0" },
-    { value: "PST", label: "Pacific Standard Time (PST), UTC−8" },
+    { value: 'EET', label: 'Eastern European Time (EET), Cairo UTC+3' },
+    { value: 'IST', label: 'India Standard Time (IST), UTC+5:30' },
+    { value: 'GMT', label: 'Greenwich Mean Time (GMT), UTC+0' },
+    { value: 'PST', label: 'Pacific Standard Time (PST), UTC−8' },
   ];
 
   const skillOptions = [
-    "Python",
-    "React Js",
-    "Node Js",
-    "JavaScript",
-    "HTML",
-    "CSS",
-    "Angular",
-    "Vue.js",
+    'Python',
+    'React Js',
+    'Node Js',
+    'JavaScript',
+    'HTML',
+    'CSS',
+    'Angular',
+    'Vue.js',
   ];
 
   const { mutate, isLoading } = useGenericMutation<{ id: number; name: string }>();
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log("✅ Form Submitted Data:", data);
-   
-    
+    console.log('✅ Form Submitted Data:', data);
+
     mutate({
-      endpoint: "/assignments", // API endpoint
-      data: {data}, // POST data
-      method: "POST", // default POST
+      endpoint: '/assignments', // API endpoint
+      data: { data }, // POST data
+      method: 'POST', // default POST
       requiresAuth: true, // auth header required
-      successMessage: "User added successfully!",
-      errorMessage: "Failed to add user",
-      invalidateKeys: ["assignments"], // query key refresh
+      successMessage: 'User added successfully!',
+      errorMessage: 'Failed to add user',
+      invalidateKeys: ['assignments'], // query key refresh
       onSuccessCallback: (res) => {
-        console.log("User Created:", res);
+        console.log('User Created:', res);
       },
       onErrorCallback: (err) => {
         alert(err);
-        console.error("Error Creating User:", err);
+        console.error('Error Creating User:', err);
       },
     });
   };
@@ -155,7 +154,7 @@ export const AssignmentForm = () => {
                   options={subjects}
                   placeholder="Select Subject"
                   value={subjects.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || "")}
+                  onChange={(opt) => field.onChange(opt?.value || '')}
                 />
               )}
             />
@@ -172,7 +171,7 @@ export const AssignmentForm = () => {
                   options={assignmentTypes}
                   placeholder="Select Type"
                   value={assignmentTypes.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || "")}
+                  onChange={(opt) => field.onChange(opt?.value || '')}
                 />
               )}
             />
@@ -192,7 +191,7 @@ export const AssignmentForm = () => {
                   options={expertiseLevels}
                   placeholder="Select Level"
                   value={expertiseLevels.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || "")}
+                  onChange={(opt) => field.onChange(opt?.value || '')}
                 />
               )}
             />
@@ -204,9 +203,7 @@ export const AssignmentForm = () => {
             <Controller
               name="additionalServices"
               control={control}
-              render={({ field }) => (
-                <Input {...field} placeholder="Any additional services?" />
-              )}
+              render={({ field }) => <Input {...field} placeholder="Any additional services?" />}
             />
           </div>
         </div>
@@ -223,7 +220,7 @@ export const AssignmentForm = () => {
                   options={languages}
                   placeholder="Select Language"
                   value={languages.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || "")}
+                  onChange={(opt) => field.onChange(opt?.value || '')}
                 />
               )}
             />
@@ -259,7 +256,7 @@ export const AssignmentForm = () => {
                   options={timeframeOptions}
                   placeholder="Select Timezone"
                   value={timeframeOptions.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || "")}
+                  onChange={(opt) => field.onChange(opt?.value || '')}
                 />
               )}
             />
@@ -271,9 +268,7 @@ export const AssignmentForm = () => {
             <Controller
               name="budget"
               control={control}
-              render={({ field }) => (
-                <Input {...field} placeholder="Enter budget with currency" />
-              )}
+              render={({ field }) => <Input {...field} placeholder="Enter budget with currency" />}
             />
             <FieldError name="budget" errors={errors} />
           </div>
@@ -286,9 +281,7 @@ export const AssignmentForm = () => {
             <Controller
               name="universityName"
               control={control}
-              render={({ field }) => (
-                <Input {...field} placeholder="Enter University Name" />
-              )}
+              render={({ field }) => <Input {...field} placeholder="Enter University Name" />}
             />
             <FieldError name="universityName" errors={errors} />
           </div>
@@ -303,7 +296,7 @@ export const AssignmentForm = () => {
                   options={subjects}
                   placeholder="Select Subject"
                   value={subjects.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || "")}
+                  onChange={(opt) => field.onChange(opt?.value || '')}
                 />
               )}
             />
@@ -363,9 +356,7 @@ export const AssignmentForm = () => {
           <Controller
             name="requirements"
             control={control}
-            render={({ field }) => (
-              <Textarea {...field} rows={4} placeholder="Write here..." />
-            )}
+            render={({ field }) => <Textarea {...field} rows={4} placeholder="Write here..." />}
           />
         </div>
 
@@ -374,7 +365,7 @@ export const AssignmentForm = () => {
           <Button variant="pill_outline" size="pill" type="button">
             Cancel
           </Button>
-          <Button  variant="pill_solid" size="pill" type="submit">
+          <Button variant="pill_solid" size="pill" type="submit">
             Submit Request
           </Button>
         </div>

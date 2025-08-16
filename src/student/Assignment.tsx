@@ -58,14 +58,14 @@ export default function Assignment() {
   const {
     data: assignments = [],
     isLoading,
-    error
+    error,
   } = useFetch<any>(
     ['assignments', subject, startDate, endDate], // react-query key
     `/assignments/filter?subject=${subject}&startDate=${startDate}&endDate=${endDate}`,
     true,
     { requiresAuth: true }
   );
-  console.log("🚀 ~ Assignment ~ assignments:", assignments)
+  console.log('🚀 ~ Assignment ~ assignments:', assignments);
 
   // Handle selection from dropdown
 
@@ -151,7 +151,7 @@ export default function Assignment() {
                     deadline={new Date(item.createdAt).toLocaleDateString('en-GB', {
                       day: '2-digit',
                       month: 'short',
-                      year: 'numeric'
+                      year: 'numeric',
                     })}
                     tags={[item.subject, item.course]}
                     status={item.status}
@@ -160,12 +160,9 @@ export default function Assignment() {
                     rating={4.8}
                     ratingCount={120}
                   />
-                )
-                )
+                ))
               ) : (
-                <div className="text-center py-4 text-gray-400">
-                  No assignments found
-                </div>
+                <div className="text-center py-4 text-gray-400">No assignments found</div>
               )}
             </div>
           </div>

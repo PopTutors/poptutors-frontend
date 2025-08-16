@@ -1,20 +1,69 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import AssignmentCard from './components/AssignmentCard';
-import { MoveLeft } from 'lucide-react';
+import { MoveLeft, Loader2, AlertCircle } from 'lucide-react';
 import SelectTeacher from '../../../../components/student/SelectTeacher';
 import PriceSection from '../../../../components/student/PriceSection';
 import DocumentTable from '../../../../components/student/DocumentTable';
 import ChatSection from '../../../../components/ChatSection';
+import { useFetch } from '../../../../api/UseFetch';
 
 const AssignmentDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const {
+    data: assignmentDetails = {},
+    isLoading,
+    error,
+  } = useFetch<any>(
+    ['assignment-details', id], // react-query key
+    `/assignments/${id}`,
+    true,
+    { requiresAuth: true }
+  );
+
   const handleGoBack = () => {
     navigate(-1); // Go back to previous page
   };
 
-  console.log(id);
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="w-full flex items-center justify-center min-h-[400px]">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          <p className="text-gray-600 font-poppinsmedium">Loading assignment details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="w-full flex items-center justify-center min-h-[400px]">
+        <div className="flex flex-col items-center gap-4 text-center">
+          <AlertCircle className="w-12 h-12 text-red-500" />
+          <div>
+            <h3 className="text-lg font-poppinssemibold text-gray-900 mb-2">
+              Failed to load assignment
+            </h3>
+            <p className="text-gray-600 font-poppinsregular">
+              {error?.message || 'Something went wrong while loading the assignment details.'}
+            </p>
+          </div>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-primary text-white rounded-lg font-poppinsmedium hover:bg-primary/90 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  console.log(assignmentDetails);
 
   return (
     <div className="w-full">
@@ -41,11 +90,11 @@ const AssignmentDetailsPage = () => {
       </header>
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <div className="xl:col-span-2 gap-5 flex flex-col">
-          <AssignmentCard />
-          <SelectTeacher />
+          <AssignmentCard assignmentData={assignmentDetails} />
+          <SelectTeacher id={id} usedAt="assignment" />
           {/* <AllotedTutor /> */}
           <PriceSection />
-          <DocumentTable />
+          <DocumentTable documents={assignmentDetails?.documents} />
         </div>
         <div className="flex flex-col gap-5">
           <ChatSection />

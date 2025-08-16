@@ -1,10 +1,4 @@
-import {
-  Menu,
-  Check,
-  Paperclip,
-  SendHorizontal,
-  RotateCw,
-} from 'lucide-react';
+import { Menu, Check, Paperclip, SendHorizontal, RotateCw } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import profile from '../assets/assignment/Image.png';
