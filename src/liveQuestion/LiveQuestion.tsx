@@ -8,9 +8,9 @@ import { LiveQuestionCard } from './components/LiveQuestionCard';
 import { useFetch } from '../api';
 
 const LiveQuestions = () => {
-  const [subject, setSubject] = useState('Mathematics');
-  const [startDate, setStartDate] = useState('2024-01-11');
-  const [endDate, setEndDate] = useState('2025-10-14');
+  const [subject, setSubject] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const handleTabChange = (tab: string) => {
     console.log('Selected Tab:', tab);
   };
@@ -107,11 +107,18 @@ const LiveQuestions = () => {
                 id={help._id}
                 status={mapStatus(help.status)}
                 title={help.title}
-                subject={help.description} // or a dedicated subject field if available
-                topic={help.topic || 'General'}
+                subject={help.metadata?.subject || help.subject || help.description || 'N/A'}
+                topic={help.metadata?.topic || help.topic || 'General'}
                 hours={help.liveHelpHours}
                 time={formatTimeRange(help.createdAt, help.liveHelpHours)}
                 startNote={getStartNote(help.createdAt)}
+                rating={help.rating}
+                showRecording={help.showRecording}
+                timezone={help.timezone}
+                pricePerHour={help.pricePerHour}
+                negotiationPrice={help.negotiationPrice}
+                finalPrice={help.finalPrice}
+                review={help.review}
               />
             ))}
             {/* <LiveQuestionCard

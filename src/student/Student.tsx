@@ -9,6 +9,8 @@ import {
 } from '../components/ui/dropdown';
 import type { TransactionType } from '../types/course';
 import TabHeader from './components/Tabs';
+import { paths } from '../config/path';
+import { useNavigate } from 'react-router-dom';
 import CourseCard from './components/CourseCard';
 import NotificationList from '../components/ui/cards/notificationList';
 import UpcommingExamCard from './components/UpcommingExamCard';
@@ -74,6 +76,8 @@ const options = [
 
 export default function Dashboard() {
   const [selectedTab, setSelectedTab] = useState('All');
+  const navigate = useNavigate();
+  const name = localStorage.getItem('name') || 'User';
 
   const enableAll = selectedTab === 'All';
   const enableAssignments = selectedTab === 'Assignment' || enableAll;
@@ -135,6 +139,23 @@ export default function Dashboard() {
 
   let filteredCourses = [];
 
+  // Helper to get details path for each type
+  const getDetailsPath = (item: any) => {
+    if (item.sessionType || item.startTime) {
+      // Session
+      return paths.student.session.sessionDetails.getHref(item._id);
+    }
+    if (item.metadata && item.metadata.assignmentType) {
+      // Assignment
+      return paths.student.assignment.assignmentDetails.getHref(item._id);
+    }
+    if (item.metadata && (item.pricePerHour || item.liveHelpHours)) {
+      // Live Question
+      return paths.student.livequestiondetails.getHref(item._id);
+    }
+    return undefined;
+  };
+
   if (selectedTab === 'Assignment') {
     filteredCourses = assignments;
   } else if (selectedTab === 'Live Questions') {
@@ -165,7 +186,7 @@ export default function Dashboard() {
           <span className="text-[12px] font-poppinsregular font-light text-gray-500">
             Welcome back,
           </span>
-          <div className="text-[16px]  mb-4 font-poppinssemibold">Shubham Gone</div>
+          <div className="text-[16px]  mb-4 font-poppinssemibold">{name}</div>
         </div>
         <div className="w-[280px]">
           <DropdownMenu>
@@ -190,7 +211,15 @@ export default function Dashboard() {
                       ? 'bg-[#E6F6FF] text-[#007A99]'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
-                  onSelect={() => console.log('Selected:', label)}
+                  onSelect={() => {
+                    if (label === 'Assignment') {
+                      navigate(paths.student.assignment.newAssignment.getHref());
+                    } else if (label === 'Live Sessions') {
+                      navigate(paths.student.session.sessionSubmit.getHref());
+                    } else if (label === 'Live Question') {
+                      navigate(paths.student.livequestion.livequestionrequest.getHref());
+                    }
+                  }}
                 >
                   {icon}
                   {label}
@@ -212,9 +241,40 @@ export default function Dashboard() {
     scrollbar-thin scrollbar-track-gray-50 scrollbar-thumb-gray-300"
           >
             <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 mt-4">
-              {filteredCourses?.map((course: any) => (
-                <CourseCard key={course.id} course={course} />
-              ))}
+              {filteredCourses?.map((item: any) => {
+                // Use getDetailsPath for navigation
+                const detailsPath = getDetailsPath(item);
+                return (
+                  <CourseCard
+                    key={item.id || item._id}
+                    course={item}
+                    metadata={item.metadata}
+                    title={item.metadata?.title || item.title || item.topic}
+                    subject={item.metadata?.subject || item.subject}
+                    status={item.status}
+                    postedBy={item.postedBy || item.requestedBy || item.studentId}
+                    assignedTo={item.assignedTo || item.teacherId}
+                    reviewedBy={item.reviewedBy || item.managerId}
+                    createdAt={item.createdAt}
+                    updatedAt={item.updatedAt}
+                    startTime={item.startTime}
+                    endTime={item.endTime}
+                    timezone={item.timezone}
+                    universityName={item.universityName}
+                    sessionAgenda={item.sessionAgenda}
+                    expertiseLevel={item.expertiseLevel}
+                    budget={item.budget}
+                    pricePerHour={item.pricePerHour}
+                    liveHelpHours={item.liveHelpHours}
+                    showJoinNow={!!(item.sessionType || item.startTime)}
+                    onDetailsClick={() => {
+                      if (detailsPath) {
+                        navigate(detailsPath);
+                      }
+                    }}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>

@@ -30,6 +30,11 @@ interface SessionData {
   documents: any[];
   createdAt: string;
   updatedAt: string;
+  universityName: string;
+  sessionAgenda: string;
+  additionalServices?: string;
+  requirements?: string;
+  review?: string;
 }
 
 interface SessionCardProps {
@@ -108,13 +113,37 @@ const SessionCard = ({ session }: SessionCardProps) => {
         </div>
       </div>
 
-      {/* Description */}
+      {/* Description & Metadata */}
       <div className="mb-4 md:mb-6">
         <h4 className="text-sm md:text-base font-poppinsmedium text-gray-900 mb-2">Description</h4>
-        <div className="text-xs md:text-sm font-poppinsregular text-gray-700 leading-relaxed">
+        <div className="text-xs md:text-sm font-poppinsregular text-gray-700 leading-relaxed space-y-1">
           <p>
-            {session.subject || 'Mathematics'} - {session.topic || 'Calculus Basics'}
+            <span className="font-poppinssemibold">Subject:</span>{' '}
+            {session.subject || 'Mathematics'}
           </p>
+          <p>
+            <span className="font-poppinssemibold">Topic:</span>{' '}
+            {session.topic || 'Calculus Basics'}
+          </p>
+          <p>
+            <span className="font-poppinssemibold">University:</span>{' '}
+            {session.universityName || 'N/A'}
+          </p>
+          <p>
+            <span className="font-poppinssemibold">Session Agenda:</span>{' '}
+            {session.sessionAgenda || 'N/A'}
+          </p>
+          {session.additionalServices && (
+            <p>
+              <span className="font-poppinssemibold">Additional Services:</span>{' '}
+              {session.additionalServices}
+            </p>
+          )}
+          {session.requirements && (
+            <p>
+              <span className="font-poppinssemibold">Requirements:</span> {session.requirements}
+            </p>
+          )}
         </div>
       </div>
       <div className="border-b border-gray-200 mb-4 md:mb-6"></div>

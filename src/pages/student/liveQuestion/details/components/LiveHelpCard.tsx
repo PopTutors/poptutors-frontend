@@ -61,37 +61,84 @@ const LiveHelpCard = ({ liveHelp }: LiveHelpCardProps) => {
         <div className="flex items-center justify-between gap-3 py-2">
           <div className="flex items-center justify-start gap-2">
             <Users className="w-4 h-4 text-gray-400 flex-shrink-0" />
-            <p className="text-xs md:text-sm font-poppinsregular text-gray-500">Organization</p>
+            <p className="text-xs md:text-sm font-poppinsregular text-gray-500">Session Type</p>
           </div>
           <p className="text-xs md:text-sm font-poppinsmedium text-gray-900">
-            {liveHelp?.sessionType || 'Lab Work'}
+            {liveHelp?.sessionType || liveHelp?.metadata?.helpType || 'Lab Work'}
           </p>
         </div>
         <div className="flex items-center justify-between gap-3 py-2">
           <div className="flex items-center justify-start gap-2">
             <NotebookText className="w-4 h-4 text-gray-400 flex-shrink-0" />
-            <p className="text-xs md:text-sm font-poppinsregular text-gray-500">Subject & Topic</p>
+            <p className="text-xs md:text-sm font-poppinsregular text-gray-500">Expertise Level</p>
           </div>
           <p className="text-xs md:text-sm font-poppinsmedium text-gray-900 text-right">
-            {liveHelp?.expertiseLevel || 'Beginner and Intermediate'}
+            {liveHelp?.expertiseLevel ||
+              liveHelp?.metadata?.expertise ||
+              'Beginner and Intermediate'}
           </p>
         </div>
         <div className="flex items-center justify-between gap-3 py-2">
           <div className="flex items-center justify-start gap-2">
             <BookAlert className="w-4 h-4 text-gray-400 flex-shrink-0" />
-            <p className="text-xs md:text-sm font-poppinsregular text-gray-500">Mode of Help</p>
+            <p className="text-xs md:text-sm font-poppinsregular text-gray-500">Language</p>
           </div>
           <p className="text-xs md:text-sm font-poppinsmedium text-gray-900">
-            {liveHelp?.language || 'English'}
+            {liveHelp?.language || liveHelp?.metadata?.language || 'English'}
           </p>
         </div>
+        <div className="flex items-center justify-between gap-3 py-2">
+          <div className="flex items-center justify-start gap-2">
+            <p className="text-xs md:text-sm font-poppinsregular text-gray-500">Price Per Hour</p>
+          </div>
+          <p className="text-xs md:text-sm font-poppinsmedium text-gray-900">
+            ${liveHelp?.pricePerHour ?? 'N/A'}
+          </p>
+        </div>
+        {liveHelp?.review && (
+          <div className="flex items-center justify-between gap-3 py-2">
+            <p className="text-xs md:text-sm font-poppinsregular text-gray-500">Review</p>
+            <p className="text-xs md:text-sm font-poppinsmedium text-gray-900">{liveHelp.review}</p>
+          </div>
+        )}
       </div>
 
-      {/* Description */}
+      {/* Description & Metadata */}
       <div className="mb-4 md:mb-6">
         <h4 className="text-sm md:text-base font-poppinsmedium text-gray-900 mb-2">Description</h4>
-        <div className="text-xs md:text-sm font-poppinsregular text-gray-700 leading-relaxed">
-          <p>{liveHelp?.description || 'N/A'}</p>
+        <div className="text-xs md:text-sm font-poppinsregular text-gray-700 leading-relaxed space-y-1">
+          <p>
+            <span className="font-poppinssemibold">Description:</span>{' '}
+            {liveHelp?.description || 'N/A'}
+          </p>
+          <p>
+            <span className="font-poppinssemibold">Subject:</span>{' '}
+            {liveHelp?.metadata?.subject || 'N/A'}
+          </p>
+          <p>
+            <span className="font-poppinssemibold">Topic:</span>{' '}
+            {liveHelp?.metadata?.topic || 'N/A'}
+          </p>
+          <p>
+            <span className="font-poppinssemibold">University:</span>{' '}
+            {liveHelp?.metadata?.university || 'N/A'}
+          </p>
+          <p>
+            <span className="font-poppinssemibold">Help Type:</span>{' '}
+            {liveHelp?.metadata?.helpType || 'N/A'}
+          </p>
+          {liveHelp?.metadata?.additionalServices && (
+            <p>
+              <span className="font-poppinssemibold">Additional Services:</span>{' '}
+              {liveHelp?.metadata?.additionalServices}
+            </p>
+          )}
+          {liveHelp?.metadata?.requirements && (
+            <p>
+              <span className="font-poppinssemibold">Requirements:</span>{' '}
+              {liveHelp?.metadata?.requirements}
+            </p>
+          )}
         </div>
       </div>
       <div className="border-b border-gray-200 mb-4 md:mb-6"></div>

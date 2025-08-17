@@ -94,10 +94,11 @@ const SessionDetailsPage = () => {
         <div className="xl:col-span-2 gap-5 flex flex-col">
           <SessionCard session={session} />
           <SelectTeacher id={id} usedAt="session" />
-          <ReviewSection />
+          <ReviewSection review={session?.review} />
           {/* <AllotedTutor /> */}
           <PriceSection />
-          <DocumentTable documents={session?.documents || []} />
+          {/* Pass documents as attachments to DocumentTable, matching backend model */}
+          <DocumentTable attachments={session?.documents || []} />
         </div>
         <div className="flex flex-col gap-5">
           <ChatSection />

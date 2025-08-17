@@ -94,7 +94,7 @@ const AssignmentDetailsPage = () => {
           <SelectTeacher id={id} usedAt="assignment" />
           {/* <AllotedTutor /> */}
           <PriceSection />
-          <DocumentTable documents={assignmentDetails?.documents} />
+          <DocumentTable attachments={assignmentDetails?.attachments} />
         </div>
         <div className="flex flex-col gap-5">
           <ChatSection />

@@ -224,7 +224,7 @@ const RequestSessionForm = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-[100%]  p-0">
       <div className="mb-6">
         <div className="mb-4">
           <h1 className="text-xl font-semibold text-gray-800">Request Session</h1>

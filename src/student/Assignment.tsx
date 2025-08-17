@@ -50,7 +50,7 @@ const transaction: TransactionType[] = [
 
 // Assignment component for dashboard
 export default function Assignment() {
-  const [subject, setSubject] = useState('Mathematics');
+  const [subject, setSubject] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);

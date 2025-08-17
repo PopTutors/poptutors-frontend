@@ -4,7 +4,11 @@ import { Button } from '../../../../../components/ui/button';
 import { Label } from '../../../../../components/ui/label';
 import Textarea from '../../../../../components/ui/textarea';
 
-const ReviewSection = () => {
+interface ReviewSectionProps {
+  review?: string;
+}
+
+const ReviewSection = ({ review }: ReviewSectionProps) => {
   const onSubmitFeedback = () => {
     console.log('submit feedback');
   };
@@ -20,6 +24,14 @@ const ReviewSection = () => {
         </div>
       </div>
       <div className="px-3 sm:px-5 pb-3 sm:pb-5 flex flex-col gap-3 sm:gap-4">
+        {review && (
+          <div className="bg-gray-50 p-3 rounded-lg">
+            <Label className="text-sm sm:text-base md:text-[16px] font-poppinsmedium mb-2">
+              Existing Review
+            </Label>
+            <div className="text-xs sm:text-sm text-gray-700 font-poppinsregular">{review}</div>
+          </div>
+        )}
         <div>
           <Label className="text-sm sm:text-base md:text-[16px] font-poppinsmedium mb-2">
             Feedback Comments

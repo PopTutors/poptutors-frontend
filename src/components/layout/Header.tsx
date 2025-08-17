@@ -21,6 +21,17 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen }) => {
   const navigate = useNavigate();
 
+  // Get user info from localStorage
+  const name = localStorage.getItem('name') || 'User';
+  const role = localStorage.getItem('role') || 'Student';
+
+  // Format today's date as 'DD MMM, ddd'
+  const today = new Date();
+  const day = today.getDate();
+  const month = today.toLocaleString('default', { month: 'short' });
+  const weekday = today.toLocaleString('default', { weekday: 'short' });
+  const formattedDate = `${day} ${month}, ${weekday}`;
+
   const clearAllCookies = () => {
     document.cookie.split(';').forEach((c) => {
       document.cookie = c
@@ -89,9 +100,9 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen }) => {
                 <User2 className="w-4 h-4 text-black" />
               </div>
               <div className="hidden sm:flex flex-col text-left">
-                <span className="text-[13px] font-medium text-black">Shubham Gone</span>
+                <span className="text-[13px] font-medium text-black">{name}</span>
                 <span className="text-[11px] text-gray-500 flex items-center gap-1">
-                  Student <span className="w-1 h-1 bg-gray-400 rounded-full" /> 23 Dec, Sun
+                  {role} <span className="w-1 h-1 bg-gray-400 rounded-full" /> {formattedDate}
                 </span>
               </div>
             </div>

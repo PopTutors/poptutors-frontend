@@ -25,9 +25,7 @@ const AssignmentCard = ({ assignmentData }: { assignmentData: any }) => {
             <Clock className="w-4 h-4 text-gray-400" />
             <p className="text-sm font-poppinsregular text-gray-500">Time</p>
           </div>
-          <p className="text-sm font-poppinsmedium text-gray-900">
-            {formatDate(assignmentData?.createdAt)}
-          </p>
+          <p className="text-sm font-poppinsmedium text-gray-900">{assignmentData?.createdAt}</p>
         </div>
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center justify-start gap-2">
@@ -35,7 +33,9 @@ const AssignmentCard = ({ assignmentData }: { assignmentData: any }) => {
             <p className="text-sm font-poppinsregular text-gray-500">Assignment Type</p>
           </div>
           <p className="text-sm font-poppinsmedium text-gray-900">
-            {assignmentData?.assignmentType || 'Lab Work'}
+            {assignmentData?.metadata?.assignmentType ||
+              assignmentData?.assignmentType ||
+              'Lab Work'}
           </p>
         </div>
         <div className="flex items-center justify-between gap-3">
@@ -44,7 +44,7 @@ const AssignmentCard = ({ assignmentData }: { assignmentData: any }) => {
             <p className="text-sm font-poppinsregular text-gray-500">Deadline</p>
           </div>
           <p className="text-sm font-poppinsmedium text-gray-900">
-            {assignmentData?.deadline ? formatDate(assignmentData?.deadline) : '20 April 2024'}
+            {assignmentData?.metadata?.dateTime || assignmentData?.deadline || 'N/A'}
           </p>
         </div>
         <div className="flex items-center justify-between gap-3">
@@ -53,7 +53,49 @@ const AssignmentCard = ({ assignmentData }: { assignmentData: any }) => {
             <p className="text-sm font-poppinsregular text-gray-500">Additional Services</p>
           </div>
           <p className="text-sm font-poppinsmedium text-gray-900">
-            {assignmentData?.subject || 'English'}
+            {assignmentData?.metadata?.additionalServices ||
+              assignmentData?.additionalServices ||
+              'N/A'}
+          </p>
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-start gap-2">
+            <p className="text-sm font-poppinsregular text-gray-500">Expertise Level</p>
+          </div>
+          <p className="text-sm font-poppinsmedium text-gray-900">
+            {assignmentData?.metadata?.expertiseLevel || assignmentData?.expertiseLevel || 'N/A'}
+          </p>
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-start gap-2">
+            <p className="text-sm font-poppinsregular text-gray-500">Language</p>
+          </div>
+          <p className="text-sm font-poppinsmedium text-gray-900">
+            {assignmentData?.metadata?.language || assignmentData?.language || 'N/A'}
+          </p>
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-start gap-2">
+            <p className="text-sm font-poppinsregular text-gray-500">University</p>
+          </div>
+          <p className="text-sm font-poppinsmedium text-gray-900">
+            {assignmentData?.metadata?.universityName || assignmentData?.universityName || 'N/A'}
+          </p>
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-start gap-2">
+            <p className="text-sm font-poppinsregular text-gray-500">Professor Name</p>
+          </div>
+          <p className="text-sm font-poppinsmedium text-gray-900">
+            {assignmentData?.metadata?.professorName || assignmentData?.professorName || 'N/A'}
+          </p>
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-start gap-2">
+            <p className="text-sm font-poppinsregular text-gray-500">Requirements</p>
+          </div>
+          <p className="text-sm font-poppinsmedium text-gray-900">
+            {assignmentData?.metadata?.requirements || assignmentData?.requirements || 'N/A'}
           </p>
         </div>
       </div>
@@ -75,6 +117,7 @@ const AssignmentCard = ({ assignmentData }: { assignmentData: any }) => {
         <h4 className="text-sm font-poppinsmedium text-gray-900 mb-4">Skills</h4>
         <div className="flex flex-wrap gap-2">
           {(
+            assignmentData?.metadata?.skills ||
             assignmentData?.skills || [
               'Python',
               'Computer Science',
@@ -89,6 +132,47 @@ const AssignmentCard = ({ assignmentData }: { assignmentData: any }) => {
             >
               {skill}
             </span>
+          ))}
+        </div>
+      </div>
+      {/* Show student price, negotiation price, final price */}
+      <div className="mt-4">
+        <h4 className="text-sm font-poppinsmedium text-gray-900 mb-2">Pricing</h4>
+        <div className="flex flex-wrap gap-4">
+          <span className="text-xs font-poppinsmedium text-gray-700 bg-[#e6f9ff] rounded px-3 py-1">
+            Student Price: ${assignmentData?.studentPrice ?? 'N/A'}
+          </span>
+          {assignmentData?.negotiationPrice && (
+            <span className="text-xs font-poppinsmedium text-gray-700 bg-[#e6f9ff] rounded px-3 py-1">
+              Negotiation Price: ${assignmentData?.negotiationPrice}
+            </span>
+          )}
+          {assignmentData?.finalPrice && (
+            <span className="text-xs font-poppinsmedium text-gray-700 bg-[#e6f9ff] rounded px-3 py-1">
+              Final Price: ${assignmentData?.finalPrice}
+            </span>
+          )}
+        </div>
+      </div>
+      {/* Show milestones */}
+      <div className="mt-4">
+        <h4 className="text-sm font-poppinsmedium text-gray-900 mb-2">Milestones</h4>
+        <div className="flex flex-col gap-2">
+          {(assignmentData?.milestones || []).map((milestone: any, idx: number) => (
+            <div key={idx} className="flex gap-2 items-center">
+              <span className="text-xs font-poppinsmedium text-gray-700 bg-gray-100 rounded px-2 py-1">
+                {milestone.description}
+              </span>
+              <span className="text-xs font-poppinsregular text-gray-500">
+                {milestone.percentage}%
+              </span>
+              <span className="text-xs font-poppinsregular text-gray-500">
+                {milestone.isCompleted ? 'Completed' : 'Pending'}
+              </span>
+              <span className="text-xs font-poppinsregular text-gray-500">
+                {milestone.paymentStatus}
+              </span>
+            </div>
           ))}
         </div>
       </div>

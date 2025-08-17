@@ -20,6 +20,11 @@ interface SessionData {
   documents: any[];
   createdAt: string;
   updatedAt: string;
+  universityName: string;
+  sessionAgenda: string;
+  additionalServices?: string;
+  requirements?: string;
+  review?: string;
 }
 
 interface SessionNotesProps {
@@ -65,6 +70,23 @@ const SessionNotes = ({ session }: SessionNotesProps) => {
       notes.push(`All times are in ${session.timezone} timezone.`);
     }
 
+    // Add university, agenda, additional services, requirements
+    if (session.universityName) {
+      notes.push(`University: ${session.universityName}`);
+    }
+    if (session.sessionAgenda) {
+      notes.push(`Session Agenda: ${session.sessionAgenda}`);
+    }
+    if (session.additionalServices) {
+      notes.push(`Additional Services: ${session.additionalServices}`);
+    }
+    if (session.requirements) {
+      notes.push(`Requirements: ${session.requirements}`);
+    }
+    // Add review note if present
+    if (session.review) {
+      notes.push(`Review: ${session.review}`);
+    }
     // Add default note if no specific notes
     if (notes.length === 0) {
       notes.push('Please review the session details before joining.');

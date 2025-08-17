@@ -99,14 +99,15 @@ const LiveQuestionDetailsPage = () => {
         <div className="xl:col-span-2 gap-5 flex flex-col">
           <LiveHelpCard liveHelp={liveHelp} />
           <SelectTeacher id={id} usedAt="live-help" />
-          <ReviewSection />
+          <ReviewSection review={liveHelp?.review} />
           {/* <AllotedTutor /> */}
           <PriceSection />
-          <DocumentTable documents={liveHelp?.documents || []} />
+          {/* Pass documents as attachments to DocumentTable, matching backend model */}
+          <DocumentTable attachments={liveHelp?.documents || []} />
         </div>
         <div className="flex flex-col gap-5">
           <ChatSection />
-          <LiveHelpNote session={liveHelp} />
+          <LiveHelpNote liveHelp={liveHelp} />
         </div>
       </div>
     </div>

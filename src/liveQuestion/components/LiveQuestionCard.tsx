@@ -1,24 +1,3 @@
-import type { FC } from 'react';
-import { ArrowRight } from 'lucide-react';
-import clsx from 'clsx';
-import { Link } from 'react-router-dom';
-
-type StatusType = 'budget' | 'confirmed' | 'completed' | 'rejected';
-interface SessionCardProps {
-  title: string;
-  id: string;
-  status: StatusType;
-  subject: string;
-  topic: string;
-  hours: number;
-  time?: string;
-  timezone?: string;
-  startsIn?: string;
-  startNote?: string;
-  rating?: number;
-  showRecording?: boolean;
-}
-
 const statusStyles = {
   budget: {
     label: 'Budget decided',
@@ -41,6 +20,26 @@ const statusStyles = {
     text: 'text-[#D22525]',
   },
 };
+import type { FC } from 'react';
+import { ArrowRight } from 'lucide-react';
+import clsx from 'clsx';
+import { Link } from 'react-router-dom';
+
+type StatusType = 'budget' | 'confirmed' | 'completed' | 'rejected';
+interface SessionCardProps {
+  title: string;
+  id: string;
+  status: StatusType;
+  subject: string;
+  topic: string;
+  hours: number;
+  time?: string;
+  timezone?: string;
+  startsIn?: string;
+  startNote?: string;
+  rating?: number;
+  showRecording?: boolean;
+}
 
 export const LiveQuestionCard: FC<SessionCardProps> = ({
   id,
@@ -50,6 +49,10 @@ export const LiveQuestionCard: FC<SessionCardProps> = ({
   hours,
   rating,
   showRecording,
+  time,
+  startNote,
+  timezone,
+  startsIn,
 }) => {
   const isCompleted = status === 'completed';
   const isRejected = status === 'rejected';
@@ -95,13 +98,11 @@ export const LiveQuestionCard: FC<SessionCardProps> = ({
           <>
             <div className="flex pt-3 justify-between">
               <div>
-                <p className="text-[18px] font-poppinssemibold text-[#212121]">
-                  16 Mar 11 PM -12 PM
-                </p>
+                <p className="text-[18px] font-poppinssemibold text-[#212121]">{time}</p>
                 <p className="text-[14px] font-poppinsregular text-[#111111]">
-                  (EET), <span className="font-poppinsregular">Cairo UTC +3</span>
+                  {timezone ? `(${timezone})` : ''}
                 </p>
-                <p className="text-[14px] font-poppinsregular text-gray-400">Starting in 4hrs</p>
+                <p className="text-[14px] font-poppinsregular text-gray-400">{startNote}</p>
               </div>
               {/* Button */}
               <div className="pt-3">
@@ -113,21 +114,10 @@ export const LiveQuestionCard: FC<SessionCardProps> = ({
           </>
         )}
 
-        {/* {!isCompleted && !isRejected && (
-          <>
-            <div className="font-semibold text-base text-black">{time}</div>
-            <div className="text-sm text-gray-500">{timezone}</div>
-            <div className="text-sm text-gray-400 mb-3">{startsIn}</div>
-            <button className="bg-sky-500 text-white px-4 py-2 rounded-full hover:bg-sky-600 text-sm">
-              Reschedule
-            </button>
-          </>
-        )} */}
-
         {isCompleted && (
           <div className="flex justify-between h-[76px] items-center">
             <div>
-              <div className="font-semibold text-base text-black">1hrs Sessions</div>
+              <div className="font-semibold text-base text-black">{hours}hrs Sessions</div>
               <div className="text-sm text-gray-600 flex items-center gap-1">
                 <span className="text-orange-500 font-semibold">{rating}</span>
                 <span className="text-gray-400">(451,444 Rating)</span>
@@ -145,13 +135,11 @@ export const LiveQuestionCard: FC<SessionCardProps> = ({
           <>
             <div className="flex pt-3 justify-between opacity-20">
               <div>
-                <p className="text-[18px] font-poppinssemibold text-[#212121]">
-                  16 Mar 11 PM -12 PM
-                </p>
+                <p className="text-[18px] font-poppinssemibold text-[#212121]">{time}</p>
                 <p className="text-[14px] font-poppinsregular text-[#111111]">
-                  (EET), <span className="font-poppinsregular">Cairo UTC +3</span>
+                  {timezone ? `(${timezone})` : ''}
                 </p>
-                <p className="text-[14px] font-poppinsregular text-gray-400">Starting in 4hrs</p>
+                <p className="text-[14px] font-poppinsregular text-gray-400">{startNote}</p>
               </div>
               {/* Button */}
               <div className="pt-3">
