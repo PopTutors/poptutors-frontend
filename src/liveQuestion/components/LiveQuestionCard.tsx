@@ -1,10 +1,12 @@
 import type { FC } from 'react';
 import { ArrowRight } from 'lucide-react';
 import clsx from 'clsx';
+import { Link } from 'react-router-dom';
 
 type StatusType = 'budget' | 'confirmed' | 'completed' | 'rejected';
 interface SessionCardProps {
   title: string;
+  id: string;
   status: StatusType;
   subject: string;
   topic: string;
@@ -41,6 +43,7 @@ const statusStyles = {
 };
 
 export const LiveQuestionCard: FC<SessionCardProps> = ({
+  id,
   status,
   subject,
   topic,
@@ -67,7 +70,9 @@ export const LiveQuestionCard: FC<SessionCardProps> = ({
             </span>
           </p>
         </div>
-        <ArrowRight className="text-[#00A5EC] w-[24px] h-[24px] mt-1 cursor-pointer" />
+        <Link to={`/student/live-question/${id}`}>
+          <ArrowRight className="text-[#00A5EC] w-[24px] h-[24px] mt-1 cursor-pointer" />
+        </Link>
       </div>
 
       <div className="p-4 space-y-1 text-[14px]">

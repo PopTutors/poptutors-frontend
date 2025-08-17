@@ -22,6 +22,7 @@ import GoogleCallback from './auth/google-callback';
 import ProtectedRoute from './protectedRoute';
 import RequestSessionForm from './components/forms/RequestSessionForm';
 import { BookExpertForm } from './components/forms/BookExpert';
+import LiveQuestionDetailsPage from './pages/student/liveQuestion/details';
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -90,6 +91,10 @@ export const createAppRouter = createBrowserRouter([
           {
             path: paths.student.livequestion.path,
             element: <LiveQuestion />,
+          },
+          {
+            path: paths.student.livequestiondetails.path,
+            element: <LiveQuestionDetailsPage />,
           },
           {
             path: paths.student.session.path,

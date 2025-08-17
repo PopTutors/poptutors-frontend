@@ -9,6 +9,8 @@ import {
 } from '../components/ui/dropdown';
 import { MdArrowOutward } from 'react-icons/md';
 import { AssignmentIcon } from '../assets/sidebar-icon';
+import { useFetch } from '../api/UseFetch';
+import { formatDate, getCurrencySymbol } from '../utils/helper';
 // FiArrowDownRight
 
 type Transaction = {
@@ -22,73 +24,10 @@ type Transaction = {
   action: string; // e.g., "View" or "Pay Now"
 };
 
-const transactions: Transaction[] = [
-  {
-    type: 'Payment',
-    service: 'Assignment',
-    transactionId: '#29833984',
-    note: 'Note',
-    dateTime: 'Feb 15, 2025 06:24 AM',
-    amount: '-$542',
-    status: 'Completed',
-    action: 'View',
-  },
-  {
-    type: 'Referral',
-    service: 'Assignment',
-    transactionId: '#29833984',
-    note: 'Note',
-    dateTime: 'Feb 15, 2025 06:24 AM',
-    amount: '-$542',
-    status: 'Pending',
-    action: 'Pay Now',
-  },
-  {
-    type: 'Payment',
-    service: 'Assignment',
-    transactionId: '#29833984',
-    note: 'Note',
-    dateTime: 'Feb 15, 2025 06:24 AM',
-    amount: '-$542',
-    status: 'Completed',
-    action: 'View',
-  },
-  {
-    type: 'Payment',
-    service: 'Session',
-    transactionId: '#29833984',
-    note: 'Note',
-    dateTime: 'Feb 15, 2025 06:24 AM',
-    amount: '-$542',
-    status: 'Failed',
-    action: 'View',
-  },
-  {
-    type: 'Payment',
-    service: 'Assignment',
-    transactionId: '#29833984',
-    note: 'Note',
-    dateTime: 'Feb 15, 2025 06:24 AM',
-    amount: '-$542',
-    status: 'Completed',
-    action: 'View',
-  },
-  {
-    type: 'Refund',
-    service: 'Assignment',
-    transactionId: '#29833984',
-    note: 'Note',
-    dateTime: 'Feb 15, 2025 06:24 AM',
-    amount: '-$542',
-    status: 'Completed',
-    action: 'View',
-  },
-];
-
 // Hides the default calendar icon on date input
 const hideDefaultDateIcon = 'appearance-none [&::-webkit-calendar-picker-indicator]:hidden';
 
-const statusClasses = {
+const statusClasses: Record<string, string> = {
   Completed: 'text-[#229126] font-poppinsmedium',
   Pending: 'text-yellow-500 font-poppinsmedium',
   Failed: 'text-[#D22525] font-poppinsmedium',
@@ -119,37 +58,52 @@ const TransactionDashboard: React.FC = () => {
 
   const tabs = [{ label: 'All' }, { label: 'Refund' }, { label: 'Payment' }, { label: 'Referral' }];
 
+  const {
+    data: walletData = {},
+    isLoading,
+    error,
+  } = useFetch<any>(
+    ['wallet-data'], // react-query key
+    `/wallet`,
+    true,
+    { requiresAuth: true }
+  );
+
+  const tableData = walletData?.transactions || [];
+
   const cardData = [
     {
       title: 'Referral Earnings',
-      value: '$742',
+      value: walletData?.earnings?.referral || '0',
       color: 'bg-[#B0DAB3]',
       textColor: 'text-[#229126]',
       icon: '📝', // Replace with your SVG if needed
     },
     {
       title: 'Assignment',
-      value: '$742',
+      value: walletData?.earnings?.assignment || '0',
       color: 'bg-[#B4DDEA]',
       textColor: 'text-[#197B9B]',
       icon: '📝',
     },
     {
       title: 'Live Sessions',
-      value: '$742',
+      value: walletData?.earnings?.liveSessions || '0',
       color: 'bg-[#F7ECD3]',
       textColor: 'text-[#DDA31E]',
       icon: '📷',
     },
     {
       title: 'Live Question Help',
-      value: '$742',
+      value: walletData?.earnings?.liveHelp || '0',
       color: 'bg-[#FFB7B7]',
       textColor: 'text-[#D22525]',
       icon: '🗓️',
     },
   ];
 
+  const currencySymbol = getCurrencySymbol(walletData?.currency || 'USD');
+  console.log('walletData', walletData);
   return (
     <div className="">
       <div className="text-[22px] text-black font-poppinssemibold">Wallet Data</div>
@@ -165,6 +119,7 @@ const TransactionDashboard: React.FC = () => {
               {/* Left: Value and Title */}
               <div className="mb-3 sm:mb-0">
                 <div className={`text-[18px] md:text-[24px] font-semibold ${item.textColor}`}>
+                  {currencySymbol}
                   {item.value}
                 </div>
                 <div className="text-[14px] md:text-[16px] font-medium mt-1 md:mt-2">
@@ -191,7 +146,10 @@ const TransactionDashboard: React.FC = () => {
 
             {/* Main Amount (Left Aligned) */}
             <div className="  text-gray-900 mb-6">
-              <span className="font-poppinssemibold text-[24px] sm:text-[30px]">$11,742</span>
+              <span className="font-poppinssemibold text-[24px] sm:text-[30px]">
+                {currencySymbol}
+                {walletData?.totalSpent}
+              </span>
               <span className="text-gray-400 font-poppinsregular text-[18px] sm:text-[24px]">
                 .00
               </span>
@@ -221,8 +179,11 @@ const TransactionDashboard: React.FC = () => {
               </span>
               <div>
                 <div>
-                  <span className="font-poppinssemibold text-[14px] sm:text-[18px]">$1,742.</span>
-                  <span className="font-poppinssregular text-[10px] sm:text-[14px]">00</span>
+                  <span className="font-poppinssemibold text-[14px] sm:text-[18px]">
+                    {currencySymbol}
+                    {walletData?.earnings?.referral}
+                  </span>
+                  <span className="font-poppinssregular text-[10px] sm:text-[14px]">.00</span>
                 </div>
                 <div className="text-[10px] sm:text-[12px] text-gray-500">Earned</div>
               </div>
@@ -249,8 +210,11 @@ const TransactionDashboard: React.FC = () => {
               </span>
               <div>
                 <div>
-                  <span className="font-poppinssemibold text-[14px] sm:text-[18px]">$742.</span>
-                  <span className="font-poppinssregular text-[10px] sm:text-[14px]">00</span>
+                  <span className="font-poppinssemibold text-[14px] sm:text-[18px]">
+                    {currencySymbol}
+                    {walletData?.totalSpent}
+                  </span>
+                  <span className="font-poppinssregular text-[10px] sm:text-[14px]">.00</span>
                 </div>
                 <div className="text-[10px] sm:text-[12px] text-gray-500">Other</div>
               </div>
@@ -438,7 +402,7 @@ const TransactionDashboard: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {transactions.map((tx, idx) => (
+              {tableData?.map((tx: any, idx: number) => (
                 <tr
                   key={idx}
                   className={`border-b last:border-b-0 ${idx % 2 === 0 ? '' : 'bg-[#F5F5F5]'}  transition`}
@@ -481,13 +445,13 @@ const TransactionDashboard: React.FC = () => {
                     {tx.note}
                   </td>
                   <td className="py-5 px-4 font-poppinsregular md:text-[14px] text-[12px]">
-                    {tx.dateTime}
+                    {formatDate(tx?.dateTime || new Date())}
                   </td>
                   <td className="py-5 px-4 font-poppinsmedium md:text-[14px] text-[12px]">
                     {tx.amount}
                   </td>
                   <td
-                    className={`py-5 px-4 font-poppinsmedium md:text-[14px] text-[12px] ${statusClasses[tx.status]}`}
+                    className={`py-5 px-4 font-poppinsmedium md:text-[14px] text-[12px] ${statusClasses[tx?.status]}`}
                   >
                     {tx.status}
                   </td>

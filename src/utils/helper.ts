@@ -11,3 +11,40 @@ export function formatDate(dateInput: string | Date): string {
   const year = date.getFullYear();
   return `${day} ${month} ${year}`;
 }
+
+export function getCurrencySymbol(currency: string): string {
+  // A simple mapping for common currencies
+  const symbols: { [key: string]: string } = {
+    USD: '$',
+    EUR: '€',
+    GBP: '£',
+    INR: '₹',
+    JPY: '¥',
+    CNY: '¥',
+    AUD: 'A$',
+    CAD: 'C$',
+    CHF: 'CHF',
+    RUB: '₽',
+    KRW: '₩',
+    NGN: '₦',
+    ZAR: 'R',
+    SGD: 'S$',
+    HKD: 'HK$',
+    BRL: 'R$',
+    MXN: '$',
+    TRY: '₺',
+    AED: 'د.إ',
+    SAR: '﷼',
+    IDR: 'Rp',
+    THB: '฿',
+    PHP: '₱',
+    PLN: 'zł',
+    SEK: 'kr',
+    NOK: 'kr',
+    DKK: 'kr',
+    MYR: 'RM',
+    // Add more as needed
+  };
+  // Try uppercase for robustness
+  return symbols[currency.toUpperCase()] || currency;
+}

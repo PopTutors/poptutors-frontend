@@ -15,7 +15,7 @@ interface Teacher {
   profileImage?: string;
 }
 
-type UsedAtType = 'assignment' | 'session';
+type UsedAtType = 'assignment' | 'session' | 'live-help';
 
 interface SelectTeacherProps {
   id?: string;
@@ -34,7 +34,9 @@ const SelectTeacher = ({
   const apiEndpoint = id
     ? usedAt === 'assignment'
       ? `/assignments/${id}/suggested-teachers`
-      : `/sessions/${id}/suggested-teachers`
+      : usedAt === 'session'
+        ? `/sessions/${id}/suggested-teachers`
+        : `/live-help/${id}/suggested-teachers`
     : '/assignments/dummy/suggested-teachers';
 
   const {
@@ -48,6 +50,7 @@ const SelectTeacher = ({
     { requiresAuth: true }
   );
 
+  console.log('suggestedTutors', suggestedTutors);
   return (
     <section className="bg-white rounded-lg">
       <div>
@@ -135,31 +138,35 @@ const SelectTeacher = ({
                   />
                   <div className="flex flex-col items-start justify-start w-full">
                     <div className="flex items-center justify-between w-full">
-                      <h5 className="text-sm font-poppinssemibold text-gray-900">{teacher.name}</h5>
+                      <h5 className="text-sm font-poppinssemibold text-gray-900">
+                        {teacher?.name ?? 'Demo User'}
+                      </h5>
                       <button className="text-xs font-poppinssemibold text-primary hover:underline">
                         View Details
                       </button>
                     </div>
                     <div className="flex items-end gap-1">
                       <p className="text-xs font-poppinsregular text-gray-600">
-                        {teacher.specialization}
+                        {teacher?.specialization ?? 'Demo User Specialization'}
                       </p>
                       <span className="w-1 h-1 bg-gray-500 rounded-full m-1.5"></span>
                       <div className="flex items-center justify-center gap-1">
                         <img src={star} alt="star" className="w-3.5 h-3.5" />
                         <span className="text-sm font-poppinssemibold text-[#FD8E1F]">
-                          {teacher.rating}
+                          {teacher?.rating ?? '4.5'}
                         </span>
                       </div>
                       <span className="text-[10px] font-poppinsmedium text-gray-500">
-                        ({teacher.totalRating} Rating)
+                        ({teacher?.totalRating ?? '50444'} Rating)
                       </span>
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center justify-between w-full gap-2 bg-[#e6f9ff] p-3 rounded-lg">
                   <div className="flex flex-col items-start justify-center">
-                    <p className="text-md font-poppinssemibold text-primary">${teacher.price}</p>
+                    <p className="text-md font-poppinssemibold text-primary">
+                      ${teacher?.price ?? '100'}
+                    </p>
                     <span className="text-xs font-poppinsmedium text-gray-500">Price</span>
                   </div>
                   <Button variant="pill_outline" className="font-poppinsmedium text-sm py-1 m-0">
