@@ -21,6 +21,7 @@ import SessionDetailsPage from './pages/student/session/details';
 import GoogleCallback from './auth/google-callback';
 import ProtectedRoute from './protectedRoute';
 import RequestSessionForm from './components/forms/RequestSessionForm';
+import LiveQuestionDetailsPage from './pages/student/liveQuestion/details';
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -85,6 +86,10 @@ export const createAppRouter = createBrowserRouter([
           {
             path: paths.student.livequestion.path,
             element: <LiveQuestion />,
+          },
+          {
+            path: paths.student.livequestiondetails.path,
+            element: <LiveQuestionDetailsPage />,
           },
           {
             path: paths.student.session.path,

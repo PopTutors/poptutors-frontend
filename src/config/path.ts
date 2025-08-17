@@ -42,6 +42,10 @@ export const paths = {
       path: '/student/live-question',
       getHref: () => '/student/live-question',
     },
+    livequestiondetails: {
+      path: '/student/live-question/:id',
+      getHref: (id: string) => `/student/live-question/${id}`,
+    },
     session: {
       path: '/student/session',
       getHref: () => '/student/session',

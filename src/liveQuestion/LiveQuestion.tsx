@@ -104,6 +104,7 @@ const LiveQuestions = () => {
             {liveHelpData.map((help: any) => (
               <LiveQuestionCard
                 key={help._id}
+                id={help._id}
                 status={mapStatus(help.status)}
                 title={help.title}
                 subject={help.description} // or a dedicated subject field if available

@@ -44,7 +44,7 @@ const LiveQuestions = () => {
       {/* Main grid layout */}
       <div className="bg-white mt-2 md:h-[706px] h-full scrollbar-thin rounded-md  md:overflow-y-scroll overflow-none py-2 mb-2">
         <div className=" px-4 mx-auto">
-          <FilterBar />
+          {/* <FilterBar /> */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
 
           <div className="flex font-poppinssemibold text-[13px] justify-center text-primary">
