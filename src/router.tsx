@@ -21,6 +21,7 @@ import SessionDetailsPage from './pages/student/session/details';
 import GoogleCallback from './auth/google-callback';
 import ProtectedRoute from './protectedRoute';
 import RequestSessionForm from './components/forms/RequestSessionForm';
+import { BookExpertForm } from './components/forms/BookExpert';
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ export const createAppRouter = createBrowserRouter([
           {
             path: paths.student.assignment.path,
             element: <Assignment />,
+          },
+          {
+            path: paths.student.livequestion.livequestionrequest.path,
+            element: <BookExpertForm />,
           },
           // {
           //   path: paths.student.assignmentSubmission.path,

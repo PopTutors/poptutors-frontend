@@ -8,34 +8,44 @@ import { Label } from '../ui/label';
 import { Select } from '../ui/select';
 import { MultiSelect } from '../ui/multi-select';
 import Textarea from '../ui/textarea';
+import { UploadIcon, X, FileIcon } from 'lucide-react';
+import FieldError from '../ui/FieldError';
 import toast from 'react-hot-toast';
 import { useGenericMutation } from '../../api/useGenericMutation';
 import { uploadMultipleFiles } from '../../utils/uploadToBunnyCdn';
 
+// ✅ Updated validation schema to match all frontend fields
 const formSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   subject: z.string().min(1, 'Subject is required'),
   topic: z.string().min(1, 'Topic is required'),
-  expertise: z.string().min(1, 'Expertise is required'),
+  expertise: z.string().min(1, 'Expertise level is required'),
   courseCode: z.string().optional(),
   language: z.string().min(1, 'Language is required'),
   skills: z.array(z.string()).min(1, 'At least one skill is required'),
   numQuestions: z.string().min(1, 'Number of questions is required'),
-  budget: z.string().optional(),
+  budget: z.string().min(1, 'Budget is required'), // Made required since it's pricePerHour in backend
   university: z.string().min(1, 'University is required'),
   helpType: z.string().min(1, 'Help type is required'),
-  questionTypes: z.array(z.string()),
+  questionTypes: z.array(z.string()).optional(),
   additionalServices: z.string().optional(),
   helpModes: z.array(z.string()).min(1, 'Help mode is required'),
-  dateTime: z.date(),
+  dateTime: z.string().min(1, 'Date and time is required'), // Changed to string for datetime-local input
   duration: z.string().min(1, 'Duration is required'),
-  requirements: z.string().optional(),
+  requirements: z.string().min(1, 'Requirements are required'), // Made required since it's description in backend
 });
 
 type FormData = z.infer<typeof formSchema>;
 
+interface UploadResponse {
+  url: string;
+  fileName: string;
+  fileSize: number;
+  fileType: string;
+}
+
 export function BookExpertForm() {
-  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadResponse[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -61,13 +71,89 @@ export function BookExpertForm() {
       questionTypes: [],
       additionalServices: '',
       helpModes: [],
-      dateTime: new Date(),
+      dateTime: '',
       duration: '',
       requirements: '',
     },
   });
 
-  const { mutate, isLoading } = useGenericMutation();
+  // ✅ Options for dropdowns
+  const subjects = [
+    { value: 'Mathematics', label: 'Mathematics' },
+    { value: 'Physics', label: 'Physics' },
+    { value: 'Chemistry', label: 'Chemistry' },
+    { value: 'Computer Science', label: 'Computer Science' },
+    { value: 'Engineering', label: 'Engineering' },
+    { value: 'Business', label: 'Business' },
+    { value: 'Economics', label: 'Economics' },
+    { value: 'Biology', label: 'Biology' },
+  ];
+
+  const expertiseLevels = [
+    { value: 'Beginner', label: 'Beginner' },
+    { value: 'Intermediate', label: 'Intermediate' },
+    { value: 'Advanced', label: 'Advanced' },
+    { value: 'Expert', label: 'Expert' },
+  ];
+
+  const languages = [
+    { value: 'English', label: 'English' },
+    { value: 'Spanish', label: 'Spanish' },
+    { value: 'French', label: 'French' },
+    { value: 'German', label: 'German' },
+    { value: 'Hindi', label: 'Hindi' },
+    { value: 'Chinese', label: 'Chinese' },
+  ];
+
+  const skillOptions = [
+    'Python',
+    'JavaScript',
+    'Java',
+    'C++',
+    'React',
+    'Node.js',
+    'Mathematics',
+    'Statistics',
+    'Data Analysis',
+    'Machine Learning',
+    'Physics',
+    'Chemistry',
+    'Biology',
+    'Research',
+    'Writing',
+    'Problem Solving',
+    'Critical Thinking',
+  ];
+
+  const helpTypes = [
+    { value: 'Assignment Help', label: 'Assignment Help' },
+    { value: 'Exam Preparation', label: 'Exam Preparation' },
+    { value: 'Concept Clarification', label: 'Concept Clarification' },
+    { value: 'Project Guidance', label: 'Project Guidance' },
+    { value: 'Research Support', label: 'Research Support' },
+  ];
+
+  const questionTypeOptions = [
+    'Multiple Choice',
+    'Short Answer',
+    'Long Answer',
+    'Numerical',
+    'Theory',
+    'Practical',
+    'Case Study',
+    'Problem Solving',
+  ];
+
+  const helpModeOptions = [
+    'Live Video Call',
+    'Voice Call',
+    'Screen Sharing',
+    'Chat Support',
+    'Email Support',
+    'Document Review',
+  ];
+
+  const { mutate, isLoading } = useGenericMutation<{ id: string; title: string }>();
 
   // File upload handler
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,13 +164,14 @@ export function BookExpertForm() {
 
     try {
       const uploadResults = await uploadMultipleFiles({
-        files,
+        files: Array.from(files),
         folderPath: 'live-help',
       });
       setUploadedFiles((prev) => [...prev, ...uploadResults]);
       toast.success(`${uploadResults.length} file(s) uploaded successfully!`);
       if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (error) {
+      console.error('Upload failed:', error);
       toast.error('File upload failed. Please try again.');
     } finally {
       setIsUploading(false);
@@ -96,294 +183,417 @@ export function BookExpertForm() {
   };
 
   const onSubmit = (data: FormData) => {
-    // Prepare payload for /live-help API
+    console.log('✅ Form Submitted Data:', data);
+    console.log('✅ Uploaded Files:', uploadedFiles);
+
+    // Parse budget to number
+    const budgetMatch = data.budget.match(/[\d.]+/);
+    const pricePerHour = budgetMatch ? parseFloat(budgetMatch[0]) : 0;
+
+    if (pricePerHour <= 0) {
+      toast.error('Please enter a valid budget amount');
+      return;
+    }
+
+    // Parse duration to number
+    const durationHours = parseInt(data.duration);
+    if (durationHours <= 0) {
+      toast.error('Please enter a valid duration');
+      return;
+    }
+
+    // ✅ Prepare payload according to backend ILiveHelp interface
     const payload = {
-      title: data.title,
-      description: data.requirements || '',
-      subject: data.subject,
-      topic: data.topic,
-      expertise: data.expertise,
-      courseCode: data.courseCode,
-      language: data.language,
-      skills: data.skills,
-      numQuestions: data.numQuestions,
-      budget: data.budget ? parseFloat(data.budget) : undefined,
-      university: data.university,
-      helpType: data.helpType,
-      questionTypes: data.questionTypes,
-      additionalServices: data.additionalServices,
-      helpModes: data.helpModes,
-      dateTime: data.dateTime instanceof Date ? data.dateTime.toISOString() : data.dateTime,
-      duration: data.duration,
-      documents: uploadedFiles,
-      liveHelpHours: data.duration ? parseInt(data.duration) : undefined,
-      pricePerHour: data.budget ? parseFloat(data.budget) : undefined,
+      // Core required fields from backend
+      title: data.title.trim(),
+      description: data.requirements.trim(), // requirements maps to description
+      pricePerHour: pricePerHour,
+      liveHelpHours: durationHours, // duration maps to liveHelpHours
       status: 'requested',
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+
+      // Document URLs for backend documents array
+      documents: uploadedFiles.map((file) => file.url),
+
+      // Additional metadata (these need to be added to backend model)
+      metadata: {
+        subject: data.subject,
+        topic: data.topic,
+        expertise: data.expertise,
+        courseCode: data.courseCode || undefined,
+        language: data.language,
+        skills: data.skills,
+        numQuestions: data.numQuestions,
+        university: data.university,
+        helpType: data.helpType,
+        questionTypes: data.questionTypes || [],
+        additionalServices: data.additionalServices || undefined,
+        helpModes: data.helpModes,
+        scheduledDateTime: data.dateTime, // Store the requested date/time
+      },
     };
 
+    console.log('✅ Live Help Payload:', payload);
+
+    // ✅ Submit using generic mutation
     mutate({
       endpoint: '/live-help',
       data: payload,
       method: 'POST',
       requiresAuth: true,
-      successMessage: 'Live help request submitted!',
-      errorMessage: 'Failed to submit live help request.',
+      successMessage: 'Live help request submitted successfully!',
+      errorMessage: 'Failed to submit live help request',
       invalidateKeys: ['live-help'],
-      onSuccessCallback: () => {
+      onSuccessCallback: (response) => {
+        console.log('Live Help Created:', response);
         reset();
         setUploadedFiles([]);
-        toast.success('Live help request submitted!');
+        toast.success('Live help request submitted successfully!');
       },
-      onErrorCallback: () => {
-        toast.error('Failed to submit live help request.');
+      onErrorCallback: (error) => {
+        console.error('Error Creating Live Help:', error);
+        toast.error('Failed to submit live help request. Please try again.');
       },
     });
   };
 
+  // ✅ Error handler for validation issues
+  const onError = (errors: any) => {
+    console.error('❌ Form validation errors:', errors);
+    toast.error('Please fill in all required fields correctly');
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div>
-        <Label>Title</Label>
-        <Controller
-          name="title"
-          control={control}
-          render={({ field }) => <Input {...field} placeholder="Title" />}
-        />
-        <FieldError name="title" errors={errors} />
+    <>
+      <div className="flex justify-between items-start mb-6">
+        <div>
+          <h1 className="text-xl font-semibold text-gray-800">Book Expert Live Help</h1>
+          <hr className="border-t border-[2px] border-gray-200 w-32 mt-[4px]" />
+        </div>
+        <div className="flex gap-3">
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            onChange={handleFileUpload}
+            className="hidden"
+            accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.ppt,.pptx,.xls,.xlsx"
+          />
+          <Button
+            variant="pill_outline"
+            size="pill"
+            className="py-2"
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isUploading}
+          >
+            {isUploading ? 'Uploading...' : 'Upload Files'}
+            <UploadIcon />
+          </Button>
+        </div>
       </div>
-      <div>
-        <Label>Subject</Label>
-        <Controller
-          name="subject"
-          control={control}
-          render={({ field }) => <Input {...field} placeholder="Subject" />}
-        />
-        <FieldError name="subject" errors={errors} />
-      </div>
-      <div>
-        <Label>Topic</Label>
-        <Controller
-          name="topic"
-          control={control}
-          render={({ field }) => <Input {...field} placeholder="Topic" />}
-        />
-        <FieldError name="topic" errors={errors} />
-      </div>
-      <div>
-        <Label>Expertise</Label>
-        <Controller
-          name="expertise"
-          control={control}
-          render={({ field }) => <Input {...field} placeholder="Expertise" />}
-        />
-        <FieldError name="expertise" errors={errors} />
-      </div>
-      <div>
-        <Label>Course Code</Label>
-        <Controller
-          name="courseCode"
-          control={control}
-          render={({ field }) => <Input {...field} placeholder="Course Code" />}
-        />
-        <FieldError name="courseCode" errors={errors} />
-      </div>
-      <div>
-        <Label>Language</Label>
-        <Controller
-          name="language"
-          control={control}
-          render={({ field }) => <Input {...field} placeholder="Language" />}
-        />
-        <FieldError name="language" errors={errors} />
-      </div>
-      <div>
-        <Label>Skills</Label>
-        <Controller
-          name="skills"
-          control={control}
-          render={({ field }) => (
-            <MultiSelect
-              options={['Python', 'Math', 'React', 'Node'].map((skill) => ({
-                label: skill,
-                value: skill,
-              }))}
-              value={field.value.map((val) => ({ label: val, value: val }))}
-              onChange={(options) => field.onChange(options.map((option) => option.value))}
-              placeholder="Select skills"
-            />
-          )}
-        />
-        <FieldError name="skills" errors={errors} />
-      </div>
-      <div>
-        <Label>Number of Questions</Label>
-        <Controller
-          name="numQuestions"
-          control={control}
-          render={({ field }) => <Input {...field} placeholder="Number of Questions" />}
-        />
-        <FieldError name="numQuestions" errors={errors} />
-      </div>
-      <div>
-        <Label>Budget (per hour)</Label>
-        <Controller
-          name="budget"
-          control={control}
-          render={({ field }) => <Input {...field} placeholder="Budget" />}
-        />
-        <FieldError name="budget" errors={errors} />
-      </div>
-      <div>
-        <Label>University</Label>
-        <Controller
-          name="university"
-          control={control}
-          render={({ field }) => <Input {...field} placeholder="University" />}
-        />
-        <FieldError name="university" errors={errors} />
-      </div>
-      <div>
-        <Label>Help Type</Label>
-        <Controller
-          name="helpType"
-          control={control}
-          render={({ field }) => <Input {...field} placeholder="Help Type" />}
-        />
-        <FieldError name="helpType" errors={errors} />
-      </div>
-      <div>
-        <Label>Question Types</Label>
-        <Controller
-          name="questionTypes"
-          control={control}
-          render={({ field }) => (
-            <MultiSelect
-              options={['MCQ', 'Theory', 'Numerical'].map((type) => ({ label: type, value: type }))}
-              value={field.value.map((val) => ({ label: val, value: val }))}
-              onChange={(options) => field.onChange(options.map((option) => option.value))}
-              placeholder="Select question types"
-            />
-          )}
-        />
-        <FieldError name="questionTypes" errors={errors} />
-      </div>
-      <div>
-        <Label>Additional Services</Label>
-        <Controller
-          name="additionalServices"
-          control={control}
-          render={({ field }) => <Input {...field} placeholder="Additional Services" />}
-        />
-        <FieldError name="additionalServices" errors={errors} />
-      </div>
-      <div>
-        <Label>Help Modes</Label>
-        <Controller
-          name="helpModes"
-          control={control}
-          render={({ field }) => (
-            <MultiSelect
-              options={['Live', 'Chat', 'Email'].map((mode) => ({ label: mode, value: mode }))}
-              value={field.value.map((val) => ({ label: val, value: val }))}
-              onChange={(options) => field.onChange(options.map((option) => option.value))}
-              placeholder="Select help modes"
-            />
-          )}
-        />
-        <FieldError name="helpModes" errors={errors} />
-      </div>
-      <div>
-        <Label>Date & Time</Label>
-        <Controller
-          name="dateTime"
-          control={control}
-          render={({ field }) => (
-            <Input
-              type="datetime-local"
-              value={
-                field.value instanceof Date ? field.value.toISOString().slice(0, 16) : field.value
-              }
-              onChange={(e) => field.onChange(new Date(e.target.value))}
-            />
-          )}
-        />
-        <FieldError name="dateTime" errors={errors} />
-      </div>
-      <div>
-        <Label>Duration (hours)</Label>
-        <Controller
-          name="duration"
-          control={control}
-          render={({ field }) => <Input {...field} placeholder="Duration in hours" />}
-        />
-        <FieldError name="duration" errors={errors} />
-      </div>
-      <div>
-        <Label>Requirements / Description</Label>
-        <Controller
-          name="requirements"
-          control={control}
-          render={({ field }) => (
-            <Textarea {...field} rows={4} placeholder="Describe your help request" />
-          )}
-        />
-        <FieldError name="requirements" errors={errors} />
-      </div>
-      <div className="mb-6">
-        <Label className="mb-2 block">Upload Files</Label>
-        <input
-          ref={fileInputRef}
-          type="file"
-          multiple
-          onChange={handleFileUpload}
-          className="hidden"
-          accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg,.ppt,.pptx,.xls,.xlsx"
-        />
-        <Button
-          variant="pill_outline"
-          size="pill"
-          type="button"
-          onClick={() => fileInputRef.current?.click()}
-          disabled={isUploading}
-        >
-          {isUploading ? 'Uploading...' : 'Upload File'}
-        </Button>
-        {uploadedFiles.length > 0 && (
-          <div className="mt-2">
-            {uploadedFiles.map((file, idx) => (
-              <div key={idx} className="flex items-center gap-2">
-                <span>{file.fileName}</span>
+
+      {/* Display uploaded files */}
+      {uploadedFiles.length > 0 && (
+        <div className="mb-6">
+          <Label className="mb-2 block">Uploaded Files</Label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {uploadedFiles.map((file, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border"
+              >
+                <div className="flex items-center gap-2">
+                  <FileIcon className="h-4 w-4 text-blue-500" />
+                  <span className="text-sm text-gray-700 truncate">{file.fileName}</span>
+                  <span className="text-xs text-gray-500">
+                    ({Math.round(file.fileSize / 1024)}KB)
+                  </span>
+                </div>
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  onClick={() => removeUploadedFile(idx)}
+                  onClick={() => removeUploadedFile(index)}
                   className="text-red-500 hover:text-red-700"
                 >
-                  Remove
+                  <X className="h-4 w-4" />
                 </Button>
               </div>
             ))}
           </div>
-        )}
-      </div>
-      <div className="flex justify-end gap-3 pt-4">
-        <Button
-          variant="pill_outline"
-          size="pill"
-          type="button"
-          onClick={() => {
-            reset();
-            setUploadedFiles([]);
-          }}
-        >
-          Cancel
-        </Button>
-        <Button variant="pill_solid" size="pill" type="submit" disabled={isLoading || isUploading}>
-          {isLoading ? 'Submitting...' : 'Submit'}
-        </Button>
-      </div>
-    </form>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-6">
+        {/* Title & Subject */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <Label>Title *</Label>
+            <Controller
+              name="title"
+              control={control}
+              render={({ field }) => <Input {...field} placeholder="Enter session title" />}
+            />
+            <FieldError name="title" errors={errors} />
+          </div>
+
+          <div>
+            <Label>Subject *</Label>
+            <Controller
+              name="subject"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  options={subjects}
+                  placeholder="Select Subject"
+                  value={subjects.find((opt) => opt.value === field.value) || null}
+                  onChange={(opt) => field.onChange(opt?.value || '')}
+                />
+              )}
+            />
+            <FieldError name="subject" errors={errors} />
+          </div>
+        </div>
+
+        {/* Topic & Expertise */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <Label>Topic *</Label>
+            <Controller
+              name="topic"
+              control={control}
+              render={({ field }) => <Input {...field} placeholder="Specific topic or chapter" />}
+            />
+            <FieldError name="topic" errors={errors} />
+          </div>
+
+          <div>
+            <Label>Expertise Level *</Label>
+            <Controller
+              name="expertise"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  options={expertiseLevels}
+                  placeholder="Select Level"
+                  value={expertiseLevels.find((opt) => opt.value === field.value) || null}
+                  onChange={(opt) => field.onChange(opt?.value || '')}
+                />
+              )}
+            />
+            <FieldError name="expertise" errors={errors} />
+          </div>
+        </div>
+
+        {/* Course Code & Language */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <Label>Course Code</Label>
+            <Controller
+              name="courseCode"
+              control={control}
+              render={({ field }) => <Input {...field} placeholder="Course Code (optional)" />}
+            />
+            <FieldError name="courseCode" errors={errors} />
+          </div>
+
+          <div>
+            <Label>Language *</Label>
+            <Controller
+              name="language"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  options={languages}
+                  placeholder="Select Language"
+                  value={languages.find((opt) => opt.value === field.value) || null}
+                  onChange={(opt) => field.onChange(opt?.value || '')}
+                />
+              )}
+            />
+            <FieldError name="language" errors={errors} />
+          </div>
+        </div>
+
+        {/* Skills */}
+        <div>
+          <Label>Required Skills *</Label>
+          <Controller
+            name="skills"
+            control={control}
+            render={({ field }) => (
+              <MultiSelect
+                {...field}
+                options={skillOptions.map((skill) => ({ label: skill, value: skill }))}
+                placeholder="Select required skills"
+              />
+            )}
+          />
+          <FieldError name="skills" errors={errors} />
+        </div>
+
+        {/* Number of Questions & Budget */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <Label>Number of Questions *</Label>
+            <Controller
+              name="numQuestions"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} placeholder="Approximate number of questions" />
+              )}
+            />
+            <FieldError name="numQuestions" errors={errors} />
+          </div>
+
+          <div>
+            <Label>Budget (per hour) *</Label>
+            <Controller
+              name="budget"
+              control={control}
+              render={({ field }) => <Input {...field} placeholder="e.g., $50, ₹2000" />}
+            />
+            <FieldError name="budget" errors={errors} />
+          </div>
+        </div>
+
+        {/* University & Help Type */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <Label>University *</Label>
+            <Controller
+              name="university"
+              control={control}
+              render={({ field }) => <Input {...field} placeholder="University or Institution" />}
+            />
+            <FieldError name="university" errors={errors} />
+          </div>
+
+          <div>
+            <Label>Help Type *</Label>
+            <Controller
+              name="helpType"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  options={helpTypes}
+                  placeholder="Select Help Type"
+                  value={helpTypes.find((opt) => opt.value === field.value) || null}
+                  onChange={(opt) => field.onChange(opt?.value || '')}
+                />
+              )}
+            />
+            <FieldError name="helpType" errors={errors} />
+          </div>
+        </div>
+
+        {/* Question Types */}
+        <div>
+          <Label>Question Types</Label>
+          <Controller
+            name="questionTypes"
+            control={control}
+            render={({ field }) => (
+              <MultiSelect
+                {...field}
+                options={questionTypeOptions.map((type) => ({ label: type, value: type }))}
+                placeholder="Select question types (optional)"
+              />
+            )}
+          />
+          <FieldError name="questionTypes" errors={errors} />
+        </div>
+
+        {/* Additional Services */}
+        <div>
+          <Label>Additional Services</Label>
+          <Controller
+            name="additionalServices"
+            control={control}
+            render={({ field }) => (
+              <Input {...field} placeholder="Any additional services needed (optional)" />
+            )}
+          />
+          <FieldError name="additionalServices" errors={errors} />
+        </div>
+
+        {/* Help Modes */}
+        <div>
+          <Label>Preferred Help Modes *</Label>
+          <Controller
+            name="helpModes"
+            control={control}
+            render={({ field }) => (
+              <MultiSelect
+                {...field}
+                options={helpModeOptions.map((mode) => ({ label: mode, value: mode }))}
+                placeholder="Select preferred help modes"
+              />
+            )}
+          />
+          <FieldError name="helpModes" errors={errors} />
+        </div>
+
+        {/* Date & Time and Duration */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <Label>Preferred Date & Time *</Label>
+            <Controller
+              name="dateTime"
+              control={control}
+              render={({ field }) => <Input {...field} type="datetime-local" />}
+            />
+            <FieldError name="dateTime" errors={errors} />
+          </div>
+
+          <div>
+            <Label>Duration (hours) *</Label>
+            <Controller
+              name="duration"
+              control={control}
+              render={({ field }) => <Input {...field} placeholder="Duration in hours (e.g., 2)" />}
+            />
+            <FieldError name="duration" errors={errors} />
+          </div>
+        </div>
+
+        {/* Requirements */}
+        <div>
+          <Label>Requirements / Description *</Label>
+          <Controller
+            name="requirements"
+            control={control}
+            render={({ field }) => (
+              <Textarea {...field} rows={4} placeholder="Describe your help request in detail..." />
+            )}
+          />
+          <FieldError name="requirements" errors={errors} />
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-end gap-3 pt-4">
+          <Button
+            variant="pill_outline"
+            size="pill"
+            type="button"
+            onClick={() => {
+              reset();
+              setUploadedFiles([]);
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="pill_solid"
+            size="pill"
+            type="submit"
+            disabled={isLoading || isUploading}
+          >
+            {isLoading ? 'Submitting...' : 'Book Expert'}
+          </Button>
+        </div>
+      </form>
+    </>
   );
 }

@@ -107,7 +107,7 @@ export const AssignmentForm = () => {
     },
   });
 
-  // ✅ Options
+  // ✅ Options - Fixed duplicate entries
   const subjects = [
     { value: 'Computer Science', label: 'Computer Science' },
     { value: 'Mathematics', label: 'Mathematics' },
@@ -120,10 +120,6 @@ export const AssignmentForm = () => {
   ];
 
   const assignmentTypes = [
-    { value: 'Case Studies', label: 'Case Studies' },
-    { value: 'Algorithms', label: 'Algorithms' },
-    { value: 'Data Structures', label: 'Data Structures' },
-    { value: 'Web Development', label: 'Web Development' },
     { value: 'Case Studies', label: 'Case Studies' },
     { value: 'Algorithms', label: 'Algorithms' },
     { value: 'Data Structures', label: 'Data Structures' },
@@ -146,18 +142,10 @@ export const AssignmentForm = () => {
     { value: 'Spanish', label: 'Spanish' },
     { value: 'French', label: 'French' },
     { value: 'German', label: 'German' },
-    { value: 'English', label: 'English' },
-    { value: 'Spanish', label: 'Spanish' },
-    { value: 'French', label: 'French' },
-    { value: 'German', label: 'German' },
     { value: 'Hindi', label: 'Hindi' },
   ];
 
   const timeframeOptions = [
-    { value: 'EET', label: 'Eastern European Time (EET), Cairo UTC+3' },
-    { value: 'IST', label: 'India Standard Time (IST), UTC+5:30' },
-    { value: 'GMT', label: 'Greenwich Mean Time (GMT), UTC+0' },
-    { value: 'PST', label: 'Pacific Standard Time (PST), UTC−8' },
     { value: 'EET', label: 'Eastern European Time (EET), Cairo UTC+3' },
     { value: 'IST', label: 'India Standard Time (IST), UTC+5:30' },
     { value: 'GMT', label: 'Greenwich Mean Time (GMT), UTC+0' },
@@ -174,14 +162,6 @@ export const AssignmentForm = () => {
     'CSS',
     'Angular',
     'Vue.js',
-    'Python',
-    'React Js',
-    'Node Js',
-    'JavaScript',
-    'HTML',
-    'CSS',
-    'Angular',
-    'Vue.js',
     'Java',
     'C++',
     'Data Analysis',
@@ -190,12 +170,7 @@ export const AssignmentForm = () => {
     'Writing',
   ];
 
-  const { mutate, isLoading } = useGenericMutation<{ id: number; name: string }>();
-
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log('✅ Form Submitted Data:', data);
-
-  // Use generic mutation hook
+  // ✅ FIXED: Use generic mutation hook only once
   const { mutate, isLoading } = useGenericMutation<{ id: number; title: string }>();
 
   // File upload handler
@@ -289,21 +264,23 @@ export const AssignmentForm = () => {
 
     console.log('✅ Assignment Payload:', assignmentPayload);
 
-    // Submit using generic mutation
+    // ✅ FIXED: Submit using the correct payload structure
     mutate({
       endpoint: '/assignments', // API endpoint
-      data: { data }, // POST data
+      data: assignmentPayload, // ✅ FIXED: Use assignmentPayload instead of { data }
       method: 'POST', // default POST
       requiresAuth: true, // auth header required
-      successMessage: 'User added successfully!',
-      errorMessage: 'Failed to add user',
+      successMessage: 'Assignment submitted successfully!',
+      errorMessage: 'Failed to submit assignment',
       invalidateKeys: ['assignments'], // query key refresh
       onSuccessCallback: (res) => {
-        console.log('User Created:', res);
+        console.log('Assignment Created:', res);
+        // Reset form and files on success
+        reset();
+        setUploadedFiles([]);
       },
       onErrorCallback: (err) => {
-        alert(err);
-        console.error('Error Creating User:', err);
+        console.error('Error Creating Assignment:', err);
       },
     });
   };
@@ -376,19 +353,6 @@ export const AssignmentForm = () => {
         </div>
       )}
 
-      {/* ✅ ADDED: Debug info for development */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
-          <p className="text-sm">
-            <strong>Debug:</strong> Form Valid: {isValid ? 'Yes' : 'No'} | Errors:{' '}
-            {Object.keys(errors).length} |
-            {Object.keys(errors).length > 0 && (
-              <span className="text-red-600">{Object.keys(errors).join(', ')}</span>
-            )}
-          </p>
-        </div>
-      )}
-
       <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-6">
         {/* Title & Budget */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -414,23 +378,6 @@ export const AssignmentForm = () => {
             <FieldError name="budget" errors={errors} />
           </div>
         </div>
-
-        {/* REMOVE Assignment Description */}
-        {/* <div>
-          <Label>Assignment Description *</Label>
-          <Controller
-            name="description"
-            control={control}
-            render={({ field }) => (
-              <Textarea
-                {...field}
-                rows={4}
-                placeholder="Describe your assignment requirements..."
-              />
-            )}
-          />
-          <FieldError name="description" errors={errors} />
-        </div> */}
 
         {/* Subject & Assignment Type */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -554,19 +501,6 @@ export const AssignmentForm = () => {
           </div>
 
           <div>
-            <Label>Budget</Label>
-            <Controller
-              name="budget"
-              control={control}
-              render={({ field }) => <Input {...field} placeholder="Enter budget with currency" />}
-            />
-            <FieldError name="budget" errors={errors} />
-          </div>
-        </div>
-
-        {/* University & Course Subject */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
             <Label>University Name / Organization</Label>
             <Controller
               name="universityName"
@@ -574,23 +508,6 @@ export const AssignmentForm = () => {
               render={({ field }) => <Input {...field} placeholder="Enter University Name" />}
             />
             <FieldError name="universityName" errors={errors} />
-          </div>
-
-          <div>
-            <Label>Subject</Label>
-            <Controller
-              name="courseSubject"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  options={subjects}
-                  placeholder="Select Subject"
-                  value={subjects.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || '')}
-                />
-              )}
-            />
-            <FieldError name="courseSubject" errors={errors} />
           </div>
         </div>
 
@@ -664,8 +581,8 @@ export const AssignmentForm = () => {
           >
             Cancel
           </Button>
-          <Button variant="pill_solid" size="pill" type="submit">
-            Submit Request
+          <Button variant="pill_solid" size="pill" type="submit" disabled={isLoading}>
+            {isLoading ? 'Submitting...' : 'Submit Request'}
           </Button>
         </div>
       </form>
