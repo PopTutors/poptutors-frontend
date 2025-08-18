@@ -50,7 +50,7 @@ export async function uploadToBunnyCDN({
             method: "PUT",
             headers: {
                 AccessKey: accessKey, // This must be the normal Password with write access
-                "Content-Type": "application/octet-stream",
+                // "Content-Type": "application/octet-stream",
             },
             body: file,
         });
@@ -68,7 +68,7 @@ export async function uploadToBunnyCDN({
             url: publicUrl,
             fileName: sanitizedFileName,
             fileSize: file.size,
-            fileType: file.type || "application/octet-stream",
+            fileType: file.type,
         };
     } catch (error) {
         console.error("Upload error:", error);
