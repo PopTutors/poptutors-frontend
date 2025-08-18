@@ -24,15 +24,6 @@ const transaction: TransactionType[] = [
   { id: 't3', date: '21 Sep, 2021', amount: '202', status: 'Completed' },
 ];
 
-// Fetch upcoming sessions & exams from backend
-const {
-  data: upcomingExams = [],
-  // isLoading: loadingUpcoming,
-  // error: upcomingError
-} = useFetch<any>(['upcoming-exams'], '/dashboard/upcoming', true, {
-  requiresAuth: true,
-});
-
 // const sampleNotifications = [
 //   {
 //     user: 'Kevin',
