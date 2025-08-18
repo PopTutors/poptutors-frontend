@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -80,16 +80,17 @@ const agendaOptions = [
 ];
 
 const RequestSessionForm = () => {
-  const [uploadedFiles, setUploadedFiles] = useState([]);
+  // Define UploadResponse type based on your uploadToBunnyCDN return value
+  type UploadResponse = { fileName?: string; fileSize?: number };
+  const [uploadedFiles, setUploadedFiles] = useState<UploadResponse[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
     reset,
-    watch,
   } = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -114,7 +115,7 @@ const RequestSessionForm = () => {
 
   const { mutate, isLoading } = useGenericMutation();
 
-  const handleFileUpload = async (event) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
 
@@ -143,11 +144,11 @@ const RequestSessionForm = () => {
     }
   };
 
-  const removeUploadedFile = (index) => {
+  const removeUploadedFile = (index: number) => {
     setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     try {
       const budgetMatch = data.budget.match(/\d+/);
       const budgetNumber = budgetMatch ? parseInt(budgetMatch[0]) : 0;
@@ -267,11 +268,11 @@ const RequestSessionForm = () => {
                   <span className="text-sm text-gray-700 truncate">
                     {file.fileName || `File ${index + 1}`}
                   </span>
-                  {file.fileSize && (
+                  {/* {file.fileSize && (
                     <span className="text-xs text-gray-500">
                       ({Math.round(file.fileSize / 1024)}KB)
                     </span>
-                  )}
+                  )} */}
                 </div>
                 <Button
                   type="button"
@@ -338,16 +339,22 @@ const RequestSessionForm = () => {
             <Controller
               name="skills"
               control={control}
-              render={({ field }) => (
-                <MultiSelect
-                  options={skillOptions.map((skill) => ({
-                    label: skill,
-                    value: skill,
-                  }))}
-                  placeholder="Select skills"
-                  {...field}
-                />
-              )}
+              render={({ field }) => {
+                const mappedValue = Array.isArray(field.value)
+                  ? field.value.map((item) => (typeof item === 'string' ? item : item.value))
+                  : [];
+                return (
+                  <MultiSelect
+                    options={skillOptions.map((skill) => ({
+                      label: skill,
+                      value: skill,
+                    }))}
+                    placeholder="Select skills"
+                    {...field}
+                    value={mappedValue}
+                  />
+                );
+              }}
             />
             <FieldError name="skills" errors={errors} />
           </div>

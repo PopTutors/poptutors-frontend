@@ -115,10 +115,6 @@ const LiveQuestions = () => {
                 rating={help.rating}
                 showRecording={help.showRecording}
                 timezone={help.timezone}
-                pricePerHour={help.pricePerHour}
-                negotiationPrice={help.negotiationPrice}
-                finalPrice={help.finalPrice}
-                review={help.review}
               />
             ))}
             {/* <LiveQuestionCard

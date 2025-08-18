@@ -83,11 +83,11 @@ export const AssignmentForm = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
     reset,
   } = useForm<FormData>({
-    resolver: zodResolver(formSchema),
-    mode: 'onBlur', // Added: validate on blur for better UX
+    resolver: zodResolver(formSchema) as any,
+    mode: 'onBlur',
     defaultValues: {
       title: '',
       subject: '',
@@ -106,6 +106,7 @@ export const AssignmentForm = () => {
       requirements: '',
     },
   });
+  type OptionType = { value: string; label: string };
 
   // ✅ Options - Fixed duplicate entries
   const subjects = [
@@ -391,7 +392,7 @@ export const AssignmentForm = () => {
                   options={subjects}
                   placeholder="Select Subject"
                   value={subjects.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || '')}
+                  onChange={(opt: OptionType | null) => field.onChange(opt?.value || '')}
                 />
               )}
             />
@@ -408,7 +409,7 @@ export const AssignmentForm = () => {
                   options={assignmentTypes}
                   placeholder="Select Type"
                   value={assignmentTypes.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || '')}
+                  onChange={(opt: OptionType | null) => field.onChange(opt?.value || '')}
                 />
               )}
             />
@@ -428,7 +429,7 @@ export const AssignmentForm = () => {
                   options={expertiseLevels}
                   placeholder="Select Level"
                   value={expertiseLevels.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || '')}
+                  onChange={(opt: OptionType | null) => field.onChange(opt?.value || '')}
                 />
               )}
             />
@@ -457,7 +458,7 @@ export const AssignmentForm = () => {
                   options={languages}
                   placeholder="Select Language"
                   value={languages.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || '')}
+                  onChange={(opt: OptionType | null) => field.onChange(opt?.value || '')}
                 />
               )}
             />
@@ -493,7 +494,7 @@ export const AssignmentForm = () => {
                   options={timeframeOptions}
                   placeholder="Select Timezone"
                   value={timeframeOptions.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || '')}
+                  onChange={(opt: OptionType | null) => field.onChange(opt?.value || '')}
                 />
               )}
             />

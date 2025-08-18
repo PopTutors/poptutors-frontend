@@ -1,8 +1,5 @@
 import { BookAlert, Clock, NotebookText, Users } from 'lucide-react';
 import {
-  formatDateTime,
-  formatTimeRange,
-  calculateDuration,
   getTimeUntilSession,
   formatTimezone,
   getSessionStatus,
@@ -15,8 +12,6 @@ interface LiveHelpCardProps {
 
 const LiveHelpCard = ({ liveHelp }: LiveHelpCardProps) => {
   const sessionStatus = getSessionStatus(liveHelp?.startTime, liveHelp?.endTime);
-  const timeRange = formatTimeRange(liveHelp?.startTime, liveHelp?.endTime, liveHelp?.timezone);
-  const duration = calculateDuration(liveHelp?.startTime, liveHelp?.endTime);
   const timeUntilSession = getTimeUntilSession(liveHelp?.startTime);
   const formattedTimezone = formatTimezone(liveHelp?.timezone);
 

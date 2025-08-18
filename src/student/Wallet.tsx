@@ -13,16 +13,16 @@ import { useFetch } from '../api/UseFetch';
 import { formatDate, getCurrencySymbol } from '../utils/helper';
 // FiArrowDownRight
 
-type Transaction = {
-  type: 'Payment' | 'Refund' | 'Referral';
-  service: string;
-  transactionId: string;
-  note: string;
-  dateTime: string;
-  amount: string;
-  status: 'Completed' | 'Pending' | 'Failed';
-  action: string; // e.g., "View" or "Pay Now"
-};
+// type Transaction = {
+//   type: 'Payment' | 'Refund' | 'Referral';
+//   service: string;
+//   transactionId: string;
+//   note: string;
+//   dateTime: string;
+//   amount: string;
+//   status: 'Completed' | 'Pending' | 'Failed';
+//   action: string; // e.g., "View" or "Pay Now"
+// };
 
 // Hides the default calendar icon on date input
 const hideDefaultDateIcon = 'appearance-none [&::-webkit-calendar-picker-indicator]:hidden';
@@ -58,11 +58,7 @@ const TransactionDashboard: React.FC = () => {
 
   const tabs = [{ label: 'All' }, { label: 'Refund' }, { label: 'Payment' }, { label: 'Referral' }];
 
-  const {
-    data: walletData = {},
-    isLoading,
-    error,
-  } = useFetch<any>(
+  const { data: walletData = {} } = useFetch<any>(
     ['wallet-data'], // react-query key
     `/wallet`,
     true,

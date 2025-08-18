@@ -23,7 +23,6 @@ export async function uploadToBunnyCDN({
     file,
     storageZone = "poptutors-test-dev",
     accessKey = "a0e4f928-ff1e-4494-85096e794c67-ad49-4627", // Use normal Password, NOT ReadOnly Password
-    region = "ny",
     folderPath = "assignments",
 }: UploadConfig): Promise<UploadResponse> {
     try {

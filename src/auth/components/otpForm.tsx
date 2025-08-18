@@ -176,7 +176,9 @@ const OtpForm = ({ email }: Props) => {
         {otp.map((digit, i) => (
           <Input
             key={i}
-            ref={(el) => (inputRefs.current[i] = el)}
+            ref={(el) => {
+              inputRefs.current[i] = el;
+            }}
             type="text"
             inputMode="numeric"
             autoComplete="one-time-code"

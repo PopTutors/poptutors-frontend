@@ -1,7 +1,6 @@
 // import RequestSessionForm from "../../components/forms/RequestSessionForm";
 import { Button } from '../../components/ui/button';
 import FilterTabs from '../../components/ui/filterTabs';
-import FilterBar from '../../student/components/Filterbar';
 
 const LiveQuestions = () => {
   const handleTabChange = (tab: string) => {

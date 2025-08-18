@@ -15,7 +15,7 @@ import CourseCard from './components/CourseCard';
 import NotificationList from '../components/ui/cards/notificationList';
 import UpcommingExamCard from './components/UpcommingExamCard';
 import { useState } from 'react';
-import { MessageIcon, NotificationIcon, RattingIcon } from '../assets';
+import { MessageIcon } from '../assets';
 import dayjs from 'dayjs';
 
 const transaction: TransactionType[] = [
@@ -39,34 +39,34 @@ const upcommingExams = [
   },
 ];
 
-const sampleNotifications = [
-  {
-    user: 'Kevin',
-    message: 'sent you message',
-    action: 'What is ux',
-    course: '2024 ui/ux design with figma',
-    time: 'Just now',
-    icon: MessageIcon,
-    type: 'message',
-  },
-  {
-    user: 'John',
-    message: 'give a 5 star rating on your assignment',
-    course: '2024 ui/ux design with figma',
-    time: '5 mins ago',
-    icon: RattingIcon,
-    type: 'rating',
-  },
-  {
-    user: 'Kevin',
-    message: 'sent you message',
-    action: 'What is ux',
-    course: '2024 ui/ux design with figma',
-    time: '6 mins ago',
-    icon: NotificationIcon,
-    type: 'message',
-  },
-];
+// const sampleNotifications = [
+//   {
+//     user: 'Kevin',
+//     message: 'sent you message',
+//     action: 'What is ux',
+//     course: '2024 ui/ux design with figma',
+//     time: 'Just now',
+//     icon: MessageIcon,
+//     type: 'message',
+//   },
+//   {
+//     user: 'John',
+//     message: 'give a 5 star rating on your assignment',
+//     course: '2024 ui/ux design with figma',
+//     time: '5 mins ago',
+//     icon: RattingIcon,
+//     type: 'rating',
+//   },
+//   {
+//     user: 'Kevin',
+//     message: 'sent you message',
+//     action: 'What is ux',
+//     course: '2024 ui/ux design with figma',
+//     time: '6 mins ago',
+//     icon: NotificationIcon,
+//     type: 'message',
+//   },
+// ];
 
 const options = [
   { label: 'Assignment', icon: <Pencil className="w-4 h-4 mr-2" /> },

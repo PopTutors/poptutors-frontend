@@ -1,6 +1,5 @@
 import { BookAlert, Clock, NotebookText, Users } from 'lucide-react';
 import {
-  formatDateTime,
   formatTimeRange,
   calculateDuration,
   getTimeUntilSession,

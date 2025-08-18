@@ -1,5 +1,4 @@
 import { BarChartHorizontal, Calendar, Clock, FilePlus } from 'lucide-react';
-import { formatDate } from '../../../../../utils/helper';
 
 const AssignmentCard = ({ assignmentData }: { assignmentData: any }) => {
   return (

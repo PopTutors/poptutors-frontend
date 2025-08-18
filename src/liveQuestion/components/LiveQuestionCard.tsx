@@ -52,7 +52,6 @@ export const LiveQuestionCard: FC<SessionCardProps> = ({
   time,
   startNote,
   timezone,
-  startsIn,
 }) => {
   const isCompleted = status === 'completed';
   const isRejected = status === 'rejected';

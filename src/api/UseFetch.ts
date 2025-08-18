@@ -132,7 +132,7 @@ export function useFetchWithAuth<T>(
     enabled = true,
     useTokenFromCookie = false,
     cookieName = 'authToken',
-    fallbackToStorage = true,
+    // ...existing code...
   } = authConfig || {};
 
   return useFetch<T>(queryKey, url, enabled, {

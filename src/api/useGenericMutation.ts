@@ -1,13 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+// ...existing code...
 import toast from 'react-hot-toast';
 import api from '../lib/api';
 // Simple cookie reader (non-HttpOnly cookies)
-function getCookie(name: string) {
-  console.log("Getting cookie:", name);
-  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-  return match ? decodeURIComponent(match[2]) : null;
-}
+// ...existing code...
 // Generic mutation data type
 interface MutationData {
   endpoint: string;
@@ -55,26 +51,31 @@ export function useGenericMutation<TResponse = any>() {
 
       console.log("Making API request:", config);
 
-      let response;
+      let axiosResponse;
 
       switch (method) {
         case 'POST':
-          response = await api.post(endpoint, data, config);
+          axiosResponse = await api.post(endpoint, data, config);
           break;
         case 'PUT':
-          response = await api.put(endpoint, data, config);
+          axiosResponse = await api.put(endpoint, data, config);
           break;
         case 'PATCH':
-          response = await api.patch(endpoint, data, config);
+          axiosResponse = await api.patch(endpoint, data, config);
           break;
         case 'DELETE':
-          response = await api.delete(endpoint, config);
+          axiosResponse = await api.delete(endpoint, config);
           break;
         default:
-          response = await api.post(endpoint, data, config);
+          axiosResponse = await api.post(endpoint, data, config);
       }
 
-      return response;
+      return {
+        success: axiosResponse.status >= 200 && axiosResponse.status < 300,
+        message: axiosResponse.data?.message,
+        data: axiosResponse.data,
+        error: axiosResponse.data?.error,
+      };
     },
     onSuccess: (response, variables) => {
       // Show success message

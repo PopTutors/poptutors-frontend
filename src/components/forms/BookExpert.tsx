@@ -78,7 +78,8 @@ export function BookExpertForm() {
   });
 
   // ✅ Options for dropdowns
-  const subjects = [
+  type OptionType = { value: string; label: string };
+  const subjects: OptionType[] = [
     { value: 'Mathematics', label: 'Mathematics' },
     { value: 'Physics', label: 'Physics' },
     { value: 'Chemistry', label: 'Chemistry' },
@@ -89,14 +90,14 @@ export function BookExpertForm() {
     { value: 'Biology', label: 'Biology' },
   ];
 
-  const expertiseLevels = [
+  const expertiseLevels: OptionType[] = [
     { value: 'Beginner', label: 'Beginner' },
     { value: 'Intermediate', label: 'Intermediate' },
     { value: 'Advanced', label: 'Advanced' },
     { value: 'Expert', label: 'Expert' },
   ];
 
-  const languages = [
+  const languages: OptionType[] = [
     { value: 'English', label: 'English' },
     { value: 'Spanish', label: 'Spanish' },
     { value: 'French', label: 'French' },
@@ -125,7 +126,7 @@ export function BookExpertForm() {
     'Critical Thinking',
   ];
 
-  const helpTypes = [
+  const helpTypes: OptionType[] = [
     { value: 'Assignment Help', label: 'Assignment Help' },
     { value: 'Exam Preparation', label: 'Exam Preparation' },
     { value: 'Concept Clarification', label: 'Concept Clarification' },
@@ -348,7 +349,7 @@ export function BookExpertForm() {
                   options={subjects}
                   placeholder="Select Subject"
                   value={subjects.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || '')}
+                  onChange={(opt: OptionType | null) => field.onChange(opt?.value || '')}
                 />
               )}
             />
@@ -378,7 +379,7 @@ export function BookExpertForm() {
                   options={expertiseLevels}
                   placeholder="Select Level"
                   value={expertiseLevels.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || '')}
+                  onChange={(opt: OptionType | null) => field.onChange(opt?.value || '')}
                 />
               )}
             />
@@ -408,7 +409,7 @@ export function BookExpertForm() {
                   options={languages}
                   placeholder="Select Language"
                   value={languages.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || '')}
+                  onChange={(opt: OptionType | null) => field.onChange(opt?.value || '')}
                 />
               )}
             />
@@ -480,7 +481,7 @@ export function BookExpertForm() {
                   options={helpTypes}
                   placeholder="Select Help Type"
                   value={helpTypes.find((opt) => opt.value === field.value) || null}
-                  onChange={(opt) => field.onChange(opt?.value || '')}
+                  onChange={(opt: OptionType | null) => field.onChange(opt?.value || '')}
                 />
               )}
             />
@@ -494,13 +495,21 @@ export function BookExpertForm() {
           <Controller
             name="questionTypes"
             control={control}
-            render={({ field }) => (
-              <MultiSelect
-                {...field}
-                options={questionTypeOptions.map((type) => ({ label: type, value: type }))}
-                placeholder="Select question types (optional)"
-              />
-            )}
+            render={({ field }) => {
+              const mappedValue = Array.isArray(field.value)
+                ? field.value.map((item: string | { value: string }) =>
+                    typeof item === 'string' ? item : (item as { value: string }).value
+                  )
+                : [];
+              return (
+                <MultiSelect
+                  {...field}
+                  options={questionTypeOptions.map((type) => ({ label: type, value: type }))}
+                  placeholder="Select question types (optional)"
+                  value={mappedValue}
+                />
+              );
+            }}
           />
           <FieldError name="questionTypes" errors={errors} />
         </div>
