@@ -24,20 +24,14 @@ const transaction: TransactionType[] = [
   { id: 't3', date: '21 Sep, 2021', amount: '202', status: 'Completed' },
 ];
 
-const upcommingExams = [
-  {
-    title: 'Social Media Course Lorem Ipsum Dolor',
-    time: '11 PM - 12 PM',
-    status: 'Starting in 2 Hrs',
-    actionLabel: 'Reschedule',
-  },
-  {
-    title: 'Social Media Course Lorem Ipsum Dolor',
-    time: '11 PM - 12 PM',
-    status: 'Starting in 20 Mins',
-    actionLabel: 'Join Now',
-  },
-];
+// Fetch upcoming sessions & exams from backend
+const {
+  data: upcomingExams = [],
+  // isLoading: loadingUpcoming,
+  // error: upcomingError
+} = useFetch<any>(['upcoming-exams'], '/dashboard/upcoming', true, {
+  requiresAuth: true,
+});
 
 // const sampleNotifications = [
 //   {
@@ -78,6 +72,15 @@ export default function Dashboard() {
   const [selectedTab, setSelectedTab] = useState('All');
   const navigate = useNavigate();
   const name = localStorage.getItem('name') || 'User';
+
+  // Fetch upcoming sessions & exams from backend
+  const {
+    data: upcomingExams = [],
+    // isLoading: loadingUpcoming,
+    // error: upcomingError
+  } = useFetch<any>(['upcoming-exams'], '/dashboard/upcoming', true, {
+    requiresAuth: true,
+  });
 
   const enableAll = selectedTab === 'All';
   const enableAssignments = selectedTab === 'Assignment' || enableAll;
@@ -295,15 +298,25 @@ export default function Dashboard() {
             </h2>
             <hr className="mb-4" />
 
-            {upcommingExams.map((session, index) => (
-              <UpcommingExamCard
-                key={index}
-                title={session.title}
-                time={session.time}
-                status={session.status}
-                actionLabel={session.actionLabel}
-              />
-            ))}
+            {upcomingExams.length === 0 ? (
+              <div className="text-gray-500 text-sm">No upcoming sessions or exams.</div>
+            ) : (
+              upcomingExams.map((item: any, index: number) => (
+                <UpcommingExamCard
+                  key={item._id || index}
+                  title={item.title || item.topic || item.sessionAgenda || 'Session/Exam'}
+                  time={
+                    item.startTime
+                      ? dayjs(item.startTime).format('hh:mm A')
+                      : item.runAt
+                        ? dayjs(item.runAt).format('hh:mm A')
+                        : ''
+                  }
+                  status={item.status || item.sessionType || 'Upcoming'}
+                  actionLabel={item.actionLabel || 'Join Now'}
+                />
+              ))
+            )}
           </div>
           <div className="mt-6">
             <TransactionTable transactions={transaction} />
