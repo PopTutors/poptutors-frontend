@@ -38,7 +38,7 @@ const ChatSection = () => {
           }}
         />
 
-        <div className="relative z-10 flex flex-col gap-3 h-full">
+        <div className="relative z-10 flex flex-col justify-between gap-3 h-full overflow-y-auto max-h-[80vh]">
           {/* Price Section */}
           <div className="border-2 bg-[#e6f9ff] border-primary p-3 rounded-lg">
             <div className="flex items-center justify-between">
@@ -58,7 +58,7 @@ const ChatSection = () => {
             </div>
           </div>
 
-          <div className="absolute bottom-0 left-0 w-full">
+          <div className="bottom-0 left-0 w-full">
             {/* Today Divider */}
             <div className="flex items-center justify-center my-2">
               <span className="text-xs font-poppinsregular bg-gray-100 px-2 py-1 rounded text-gray-500">
