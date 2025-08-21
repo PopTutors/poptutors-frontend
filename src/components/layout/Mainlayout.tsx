@@ -18,7 +18,7 @@ const MainLayout = () => {
         <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
         <div className="flex-1 bg-[#f5f6f8] overflow-y-auto">
-          <div className="p-5">
+          <div className="p-6">
             <Outlet />
           </div>
         </div>

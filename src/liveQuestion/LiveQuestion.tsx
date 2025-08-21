@@ -43,7 +43,7 @@ const LiveQuestions = () => {
   function formatTimeRange(startTime: string, hours: number) {
     const start = new Date(startTime);
     const end = new Date(start.getTime() + hours * 60 * 60 * 1000);
-    return `${start.toLocaleDateString()} ${start.toLocaleTimeString()} – ${end.toLocaleTimeString()}`;
+    return `${start.toLocaleDateString()} ${start.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} – ${end.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
   }
 
   function getStartNote(startTime: string) {
@@ -55,7 +55,7 @@ const LiveQuestions = () => {
   return (
     <div>
       {/* Top summary bar */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 my-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         {/* Left: Title */}
         <div className="text-[22px] text-black font-poppinssemibold">Live Exam Help</div>
 

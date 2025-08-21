@@ -186,7 +186,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role }) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-center gap-2">
           <Checkbox checked={remember} onCheckedChange={(val) => setRemember(!!val)} />
-          <Label>Remember me</Label>
+          <Label className='mb-0'>Remember me</Label>
         </div>
         <button type="button" onClick={handleForgotPassword}>
           Forgot Password?
