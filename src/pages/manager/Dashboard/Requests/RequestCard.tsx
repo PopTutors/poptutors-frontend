@@ -1,3 +1,27 @@
+import React from 'react';
+
+export type RequestItem = {
+  _id: string;
+  type: string; // 'assignment' | 'liveHelp' | 'session' | etc.
+  title: string;
+  description?: string;
+  subject?: string;
+  amount?: number;
+  status?: string;
+  createdAt?: string;
+  createdBy?: {
+    _id?: string;
+    name?: string;
+    email?: string;
+  };
+};
+
+interface RequestCardsProps {
+  items?: RequestItem[];
+  onViewAll?: () => void;
+}
+
+/** Keep the visual markup exactly the same — only badge text is dynamic */
 interface RequestCardProps {
   title: string;
   price: string;
@@ -5,9 +29,9 @@ interface RequestCardProps {
   deadline: string;
   status: string;
   subject: string;
+  badgeLabel: string;
 }
-
-function RequestCard({ title, price, date, deadline, status, subject }: RequestCardProps) {
+function RequestCard({ title, price, date, deadline, status, subject, badgeLabel }: RequestCardProps) {
   return (
     <div className="bg-white border border-black/10 p-6 flex flex-col gap-4 shadow-sm hover:shadow-md transition-shadow">
       {/* Header */}
@@ -17,8 +41,9 @@ function RequestCard({ title, price, date, deadline, status, subject }: RequestC
             {title}
           </h3>
           <div className="flex items-center gap-1.5">
+            {/* Dynamic badge text only — preserving original styling classes */}
             <span className="px-2.5 py-1.5 bg-mentoos-status-danger/5 border border-mentoos-status-danger text-mentoos-status-danger text-xs font-medium rounded-full">
-              Exam help
+              {badgeLabel}
             </span>
             <span className="text-mentoos-text-primary/70 text-sm">•</span>
             <span className="text-sm font-semibold text-mentoos-primary">{price}</span>
@@ -61,8 +86,10 @@ function RequestCard({ title, price, date, deadline, status, subject }: RequestC
   );
 }
 
-export default function RequestCards() {
-  const requests = [
+/** Parent component — accepts items prop from API */
+export default function RequestCards({ items = [], onViewAll }: RequestCardsProps) {
+  // fallback demo data (kept from your original file)
+  const fallbackRequests = [
     {
       title: 'Social Media Course Social Media Course',
       price: '$50',
@@ -70,6 +97,8 @@ export default function RequestCards() {
       deadline: '25/5/2024',
       status: 'Finding expert',
       subject: 'Computer science',
+      badgeLabel: 'Assignment',
+      key: 'f1',
     },
     {
       title: 'Social Media Course Social Media Course',
@@ -78,6 +107,8 @@ export default function RequestCards() {
       deadline: '25/5/2024',
       status: 'Finding expert',
       subject: 'Computer science',
+      badgeLabel: 'Live Help',
+      key: 'f2',
     },
     {
       title: 'Social Media Course Social Media Course',
@@ -86,6 +117,8 @@ export default function RequestCards() {
       deadline: '25/5/2024',
       status: 'Finding expert',
       subject: 'Computer science',
+      badgeLabel: 'Assignment',
+      key: 'f3',
     },
     {
       title: 'Social Media Course Social Media Course',
@@ -94,6 +127,8 @@ export default function RequestCards() {
       deadline: '25/5/2024',
       status: 'Finding expert',
       subject: 'Computer science',
+      badgeLabel: 'Assignment',
+      key: 'f4',
     },
     {
       title: 'Social Media Course Social Media Course',
@@ -102,6 +137,8 @@ export default function RequestCards() {
       deadline: '25/5/2024',
       status: 'Finding expert',
       subject: 'Computer science',
+      badgeLabel: 'Session',
+      key: 'f5',
     },
     {
       title: 'Social Media Course Social Media Course',
@@ -110,30 +147,73 @@ export default function RequestCards() {
       deadline: '25/5/2024',
       status: 'Finding expert',
       subject: 'Computer science',
+      badgeLabel: 'Live Help',
+      key: 'f6',
     },
   ];
+
+  // helper to convert raw `type` string into a friendly badge label
+  const typeToBadge = (type?: string) => {
+    if (!type) return 'Request';
+    const normalized = String(type).toLowerCase();
+    if (normalized === 'assignment') return 'Assignment';
+    if (normalized === 'livehelp' || normalized === 'liveHelp' || normalized === 'live_help') return 'Live Help';
+    if (normalized === 'session' || normalized === 'sessions') return 'Session';
+    // fallback: capitalize first letter
+    return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+  };
+
+  // map incoming API items to card props (with safe fallbacks)
+  const mappedRequests =
+    items && items.length
+      ? items.map((it) => {
+          const createdAt = it.createdAt ? new Date(it.createdAt) : undefined;
+          const date = createdAt ? createdAt.toLocaleDateString() : 'N/A';
+          const deadline = it['deadline'] ? new Date(it['deadline']).toLocaleDateString() : 'N/A';
+          const price = typeof it.amount === 'number' && it.amount > 0 ? `$${it.amount}` : 'TBD';
+          const title = it.title ?? it.type ?? 'Untitled request';
+          const status = it.status ?? 'Unknown';
+          const subject = it.subject ?? (it.type === 'liveHelp' ? 'Live Help' : 'General');
+          const badgeLabel = typeToBadge(it.type);
+
+          return {
+            key: it._id ?? Math.random().toString(36).slice(2, 9),
+            title,
+            price,
+            date,
+            deadline,
+            status,
+            subject,
+            badgeLabel,
+          };
+        })
+      : fallbackRequests;
 
   return (
     <div className="bg-white p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-mentoos-text-primary">New Requests</h2>
-        <button className="text-xl text-mentoos-text-primary hover:text-mentoos-primary transition-colors">
+        <button
+          onClick={() => onViewAll?.()}
+          className="text-xl text-mentoos-text-primary hover:text-mentoos-primary transition-colors"
+        >
           View all
         </button>
       </div>
 
       {/* Grid of Request Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {requests.map((request, index) => (
+        {mappedRequests.map((request) => (
           <RequestCard
-            key={index}
+            key={request.key}
             title={request.title}
             price={request.price}
             date={request.date}
             deadline={request.deadline}
             status={request.status}
             subject={request.subject}
+            badgeLabel={request.badgeLabel}
           />
         ))}
       </div>

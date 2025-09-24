@@ -8,6 +8,8 @@ export type Column<T> = {
   align?: 'left' | 'center' | 'right';
   render?: (row: T) => React.ReactNode;
   sortFn?: (a: T, b: T) => number;
+  // optional: allow overflow for popovers/menus in this column
+  allowOverflow?: boolean;
 };
 
 export type DataGridProps<T> = {
@@ -24,7 +26,7 @@ export type DataGridProps<T> = {
  * - Pagination (simple)
  * - Custom render per column
  *
- * Styling: expects Tailwind to be available. Keep className to place grid in layout.
+ * Styling: expects Tailwind to be available.
  */
 export function DataGrid<T extends Record<string, any>>({
   columns,
@@ -122,12 +124,16 @@ export function DataGrid<T extends Record<string, any>>({
               className="relative flex items-center px-4 py-4 text-base font-normal"
               style={{ width: colWidths[idx], minWidth: col.minWidth ?? 60 }}
             >
+              {/* Header label: truncation & no-wrap */}
               <div
                 className={`flex-1 cursor-pointer ${col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left'}`}
                 onClick={() => toggleSort(col.key)}
+                title={col.label}
               >
                 <div className="flex items-center gap-2">
-                  <span>{col.label}</span>
+                  <span className="block truncate" style={{ maxWidth: '100%' }}>
+                    {col.label}
+                  </span>
                   {sortKey === col.key && <span className="text-xs">{sortDir === 'asc' ? '▲' : '▼'}</span>}
                 </div>
               </div>
@@ -135,7 +141,9 @@ export function DataGrid<T extends Record<string, any>>({
               {/* resizer */}
               <div
                 onPointerDown={(e) => handleStartResize(e, idx)}
-                onDoubleClick={() => setColWidths((w) => w.map((val, i) => (i === idx ? (columns[i].width ?? 140) : val)))}
+                onDoubleClick={() =>
+                  setColWidths((w) => w.map((val, i) => (i === idx ? (columns[i].width ?? 140) : val)))
+                }
                 className="absolute right-0 top-0 h-full w-2 -mr-2 cursor-col-resize touch-manipulation"
                 style={{ zIndex: 10 }}
                 role="separator"
@@ -148,13 +156,29 @@ export function DataGrid<T extends Record<string, any>>({
         {/* Body rows */}
         {paginated.map((row, rI) => (
           <div key={rI} className={`flex items-center ${rI < paginated.length - 1 ? 'border-b border-black/10' : ''}`}>
-            {columns.map((col, cI) => (
-              <div key={col.key} className="px-4 py-4 text-base" style={{ width: colWidths[cI], minWidth: col.minWidth ?? 60 }}>
-                <div className={`${col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left'}`}>
-                  {col.render ? col.render(row) : (row as any)[col.key]}
+            {columns.map((col, cI) => {
+              // allow overflow if column explicitly allows it (or if key === 'action' for compatibility)
+              const allowOverflow = col.allowOverflow ?? (col.key === 'action');
+              return (
+                <div
+                  key={col.key}
+                  className="px-4 py-4 text-base"
+                  style={{ width: colWidths[cI], minWidth: col.minWidth ?? 60, overflow: allowOverflow ? 'visible' : 'hidden' }}
+                >
+                  <div className={`${col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left'}`}>
+                    {col.render ? (
+                      <div className="truncate block" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {col.render(row)}
+                      </div>
+                    ) : (
+                      <span className="truncate block" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {(row as any)[col.key]}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ))}
       </div>
