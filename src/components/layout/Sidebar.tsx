@@ -14,6 +14,16 @@ import {
   HelpIconActive,
   WalletIconActive,
   SessionsIconActive,
+  // Manager icons (replace with your actual SVGs)
+  MessagesIcon,
+  ProfileIcon,
+  HiringIcon,
+  JobListingIcon,
+  SessionManagerIcon,
+  ExamIcon,
+  FinanceIcon,
+  HubManagerIcon,
+  TeacherIcon,
 } from '../../assets/sidebar-icon';
 import { paths } from '../../config/path';
 import { useLocation } from 'react-router-dom';
@@ -26,7 +36,11 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
 
-  const sidebarTabs = [
+  // Detect portal type from URL
+  const isManager = location.pathname.startsWith('/manager');
+
+  // Student tabs
+  const studentTabs = [
     {
       label: 'Dashboard',
       icon: DashboardIcon,
@@ -60,6 +74,23 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { label: 'Help & Support', icon: HelpIcon, iconActive: HelpIconActive, path: '/help-support' },
   ];
 
+  // Manager tabs (add/replace icons as needed)
+  const managerTabs = [
+    { label: 'Dashboard', icon: DashboardIcon, path: '/manager/dashboard' },
+    { label: 'Messages', icon: MessagesIcon, path: '/manager/messages' },
+    { label: 'My Profile', icon: ProfileIcon, path: '/manager/profile' },
+    { label: 'Hirings', icon: HiringIcon, path: '/manager/hirings' },
+    { label: 'Job Listing', icon: JobListingIcon, path: '/manager/job-listing' },
+    { label: 'My Session', icon: SessionManagerIcon, path: '/manager/sessions' },
+    { label: 'My Exam', icon: ExamIcon, path: '/manager/exams' },
+    { label: 'Finance', icon: FinanceIcon, path: '/manager/finance' },
+    { label: 'Hub Manager', icon: HubManagerIcon, path: '/manager/hub-manager' },
+    { label: 'Teacher', icon: TeacherIcon, path: '/manager/teacher' },
+    { label: 'Settings', icon: TeacherIcon, path: '/manager/settings' },
+  ];
+
+  const sidebarTabs = isManager ? managerTabs : studentTabs;
+
   return (
     <>
       {/* Overlay on mobile */}
@@ -79,7 +110,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               <SidebarTab
                 key={tab.label}
                 icon={tab.icon}
-                iconActive={tab.iconActive}
                 label={tab.label}
                 active={isActive}
                 redirectPath={tab.path}

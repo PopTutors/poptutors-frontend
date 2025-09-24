@@ -1,4 +1,52 @@
+import { Settings } from "lucide-react";
+
 export const paths = {
+  manager: {
+    dashboard: {
+      path: '/manager/dashboard',
+      getHref: () => '/manager/dashboard',
+    },
+    messages: {
+      path: '/manager/messages',
+      getHref: () => '/manager/messages',
+    },
+    profile: {
+      path: '/manager/profile',
+      getHref: () => '/manager/profile',
+    },
+    hirings: {
+      path: '/manager/hirings',
+      getHref: () => '/manager/hirings',
+    },
+    jobListing: {
+      path: '/manager/job-listing',
+      getHref: () => '/manager/job-listing',
+    },
+    sessions: {
+      path: '/manager/sessions',
+      getHref: () => '/manager/sessions',
+    },
+    exams: {
+      path: '/manager/exams',
+      getHref: () => '/manager/exams',
+    },
+    finance: {
+      path: '/manager/finance',
+      getHref: () => '/manager/finance',
+    },
+    hubManager: {
+      path: '/manager/hub-manager',
+      getHref: () => '/manager/hub-manager',
+    },
+    teacher: {
+      path: '/manager/teacher',
+      getHref: () => '/manager/teacher',
+    },
+    settings: {
+      path: '/manager/settings',
+      getHref: () => '/manager/settings',
+    }
+  },
   home: {
     path: '/dashboard',
     getHref: () => '/dashboard',

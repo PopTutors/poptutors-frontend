@@ -2,6 +2,9 @@ import { Helmet } from 'react-helmet-async';
 import './index.css';
 import AppProvider from './provider';
 
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
+
 function App() {
   const jsonLdObject = {
     '@context': 'https://schema.org',

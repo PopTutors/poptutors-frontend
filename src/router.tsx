@@ -1,4 +1,6 @@
+import JobApplicants from './pages/manager/JobApplicants';
 import { createBrowserRouter } from 'react-router-dom';
+import JobListing from './pages/manager/JobListing';
 // import { lazy } from "react";
 // import ProtectedRoute from "./ProtectedRoute";
 import { paths } from './config/path';
@@ -23,6 +25,10 @@ import ProtectedRoute from './protectedRoute';
 import RequestSessionForm from './components/forms/RequestSessionForm';
 import { BookExpertForm } from './components/forms/BookExpert';
 import LiveQuestionDetailsPage from './pages/student/liveQuestion/details';
+import Settings from './pages/manager/Settings';
+import Hirings from './pages/manager/Hirings/Hirings';
+import ManagerProfile from './pages/manager/MangerProfile/ManagerProfile';
+import DashboardPage from './pages/manager/Dashboard/DashboardPage';
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -48,6 +54,31 @@ export const createAppRouter = createBrowserRouter([
       {
         element: <HomeContent />,
         children: [
+          // Manager Portal
+          {
+            path: paths.manager.jobListing.path,
+            element: <JobListing />,
+          },
+          {
+            path: paths.manager.dashboard.path,
+            element: <DashboardPage />,
+          },
+          {
+            path: paths.manager.hirings.path,
+            element: <Hirings />,
+          },
+          {
+            path: paths.manager.profile.path,
+            element: <ManagerProfile />,
+          },
+          {
+            path: '/manager/job-listing/:id/applicants',
+            element: <JobApplicants />,
+          },
+          {
+            path: paths.manager.settings.path,
+            element: <Settings />,
+          },
           {
             path: paths.student.profile.path,
             element: <Profile />,

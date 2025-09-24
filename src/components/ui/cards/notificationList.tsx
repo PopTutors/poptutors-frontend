@@ -38,7 +38,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
     onFilterChange?.(option);
   };
   return (
-    <div className=" bg-white shadow-sm w-full p-4 rounded-lg">
+    <div className=" bg-white shadow-sm w-full p-4 rounded-lg min-h-[400px]">
       <div className="flex justify-between items-center mb-4 border-b pb-3 border-gray-200">
         <h2 className=" text-[16px] font-poppinssemibold">{title}</h2>
         <DropdownMenu open={open} onOpenChange={setOpen}>
