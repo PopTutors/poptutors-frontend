@@ -22,6 +22,10 @@ export const paths = {
       path: '/manager/job-listing',
       getHref: () => '/manager/job-listing',
     },
+    postAssignment: {
+      path: '/manager/post-assignment',
+      getHref: () => '/manager/post-assignment',
+    },
     sessions: {
       path: '/manager/sessions',
       getHref: () => '/manager/sessions',

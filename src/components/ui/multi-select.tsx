@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
+import { Menu, Transition } from '@headlessui/react';
 import { Check } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
@@ -23,33 +23,34 @@ export function MultiSelect({
   options,
   className,
   placeholder = 'Select options',
-  value,
+  value = [],
   onChange,
   onBlur,
   name,
 }: MultiSelectProps) {
-  // is this option currently selected?
-  const isSelected = (opt: Option) => value.includes(opt.value);
+  // defensive: ensure value is array
+  const valArray = Array.isArray(value) ? value : [];
 
-  // toggle it in the raw value array
+  const isSelected = (opt: Option) => valArray.includes(opt.value);
+
   const handleToggle = (opt: Option) => {
     if (isSelected(opt)) {
-      onChange(value.filter((v) => v !== opt.value));
+      onChange(valArray.filter((v) => v !== opt.value));
     } else {
-      onChange([...value, opt.value]);
+      onChange([...valArray, opt.value]);
     }
   };
 
-  // derive the Option[] for rendering tags
   const selectedOptions = options.filter((o) => isSelected(o));
 
   return (
     <div className={cn('relative w-full', className)}>
-      <Menu as="div" className="relative w-full" onBlur={onBlur}>
+      <Menu as="div" className="relative w-full">
         {() => (
           <>
-            <MenuButton
+            <Menu.Button
               name={name}
+              onBlur={onBlur}
               className={cn(
                 'relative w-full h-[40px] rounded-md border border-gray-300 bg-white',
                 'py-1.5 pl-3 pr-10 text-left text-sm font-normal flex items-center gap-2',
@@ -60,7 +61,7 @@ export function MultiSelect({
                 {selectedOptions.length > 0 ? (
                   selectedOptions.map((o) => (
                     <span
-                      key={o.value}
+                      key={String(o.value)}
                       className="inline-flex items-center rounded-full border border-gray-300 px-3 py-1 text-xs font-poppinsregular text-gray-800 bg-white"
                     >
                       {o.label}
@@ -70,6 +71,7 @@ export function MultiSelect({
                   <span className="text-muted font-normal">{placeholder}</span>
                 )}
               </div>
+
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +83,7 @@ export function MultiSelect({
                   <path d="M0 0L7 7L14 0H0Z" />
                 </svg>
               </span>
-            </MenuButton>
+            </Menu.Button>
 
             <Transition
               as={Fragment}
@@ -92,9 +94,9 @@ export function MultiSelect({
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <MenuItems className="absolute z-10 mt-1 w-full bg-white shadow-lg ring-1 ring-black ring-opacity-5 rounded-md py-1 text-sm focus:outline-none">
+              <Menu.Items className="absolute z-10 mt-1 w-full bg-white shadow-lg ring-1 ring-black ring-opacity-5 rounded-md py-1 text-sm focus:outline-none">
                 {options.map((opt) => (
-                  <MenuItem key={opt.value} as={Fragment}>
+                  <Menu.Item key={String(opt.value)} as={Fragment}>
                     {({ active }) => (
                       <button
                         type="button"
@@ -108,9 +110,9 @@ export function MultiSelect({
                         {isSelected(opt) && <Check className="h-4 w-4 text-blue-600" />}
                       </button>
                     )}
-                  </MenuItem>
+                  </Menu.Item>
                 ))}
-              </MenuItems>
+              </Menu.Items>
             </Transition>
           </>
         )}

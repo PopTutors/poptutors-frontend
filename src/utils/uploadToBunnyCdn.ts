@@ -21,8 +21,8 @@ function normalizeFolderPath(folderPath?: string): string {
 
 export async function uploadToBunnyCDN({
     file,
-    storageZone = "poptutors-test-dev",
-    accessKey = "a0e4f928-ff1e-4494-85096e794c67-ad49-4627", // Use normal Password, NOT ReadOnly Password
+    storageZone = "poptutors-dev",
+    accessKey = "560d8a4a-9412-4789-b32cca6b82fb-2199-47ca", // Use normal Password, NOT ReadOnly Password
     folderPath = "assignments",
 }: UploadConfig): Promise<UploadResponse> {
     try {
@@ -42,7 +42,7 @@ export async function uploadToBunnyCDN({
         const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
         const fileName = `${timestamp}-${sanitizedFileName}`;
 
-        const uploadUrl = `https://storage.bunnycdn.com/${storageZone}/${normalizedFolderPath}${fileName}`;
+        const uploadUrl = `https://sg.storage.bunnycdn.com/${storageZone}/${normalizedFolderPath}${fileName}`;
 
         console.log("Uploading to URL:", uploadUrl);
 
@@ -50,7 +50,7 @@ export async function uploadToBunnyCDN({
             method: "PUT",
             headers: {
                 AccessKey: accessKey, // This must be the normal Password with write access
-                // "Content-Type": "application/octet-stream",
+                "Content-Type": "application/octet-stream",
             },
             body: file,
         });

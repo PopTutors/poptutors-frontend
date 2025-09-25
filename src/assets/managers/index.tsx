@@ -24,6 +24,8 @@ import OpenIcon from './open.svg';
 import DashboardFileIcon from './dashboard-file.svg';
 import JobIcon from './job.svg';
 import ReceiptIcon from './receipt.svg';
+import UploadIcon from './Upload.svg';
+import DateIcon from './date.svg';
 export {
   DeleteIcon,
   InactiveIcon,
@@ -50,5 +52,7 @@ export {
   OpenIcon,
   DashboardFileIcon,
   JobIcon,
-  ReceiptIcon
+  ReceiptIcon,
+  UploadIcon,
+  DateIcon
 };

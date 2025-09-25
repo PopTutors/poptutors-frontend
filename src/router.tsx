@@ -29,6 +29,7 @@ import Settings from './pages/manager/Settings';
 import Hirings from './pages/manager/Hirings/Hirings';
 import ManagerProfile from './pages/manager/MangerProfile/ManagerProfile';
 import DashboardPage from './pages/manager/Dashboard/DashboardPage';
+import PostAJob from './pages/manager/PostAJob/PostAJob';
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -82,6 +83,10 @@ export const createAppRouter = createBrowserRouter([
           {
             path: paths.student.profile.path,
             element: <Profile />,
+          },
+           {
+            path: paths.manager.postAssignment.path,
+            element: <PostAJob />,
           },
           {
             path: paths.student.dashboard.path,
