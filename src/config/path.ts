@@ -26,6 +26,14 @@ export const paths = {
       path: '/manager/post-assignment',
       getHref: () => '/manager/post-assignment',
     },
+    postSession: {
+      path: '/manager/post-session',
+      getHref: () => '/manager/post-session',
+    },
+    postLiveHelp: {
+      path: '/manager/post-live-help',
+      getHref: () => '/manager/post-live-help',
+    },
     sessions: {
       path: '/manager/sessions',
       getHref: () => '/manager/sessions',

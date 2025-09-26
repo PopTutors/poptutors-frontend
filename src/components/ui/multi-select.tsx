@@ -62,7 +62,7 @@ export function MultiSelect({
                   selectedOptions.map((o) => (
                     <span
                       key={String(o.value)}
-                      className="inline-flex items-center rounded-full border border-gray-300 px-3 py-1 text-xs font-poppinsregular text-gray-800 bg-white"
+                      className="inline-flex items-center border-none px-3 py-1 text-xs font-poppins regular text-[#019ACB] bg-[#edf6fb]"
                     >
                       {o.label}
                     </span>

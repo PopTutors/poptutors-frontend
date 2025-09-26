@@ -30,6 +30,8 @@ import Hirings from './pages/manager/Hirings/Hirings';
 import ManagerProfile from './pages/manager/MangerProfile/ManagerProfile';
 import DashboardPage from './pages/manager/Dashboard/DashboardPage';
 import PostAJob from './pages/manager/PostAJob/PostAJob';
+import PostASession from './pages/manager/PostAJob/PostASession';
+import PostALiveHelp from './pages/manager/PostAJob/PostALiveHelp';
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -84,9 +86,17 @@ export const createAppRouter = createBrowserRouter([
             path: paths.student.profile.path,
             element: <Profile />,
           },
-           {
+          {
             path: paths.manager.postAssignment.path,
             element: <PostAJob />,
+          },
+          {
+            path: paths.manager.postSession.path,
+            element: <PostASession />,
+          },
+          {
+            path: paths.manager.postLiveHelp.path,
+            element: <PostALiveHelp />,
           },
           {
             path: paths.student.dashboard.path,
