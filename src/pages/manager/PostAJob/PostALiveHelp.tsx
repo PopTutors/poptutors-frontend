@@ -271,7 +271,7 @@ export default function PostALiveHelp() {
                 toast.success('Live help request submitted successfully!');
                 resetForm();
                 setTimeout(() => {
-                    router('/manager/live-help-listings');
+                    router('/manager/job-listings');
                 }, 1500);
             },
             onErrorCallback: (err) => {

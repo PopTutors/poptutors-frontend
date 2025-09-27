@@ -32,6 +32,7 @@ import DashboardPage from './pages/manager/Dashboard/DashboardPage';
 import PostAJob from './pages/manager/PostAJob/PostAJob';
 import PostASession from './pages/manager/PostAJob/PostASession';
 import PostALiveHelp from './pages/manager/PostAJob/PostALiveHelp';
+import FinancesHub from './pages/manager/FinancesHub/FinancesHub';
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -97,6 +98,10 @@ export const createAppRouter = createBrowserRouter([
           {
             path: paths.manager.postLiveHelp.path,
             element: <PostALiveHelp />,
+          },
+          {
+            path: paths.manager.finance.path,
+            element: <FinancesHub />
           },
           {
             path: paths.student.dashboard.path,
