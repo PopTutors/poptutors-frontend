@@ -51,11 +51,11 @@ export default function ManagerProfile(): JSX.Element {
   const [additionalDetailsDialogOpen, setAdditionalDetailsDialogOpen] = useState(false);
   const [socialLinksDialogOpen, setSocialLinksDialogOpen] = useState(false);
 
-  const [editingExperience, setEditingExperience] = useState<Experience | null>(null);
+  const [editingExperience, setEditingExperience] = useState < Experience | null > (null);
 
-  const [profile, setProfile] = useState<Profile>(initialProfile);
+  const [profile, setProfile] = useState < Profile > (initialProfile);
 
-  const [experiences, setExperiences] = useState<Experience[]>([
+  const [experiences, setExperiences] = useState < Experience[] > ([
     {
       id: '1',
       role: 'Product Designer',
@@ -77,14 +77,14 @@ export default function ManagerProfile(): JSX.Element {
     },
   ]);
 
-  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([
+  const [socialLinks, setSocialLinks] = useState < SocialLink[] > ([
     { platform: 'Instagram', url: 'instagram.com/jakegyll' },
     { platform: 'Twitter', url: 'twitter.com/jakegyll' },
     { platform: 'Website', url: 'www.jakegyll.com' },
   ]);
 
-  const [tempProfile, setTempProfile] = useState<Profile>(profile);
-  const [tempExperience, setTempExperience] = useState<Experience>({
+  const [tempProfile, setTempProfile] = useState < Profile > (profile);
+  const [tempExperience, setTempExperience] = useState < Experience > ({
     id: '',
     role: '',
     company: '',
@@ -93,7 +93,7 @@ export default function ManagerProfile(): JSX.Element {
     description: '',
     logo: '',
   });
-  const [tempSocialLinks, setTempSocialLinks] = useState<SocialLink[]>([]);
+  const [tempSocialLinks, setTempSocialLinks] = useState < SocialLink[] > ([]);
 
   const handleEditExperience = (experience: Experience) => {
     setTempExperience(experience);
