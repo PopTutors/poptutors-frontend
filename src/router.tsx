@@ -26,7 +26,7 @@ import RequestSessionForm from './components/forms/RequestSessionForm';
 import { BookExpertForm } from './components/forms/BookExpert';
 import LiveQuestionDetailsPage from './pages/student/liveQuestion/details';
 import Settings from './pages/manager/Settings';
-import Hirings from './pages/manager/Hirings/Hirings';
+import Hirings from './pages/manager/TeachersProfile/Hirings';
 import ManagerProfile from './pages/manager/MangerProfile/ManagerProfile';
 import DashboardPage from './pages/manager/Dashboard/DashboardPage';
 import PostAJob from './pages/manager/PostAJob/PostAJob';
