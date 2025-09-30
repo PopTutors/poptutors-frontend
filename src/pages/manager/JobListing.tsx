@@ -1,5 +1,4 @@
-// JobListing.tsx
-import React, { useState, useRef } from 'react';
+import React, { useMemo, useState } from "react";
 import {
   Search,
   Filter,
@@ -7,151 +6,186 @@ import {
   Clock,
   Calendar,
   DollarSign,
-  UserX,
   Star as StarIcon,
   X as XIcon,
-} from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { DeleteIcon, EditIcon, InactiveIcon, ReOpenIcon } from '../../assets/managers';
+  UserX,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import {
+  DeleteIcon,
+  EditIcon,
+  InactiveIcon,
+  ReOpenIcon,
+} from "../../assets/managers";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
   DialogClose,
-} from '../../components/ui/dialog';
+} from "../../components/ui/dialog";
+import { useFetch } from "../../api";
 
-const jobs = [
-  /* your jobs array (unchanged) */
-  {
-    subject: 'Mona Lisa',
-    budget: '$50',
-    datePosted: '20 May 2020',
-    dueDate: '20 May 2020',
-    location: 'USA',
-    status: 'Live',
-    jobType: 'Live Help',
-    applicants: 19,
-  },
-  {
-    subject: 'Mona Lisa',
-    budget: '$50',
-    datePosted: '20 May 2020',
-    dueDate: '20 May 2020',
-    location: 'USA',
-    status: 'Live',
-    jobType: 'Live Help',
-    applicants: 19,
-  },
-  {
-    subject: 'Mona Lisa',
-    budget: '$50',
-    datePosted: '20 May 2020',
-    dueDate: '20 May 2020',
-    location: 'USA',
-    status: 'Live',
-    jobType: 'Live Help',
-    applicants: 19,
-  },
-  {
-    subject: 'Mona Lisa',
-    budget: '$50',
-    datePosted: '20 May 2020',
-    dueDate: '20 May 2020',
-    location: 'USA',
-    status: 'Live',
-    jobType: 'Live Help',
-    applicants: 19,
-  },
-  {
-    subject: 'Mona Lisa',
-    budget: '$50',
-    datePosted: '20 May 2020',
-    dueDate: '20 May 2020',
-    location: 'USA',
-    status: 'Live',
-    jobType: 'Live Help',
-    applicants: 19,
-  },
-  {
-    subject: 'Mona Lisa',
-    budget: '$50',
-    datePosted: '20 May 2020',
-    dueDate: '20 May 2020',
-    location: 'USA',
-    status: 'Live',
-    jobType: 'Live Help',
-    applicants: 19,
-  },
-  // ... rest of the items
-];
-
+// Badge color maps
 const statusColors: Record<string, string> = {
-  Live: 'bg-green-100 text-green-600 border-green-200',
-  New: 'bg-blue-100 text-blue-600 border-blue-200',
-  Ongoing: 'bg-blue-50 text-blue-500 border-blue-200',
-  Closed: 'bg-red-50 text-red-500 border-red-200',
+  Live: "bg-green-100 text-green-600 border-green-200",
+  New: "bg-blue-100 text-blue-600 border-blue-200",
+  Ongoing: "bg-blue-50 text-blue-500 border-blue-200",
+  Closed: "bg-red-50 text-red-500 border-red-200",
 };
 
 const jobTypeColors: Record<string, string> = {
-  'Live Help': 'bg-red-50 text-red-500 border-red-200',
-  Sessions: 'bg-yellow-50 text-yellow-600 border-yellow-200',
-  Assignment: 'bg-blue-50 text-blue-500 border-blue-200',
+  liveHelp: "bg-red-50 text-red-500 border-red-200",
+  session: "bg-yellow-50 text-yellow-600 border-yellow-200",
+  assignment: "bg-blue-50 text-blue-500 border-blue-200",
 };
 
-const allStatuses = ['Good fit', 'New', 'Rejected', 'Finalized']; // screenshot labels
+const allStatuses = ["Good fit", "New", "Rejected", "Finalized"];
 const numericStars = [1, 2, 3, 4, 5];
 
 const JobListing: React.FC = () => {
   const navigate = useNavigate();
-  const handleRowClick = (id: number) => {
-    navigate(`/manager/job-listing/${id}/applicants`);
+
+  // API integration
+  const { data, isLoading, error } = useFetch(
+    ["newRequests"],
+    `/manager-dashboard/new-requests`,
+    true,
+    { requiresAuth: true }
+  );
+
+  const items = data?.items || [];
+  const total = data?.total || 0;
+
+  // UI state
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const [showActionDropdown, setShowActionDropdown] = useState < number | null > (
+    null
+  );
+  const [showFilterModal, setShowFilterModal] = useState(false);
+
+  // filter / sort / search state
+  const [filterStatus, setFilterStatus] = useState < string | null > (null);
+  const [filterRating, setFilterRating] = useState < number | null > (null);
+  const [sortBudget, setSortBudget] = useState < "asc" | "desc" | null > (null);
+  const [sortDeadline, setSortDeadline] = useState < "asc" | "desc" | null > (
+    null
+  );
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState <
+    "deadline" | "posted" | "budget" | null
+    > (null);
+
+  // row click -> navigate to applicants
+  const handleRowClick = (job: any) => {
+    const jobId = job._id;
+    const jobType = job.type || job._type || "assignment"; // fallback
+    navigate(`/manager/job-listing/${jobType}/${jobId}/applicants`);
   };
 
-  const [showSortDropdown, setShowSortDropdown] = useState(false);
-  const [showActionDropdown, setShowActionDropdown] = useState<number | null>(null);
+  // local helpers - parse numbers/dates safely
+  const parseAmount = (amt: any) => {
+    if (amt == null) return null;
+    const n = Number(amt);
+    if (!isFinite(n)) return null;
+    return n;
+  };
 
-  // ----- Filter modal state -----
-  const [showFilterModal, setShowFilterModal] = useState(false);
-  const [filterStatus, setFilterStatus] = useState<string | null>(null);
-  const [filterRating, setFilterRating] = useState<number | null>(3); // default 3 per screenshot
-  const [sortBudget, setSortBudget] = useState<'asc' | 'desc' | null>(null);
-  const [sortDeadline, setSortDeadline] = useState<'asc' | 'desc' | null>(null);
+  const parseDate = (d: any) => {
+    if (!d) return null;
+    const dt = new Date(d);
+    if (isNaN(dt.getTime())) return null;
+    return dt;
+  };
 
-  // Table data state (if you want)
-  // const [jobsState, setJobsState] = useState(jobs);
+  // filtered + sorted items computed with useMemo
+  const displayedItems = useMemo(() => {
+    let list = Array.isArray(items) ? [...items] : [];
 
-  const total = jobs.length;
+    // search filter: subject/title/description
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      list = list.filter((job: any) => {
+        const subject = (job.subject || job.title || "").toString().toLowerCase();
+        const desc = (job.description || job.details || "").toString().toLowerCase();
+        return subject.includes(q) || desc.includes(q);
+      });
+    }
 
-  const filterByQuery = (t: any) => true; // keep original search logic outside this snippet
+    // filter by status if provided
+    if (filterStatus) {
+      list = list.filter((j: any) => (j.status || "").toString() === filterStatus);
+    }
 
-  // Handlers for filter modal
+    // filter by rating if API provides rating field (reviews aggregated)
+    if (filterRating != null) {
+      list = list.filter((j: any) => {
+        const rating = j.rating ?? j.avgRating ?? null;
+        return rating != null && Number(rating) >= filterRating;
+      });
+    }
+
+    // Sorting: apply primary sortBy if chosen
+    if (sortBy === "budget") {
+      list.sort((a: any, b: any) => {
+        const pa = parseAmount(a.amount ?? a.studentPrice ?? a.price ?? null) ?? 0;
+        const pb = parseAmount(b.amount ?? b.studentPrice ?? b.price ?? null) ?? 0;
+        return sortBudget === "asc" ? pa - pb : pb - pa;
+      });
+    } else if (sortBy === "deadline") {
+      list.sort((a: any, b: any) => {
+        const da = parseDate(a.dueDate ?? a.deadline ?? null)?.getTime() ?? 0;
+        const db = parseDate(b.dueDate ?? b.deadline ?? null)?.getTime() ?? 0;
+        return sortDeadline === "asc" ? da - db : db - da;
+      });
+    } else if (sortBy === "posted") {
+      list.sort((a: any, b: any) => {
+        const ta = parseDate(a.createdAt ?? a.postedAt ?? null)?.getTime() ?? 0;
+        const tb = parseDate(b.createdAt ?? b.postedAt ?? null)?.getTime() ?? 0;
+        // newest first unless user set differently via sortDeadline (use desc as default)
+        return (sortDeadline === "asc" ? ta - tb : tb - ta);
+      });
+    }
+
+    return list;
+  }, [
+    items,
+    searchQuery,
+    filterStatus,
+    filterRating,
+    sortBy,
+    sortBudget,
+    sortDeadline,
+  ]);
+
+  // Filter modal handlers
   const clearFilters = () => {
     setFilterStatus(null);
     setFilterRating(null);
     setSortBudget(null);
     setSortDeadline(null);
+    setSortBy(null);
+    setSearchQuery("");
   };
 
   const applyFilters = () => {
-    // TODO: actually filter your table data here using the filter* state
-    // For now we just close the modal to demonstrate behavior
+    // We compute on-the-fly via useMemo. Close modal.
     setShowFilterModal(false);
   };
 
+  if (isLoading) return <div className="p-6">Loading requests...</div>;
+  if (error) return <div className="p-6 text-red-500">Error loading requests</div>;
+
   return (
-    <div className="p-6 ">
+    <div className="p-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
         <div>
-          <h1 className="text-[20px] font-bold text-gray-900 text-[#141414]">
-            Job List{' '}
-            <span className="text-gray-500  text-[#141414]">
-              (158){' '}
-              <span className="text-gray-400 text-[16px] ml-4 text-[#141414CC]">
-                July 19 - July 25
-              </span>
+          <h1 className="text-[20px] font-bold text-gray-900">
+            Job List{" "}
+            <span className="text-gray-500">
+              ({total}){" "}
+              <span className="text-gray-400 text-[16px] ml-4">July 19 - July 25</span>
             </span>
           </h1>
         </div>
@@ -161,53 +195,81 @@ const JobListing: React.FC = () => {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
-              className="border border-gray-200  pl-10 pr-4 py-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="border border-gray-200 pl-10 pr-4 py-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              placeholder="Search subject or description..."
             />
           </div>
 
-          {/* Sort Dropdown & Filter Button */}
-          <div className="relative">
-            <div className="flex items-center gap-2 px-4 py-2 bg-white cursor-pointer">
-              <button
-                onClick={() => setShowFilterModal(true)}
-                aria-label="Open filter"
-                className="border border-gray-200 rounded-lg px-4 py-2 flex items-center gap-2 bg-white shadow-sm text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                <Filter className="w-5 h-5" />
-              </button>
+          {/* Sort & Filter */}
+          <div className="relative flex items-center gap-2">
+            <button
+              onClick={() => setShowFilterModal(true)}
+              className="border border-gray-200 px-4 py-2 flex items-center gap-2 bg-white shadow-sm text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              <Filter className="w-5 h-5" />
+              {/* <span className="hidden md:inline">Filter</span> */}
+            </button>
 
+            <div className="relative">
               <button
-                onClick={() => setShowSortDropdown(!showSortDropdown)}
-                className="border border-gray-200 rounded-lg px-4 py-2 flex items-center gap-2 bg-white shadow-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                onClick={() => setShowSortDropdown((s) => !s)}
+                className="border border-gray-200 px-4 py-2 flex items-center gap-2 bg-white shadow-sm text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 Sort by
               </button>
-            </div>
 
-            {showSortDropdown && (
-              <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
-                <div className="py-1">
-                  <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                    <Clock className="w-4 h-4" />
-                    Deadline
-                  </button>
-                  <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    Posted date
-                  </button>
-                  <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                    <DollarSign className="w-4 h-4" />
-                    Budget
-                  </button>
-                  <hr className="my-1" />
-                  <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                    <UserX className="w-4 h-4" />
-                    Inactive
-                  </button>
+              {showSortDropdown && (
+                <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                  <div className="py-1">
+                    <button
+                      onClick={() => {
+                        setSortBy("deadline");
+                        setShowSortDropdown(false);
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                    >
+                      <Clock className="w-4 h-4" />
+                      Deadline
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setSortBy("posted");
+                        setShowSortDropdown(false);
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                    >
+                      <Calendar className="w-4 h-4" />
+                      Posted date
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setSortBy("budget");
+                        setShowSortDropdown(false);
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                    >
+                      <DollarSign className="w-4 h-4" />
+                      Budget
+                    </button>
+                    <hr className="my-1" />
+                    <button
+                      onClick={() => {
+                        // toggle "inactive" filter simulation - not altering list here
+                        setShowSortDropdown(false);
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                    >
+                      <UserX className="w-4 h-4" />
+                      Inactive
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -217,8 +279,8 @@ const JobListing: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-200">
-              <tr className="text-gray-600 h-[60px] text-center text-[#141414]">
-                <th className="px-6 py-3 font-medium text-[16px]">Subject name</th>
+              <tr className="text-gray-600 h-[60px] text-center">
+                <th className="px-6 py-3 font-medium text-[16px]">Subject</th>
                 <th className="px-6 py-3 font-medium text-[16px]">Budget</th>
                 <th className="px-6 py-3 font-medium text-[16px]">Date Posted</th>
                 <th className="px-6 py-3 font-medium text-[16px]">Due Date</th>
@@ -230,40 +292,74 @@ const JobListing: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {jobs.map((job, idx) => (
+              {displayedItems.map((job: any, idx: number) => (
                 <tr
-                  key={idx}
-                  className="border-b hover:bg-gray-50 group cursor-pointer h-[80px] text-[16px] text-center text-[#141414]"
+                  key={job._id ?? idx}
+                  className="border-b hover:bg-gray-50 group cursor-pointer h-[80px] text-[16px] text-center"
                   onClick={(e) => {
-                    const actionsCell = e.currentTarget.querySelector('.actions-td');
+                    const actionsCell =
+                      e.currentTarget.querySelector(".actions-td");
                     if (actionsCell && actionsCell.contains(e.target as Node)) {
                       return;
                     }
-                    handleRowClick(idx + 1);
+                    handleRowClick(job);
                   }}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900 ">
-                    {job.subject}
+                  <td className="px-6 py-4 font-medium text-gray-900 text-left">
+                    {job.subject || job.title || "-"}
                   </td>
-                  <td className="px-6 py-4 text-gray-700">{job.budget}</td>
-                  <td className="px-6 py-4 text-gray-700">{job.datePosted}</td>
-                  <td className="px-6 py-4 text-gray-700">{job.dueDate}</td>
-                  <td className="px-6 py-4 text-gray-700">{job.location}</td>
+
+                  <td className="px-6 py-4 text-gray-700">
+                    {job.amount != null
+                      ? `$${job.amount}`
+                      : job.studentPrice != null
+                        ? `$${job.studentPrice}`
+                        : "-"}
+                  </td>
+
+                  <td className="px-6 py-4 text-gray-700">
+                    {job.createdAt
+                      ? new Date(job.createdAt).toLocaleDateString()
+                      : "-"}
+                  </td>
+
+                  <td className="px-6 py-4 text-gray-700">
+                    {job.dueDate
+                      ? new Date(job.dueDate).toLocaleDateString()
+                      : job.startTime
+                        ? new Date(job.startTime).toLocaleDateString()
+                        : "-"}
+                  </td>
+
+                  <td className="px-6 py-4 text-gray-700">
+                    {job.location || job.country || job.createdBy?.country || "-"}
+                  </td>
+
                   <td className="px-6 py-4">
                     <span
-                      className={`px-[16px] py-[8px] border rounded-[80px] min-w-[84px] text-[14px] text-center  h-[33px] ${statusColors[job.status]}`}
+                      className={`px-[16px] py-[8px] border rounded-[80px] text-[14px] ${statusColors[job.status] ||
+                        "bg-gray-50 text-gray-500 border-gray-200"
+                        }`}
                     >
-                      {job.status}
+                      {job.status || "-"}
                     </span>
                   </td>
+
                   <td className="px-6 py-4">
                     <span
-                      className={`px-[16px] py-[8px] border rounded-[80px] min-w-[84px] text-[14px] text-center  h-[33px] ${jobTypeColors[job.jobType]}`}
+                      className={`px-[16px] py-[8px] border rounded-[80px] text-[14px] ${jobTypeColors[job.type] ||
+                        jobTypeColors[job._type] ||
+                        "bg-gray-50 text-gray-500 border-gray-200"
+                        }`}
                     >
-                      {job.jobType}
+                      {job.type || job._type || job.subject === "Live Help" ? "Live Help" : job.type || "-"}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-gray-700">{job.applicants}</td>
+
+                  <td className="px-6 py-4 text-gray-700">
+                    {typeof job.applicants === "number" ? job.applicants : job.applicants?.length ?? 0}
+                  </td>
+
                   <td className="px-6 py-4 text-right actions-td">
                     <div className="relative flex items-center justify-center">
                       <button
@@ -272,55 +368,29 @@ const JobListing: React.FC = () => {
                           setShowActionDropdown(showActionDropdown === idx ? null : idx);
                         }}
                         className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                        aria-label="Open actions"
                       >
                         <MoreVertical className="w-4 h-4 text-gray-400" />
                       </button>
+
                       {showActionDropdown === idx && (
                         <div className="absolute right-0 top-full mt-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
                           <div className="py-1">
-                            <button
-                              className="w-full px-4 py-2 text-left text-[14px] text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <img
-                                src={InactiveIcon}
-                                alt={`inactiveicon`}
-                                className="object-contain w-[20px]  h-[20px] mr-3 transition duration-200"
-                              />
+                            <button className="w-full px-4 py-2 flex items-center gap-2 text-sm hover:bg-gray-50">
+                              <img src={InactiveIcon} alt="inactive" className="w-5 h-5" />
                               Inactive
                             </button>
-                            <button
-                              className="w-full px-4 py-2 text-left text-[14px] text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <img
-                                src={EditIcon}
-                                alt={`editicon`}
-                                className="object-contain w-[20px]  h-[20px] mr-3 transition duration-200"
-                              />
+                            <button className="w-full px-4 py-2 flex items-center gap-2 text-sm hover:bg-gray-50">
+                              <img src={EditIcon} alt="edit" className="w-5 h-5" />
                               Edit Job
                             </button>
-                            <button
-                              className="w-full px-4 py-2 text-left text-[14px] text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <img
-                                src={ReOpenIcon}
-                                alt={`reopenicon`}
-                                className="object-contain w-[20px]  h-[20px] mr-3 transition duration-200"
-                              />
+                            <button className="w-full px-4 py-2 flex items-center gap-2 text-sm hover:bg-gray-50">
+                              <img src={ReOpenIcon} alt="reopen" className="w-5 h-5" />
                               Reopen Job
                             </button>
                             <hr className="my-1" />
-                            <button
-                              className="w-full px-4 py-2 text-left text-[14px] text-gray-700 hover:bg-gray-50 flex items-center gap-2 text-red-600"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <img
-                                src={DeleteIcon}
-                                alt={`deleteicon`}
-                                className="object-contain w-[20px]  h-[20px] mr-3 transition duration-200"
-                              />
+                            <button className="w-full px-4 py-2 flex items-center gap-2 text-sm text-red-600 hover:bg-gray-50">
+                              <img src={DeleteIcon} alt="delete" className="w-5 h-5" />
                               Delete Job
                             </button>
                           </div>
@@ -337,33 +407,8 @@ const JobListing: React.FC = () => {
         {/* Footer */}
         <div className="flex items-center justify-end gap-[10px] px-6 py-4 bg-gray-50 border-t border-gray-200 h-[40px] mt-4">
           <span className="text-[12px] text-gray-500">
-            Showing{' '}
-            <select className="border border-gray-200 rounded px-2 py-1 text-sm mx-1 bg-white">
-              <option>8</option>
-              <option>12</option>
-              <option>24</option>
-              <option>48</option>
-            </select>{' '}
-            out of 512
+            Showing {displayedItems.length} of {total}
           </span>
-          <div className="flex items-center gap-1">
-            <button className="w-[30px] h-[30px] bg-gray-900 text-white font-medium text-sm">
-              1
-            </button>
-            <button className="w-[30px] h-[30px] hover:bg-gray-100 text-gray-700 font-medium text-sm transition-colors">
-              2
-            </button>
-            <button className="w-[30px] h-[30px] hover:bg-gray-100 text-gray-700 font-medium text-sm transition-colors">
-              3
-            </button>
-            <span className="px-2 text-gray-400">...</span>
-            <button className="w-[30px] h-[30px] hover:bg-gray-100 text-gray-700 font-medium text-sm transition-colors">
-              16
-            </button>
-            <button className="ml-2 p-2 hover:bg-gray-100 text-gray-400 transition-colors">
-              →
-            </button>
-          </div>
         </div>
       </div>
 
@@ -371,8 +416,8 @@ const JobListing: React.FC = () => {
       <Dialog open={showFilterModal} onOpenChange={setShowFilterModal}>
         <DialogContent className="max-w-lg w-full">
           <DialogHeader>
-            <div className="flex items-start justify-between">
-              <DialogTitle className="text-lg font-semibold">Filter &amp; Sort</DialogTitle>
+            <div className="flex items-start justify-between w-full">
+              <DialogTitle className="text-lg font-semibold">Filter & Sort</DialogTitle>
               <DialogClose asChild>
                 <button className="p-1 rounded hover:bg-gray-100">
                   <XIcon className="w-5 h-5" />
@@ -392,7 +437,7 @@ const JobListing: React.FC = () => {
                     <button
                       key={s}
                       onClick={() => setFilterStatus(active ? null : s)}
-                      className={`px-3 py-1 rounded-full border ${active ? 'bg-green-100 border-green-200 text-green-700' : 'bg-white border-gray-200 text-gray-700'}`}
+                      className={`px-3 py-1 rounded-full border text-sm ${active ? 'bg-green-100 border-green-200 text-green-700' : 'bg-white border-gray-200 text-gray-700'}`}
                     >
                       {s}
                     </button>
@@ -403,7 +448,7 @@ const JobListing: React.FC = () => {
 
             {/* Rating */}
             <div className="py-4">
-              <h4 className="text-sm font-medium mb-3">Rating</h4>
+              <h4 className="text-sm font-medium mb-3">Rating (min)</h4>
               <div className="flex items-center gap-3">
                 {numericStars.map((n) => {
                   const active = filterRating === n;
@@ -414,12 +459,8 @@ const JobListing: React.FC = () => {
                       className="flex items-center gap-1"
                       aria-pressed={active}
                     >
-                      <div
-                        className={`inline-flex items-center justify-center w-7 h-7 rounded ${active ? 'bg-yellow-100' : ''}`}
-                      >
-                        <StarIcon
-                          className={`w-4 h-4 ${active ? 'text-yellow-500' : 'text-gray-300'}`}
-                        />
+                      <div className={`inline-flex items-center justify-center w-7 h-7 rounded ${active ? 'bg-yellow-100' : ''}`}>
+                        <StarIcon className={`w-4 h-4 ${active ? 'text-yellow-500' : 'text-gray-300'}`} />
                       </div>
                       <span className="text-sm">{n}</span>
                     </button>
@@ -431,76 +472,71 @@ const JobListing: React.FC = () => {
             {/* Sort by */}
             <div className="py-4">
               <h4 className="text-sm font-medium mb-3">Sort by</h4>
-
               <div className="grid gap-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">budget:</p>
+                    <p className="text-sm text-gray-600">Budget</p>
                   </div>
                   <div className="flex items-center gap-4">
                     <label className="inline-flex items-center gap-2 cursor-pointer">
                       <input
                         type="radio"
                         name="budget"
-                        checked={sortBudget === 'asc'}
-                        onChange={() => setSortBudget('asc')}
+                        checked={sortBudget === "asc" && sortBy === "budget"}
+                        onChange={() => {
+                          setSortBy("budget");
+                          setSortBudget("asc");
+                        }}
                         className="hidden"
                       />
-                      <span
-                        className={`px-2 py-1 rounded border ${sortBudget === 'asc' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'}`}
-                      >
-                        Ascending
-                      </span>
+                      <span className={`px-2 py-1 rounded border ${sortBudget === 'asc' && sortBy === 'budget' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'}`}>Ascending</span>
                     </label>
                     <label className="inline-flex items-center gap-2 cursor-pointer">
                       <input
                         type="radio"
                         name="budget"
-                        checked={sortBudget === 'desc'}
-                        onChange={() => setSortBudget('desc')}
+                        checked={sortBudget === "desc" && sortBy === "budget"}
+                        onChange={() => {
+                          setSortBy("budget");
+                          setSortBudget("desc");
+                        }}
                         className="hidden"
                       />
-                      <span
-                        className={`px-2 py-1 rounded border ${sortBudget === 'desc' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'}`}
-                      >
-                        Descending
-                      </span>
+                      <span className={`px-2 py-1 rounded border ${sortBudget === 'desc' && sortBy === 'budget' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'}`}>Descending</span>
                     </label>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">teacher deadline:</p>
+                    <p className="text-sm text-gray-600">Deadline</p>
                   </div>
                   <div className="flex items-center gap-4">
                     <label className="inline-flex items-center gap-2 cursor-pointer">
                       <input
                         type="radio"
                         name="deadline"
-                        checked={sortDeadline === 'asc'}
-                        onChange={() => setSortDeadline('asc')}
+                        checked={sortDeadline === "asc" && sortBy === "deadline"}
+                        onChange={() => {
+                          setSortBy("deadline");
+                          setSortDeadline("asc");
+                        }}
                         className="hidden"
                       />
-                      <span
-                        className={`px-2 py-1 rounded border ${sortDeadline === 'asc' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'}`}
-                      >
-                        Ascending
-                      </span>
+                      <span className={`px-2 py-1 rounded border ${sortDeadline === 'asc' && sortBy === 'deadline' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'}`}>Ascending</span>
                     </label>
                     <label className="inline-flex items-center gap-2 cursor-pointer">
                       <input
                         type="radio"
                         name="deadline"
-                        checked={sortDeadline === 'desc'}
-                        onChange={() => setSortDeadline('desc')}
+                        checked={sortDeadline === "desc" && sortBy === "deadline"}
+                        onChange={() => {
+                          setSortBy("deadline");
+                          setSortDeadline("desc");
+                        }}
                         className="hidden"
                       />
-                      <span
-                        className={`px-2 py-1 rounded border ${sortDeadline === 'desc' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'}`}
-                      >
-                        Descending
-                      </span>
+                      <span className={`px-2 py-1 rounded border ${sortDeadline === 'desc' && sortBy === 'deadline' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'}`}>Descending</span>
                     </label>
                   </div>
                 </div>

@@ -76,7 +76,7 @@ export const createAppRouter = createBrowserRouter([
             element: <ManagerProfile />,
           },
           {
-            path: '/manager/job-listing/:id/applicants',
+            path: '/manager/job-listing/:type/:id/applicants',
             element: <JobApplicants />,
           },
           {
