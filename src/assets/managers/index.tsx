@@ -27,6 +27,7 @@ import ReceiptIcon from './receipt.svg';
 import UploadIcon from './Upload.svg';
 import DateIcon from './date.svg';
 import FlagIcon from './Flag.svg';
+import LabelIcon from './Label.svg';
 export {
   DeleteIcon,
   InactiveIcon,
@@ -56,5 +57,6 @@ export {
   ReceiptIcon,
   UploadIcon,
   DateIcon,
-  FlagIcon
+  FlagIcon,
+  LabelIcon
 };

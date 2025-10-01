@@ -84,8 +84,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { label: 'My Session', icon: SessionManagerIcon, path: '/manager/sessions' },
     { label: 'My Exam', icon: ExamIcon, path: '/manager/exams' },
     { label: 'Finance', icon: FinanceIcon, path: '/manager/finance' },
-    { label: 'Hub Manager', icon: HubManagerIcon, path: '/manager/hub-manager' },
-    { label: 'Teacher', icon: TeacherIcon, path: '/manager/teacher' },
+    { label: 'Manager', icon: HubManagerIcon, path: '/manager/hub-manager' },
+    { label: 'Manage Teacher', icon: TeacherIcon, path: '/manager/teacher' },
     { label: 'Settings', icon: TeacherIcon, path: '/manager/settings' },
   ];
 

@@ -33,6 +33,8 @@ import PostAJob from './pages/manager/PostAJob/PostAJob';
 import PostASession from './pages/manager/PostAJob/PostASession';
 import PostALiveHelp from './pages/manager/PostAJob/PostALiveHelp';
 import FinancesHub from './pages/manager/FinancesHub/FinancesHub';
+import MySessionPage from './pages/manager/MySessions/MySession';
+import ManageTeacher from './pages/manager/ManagerTeacher';
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -74,6 +76,14 @@ export const createAppRouter = createBrowserRouter([
           {
             path: paths.manager.profile.path,
             element: <ManagerProfile />,
+          },
+          {
+            path: paths.manager.sessions.path,
+            element: <MySessionPage />,
+          },
+          {
+            path: paths.manager.teacher.path,
+            element: <ManageTeacher />,
           },
           {
             path: '/manager/job-listing/:type/:id/applicants',
