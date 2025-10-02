@@ -35,6 +35,7 @@ import PostALiveHelp from './pages/manager/PostAJob/PostALiveHelp';
 import FinancesHub from './pages/manager/FinancesHub/FinancesHub';
 import MySessionPage from './pages/manager/MySessions/MySession';
 import ManageTeacher from './pages/manager/ManagerTeacher';
+import MyLiveHelpPage from './pages/manager/MyLiveHelps/MyLiveHelps';
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -80,6 +81,10 @@ export const createAppRouter = createBrowserRouter([
           {
             path: paths.manager.sessions.path,
             element: <MySessionPage />,
+          },
+          {
+            path: paths.manager.exams.path,
+            element: <MyLiveHelpPage />,
           },
           {
             path: paths.manager.teacher.path,

@@ -76,13 +76,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   // Manager tabs (add/replace icons as needed)
   const managerTabs = [
-    { label: 'Dashboard', icon: DashboardIcon, path: '/manager/dashboard' },
+    { label: 'Dashboard', icon: DashboardIcon, path: paths.manager.dashboard.getHref() },
     { label: 'Messages', icon: MessagesIcon, path: '/manager/messages' },
     { label: 'My Profile', icon: ProfileIcon, path: '/manager/profile' },
     { label: 'Hirings', icon: HiringIcon, path: '/manager/hirings' },
     { label: 'Job Listing', icon: JobListingIcon, path: '/manager/job-listing' },
     { label: 'My Session', icon: SessionManagerIcon, path: '/manager/sessions' },
-    { label: 'My Exam', icon: ExamIcon, path: '/manager/exams' },
+    { label: 'My Live Helps', icon: ExamIcon, path: '/manager/liveHelp' },
     { label: 'Finance', icon: FinanceIcon, path: '/manager/finance' },
     { label: 'Manager', icon: HubManagerIcon, path: '/manager/hub-manager' },
     { label: 'Manage Teacher', icon: TeacherIcon, path: '/manager/teacher' },

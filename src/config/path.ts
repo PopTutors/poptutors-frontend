@@ -39,8 +39,8 @@ export const paths = {
       getHref: () => '/manager/sessions',
     },
     exams: {
-      path: '/manager/exams',
-      getHref: () => '/manager/exams',
+      path: '/manager/liveHelp',
+      getHref: () => '/manager/liveHelp',
     },
     finance: {
       path: '/manager/finance',

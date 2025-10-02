@@ -28,6 +28,15 @@ import UploadIcon from './Upload.svg';
 import DateIcon from './date.svg';
 import FlagIcon from './Flag.svg';
 import LabelIcon from './Label.svg';
+import TimeIcon from './time.svg';
+import LeartIcon from './leart.svg';
+import ProfileIcon from './profile.svg';
+import SessionStudentIcon from './student.svg';
+import SessionTeacherIcon from './Teacher.svg';
+import SessionDateIcon from './SessionDate.svg';
+import SessionMoneyIcon from './SessionMoney.svg';
+import ClockIcon from './ClockIcon.svg';
+import Completed from './Completed.svg';
 export {
   DeleteIcon,
   InactiveIcon,
@@ -58,5 +67,14 @@ export {
   UploadIcon,
   DateIcon,
   FlagIcon,
-  LabelIcon
+  LabelIcon,
+  TimeIcon,
+  LeartIcon,
+  ProfileIcon,
+  SessionStudentIcon,
+  SessionTeacherIcon,
+  SessionDateIcon,
+  SessionMoneyIcon,
+  ClockIcon,
+  Completed,
 };
