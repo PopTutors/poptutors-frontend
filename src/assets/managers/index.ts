@@ -5,7 +5,7 @@ import ManagerEditIcon from './edit.svg';
 import RejectIcon from './Reject.svg';
 import FinalizeIcon from './Finalize.svg';
 import GoodIcon from './Good.svg';
-import FileIcon from './file.svg';
+import FileIcon from './File.svg';
 import SizeIcon from './size.svg';
 import InstagramIcon from './instagram.svg';
 import LinkedInIcon from './linkedin.svg';
