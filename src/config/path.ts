@@ -57,6 +57,10 @@ export const paths = {
     settings: {
       path: '/manager/settings',
       getHref: () => '/manager/settings',
+    },
+    teacherProfile: {
+      path: '/manager/teacher/profile/:id',
+      getHref: (id: string) => `/manager/teacher/profile/${id}`,
     }
   },
   home: {

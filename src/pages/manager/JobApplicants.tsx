@@ -1,11 +1,14 @@
+// components/JobApplicants.tsx
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Search, Filter, MoreVertical } from "lucide-react";
 import Updates from "./Updates";
 import StudentDocuments from "./StudentDocuments";
+import JobDetailsPage from "./JobDetails";
 import { FinalizeIcon, GoodIcon, RejectIcon } from "../../assets/managers";
 import { useFetch } from "../../api"; // ✅ your custom hook
-import JobDetailsPage from "./JobDetails";
+import { paths } from "../../config/path";
+// import ChatScreen from "./ChatScreen";
 
 interface Applicant {
   id: string;
@@ -50,15 +53,15 @@ const JobApplicants: React.FC = () => {
     type: "assignment" | "session" | "liveHelp";
   } > ();
 
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState < string > ("Applicants");
   const [search, setSearch] = useState("");
-  const [openActionDropdownId, setOpenActionDropdownId] = useState <
-    string | null
-    > (null);
+  const [openActionDropdownId, setOpenActionDropdownId] = useState < string | null > (null);
+  const [dropdownPositions, setDropdownPositions] = useState < Record < string, 'left' | 'right' >> ({});
 
   const actionContainerRefs = useRef < Record < string, HTMLDivElement | null >> ({});
 
-  // ✅ Fetch applicants
+  // Fetch applicants
   const { data, isLoading, error } = useFetch(
     ["applicants", jobId, type],
     `/manager-dashboard/applicants/${jobId}?type=${type}`,
@@ -71,6 +74,7 @@ const JobApplicants: React.FC = () => {
 
   useEffect(() => {
     if (applicants.length) setApplicantList(applicants);
+    else setApplicantList([]);
   }, [applicants]);
 
   useEffect(() => {
@@ -86,26 +90,69 @@ const JobApplicants: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleDocClick);
   }, [openActionDropdownId]);
 
-  const handleStatusChange = (
-    applicantId: string,
-    newStatus: Applicant["status"]
-  ) => {
-    setApplicantList((prev) =>
-      prev.map((app) =>
-        app.id === applicantId ? { ...app, status: newStatus } : app
-      )
-    );
+  // ---------- Resizable columns ----------
+  // Columns: Full Name, Rating, Teacher Budget, Teacher Deadline, Applied Date, Selection status, Action
+  const initialColWidths = [260, 100, 140, 140, 140, 160, 96]; // px defaults
+  const [colWidths, setColWidths] = useState < number[] > (initialColWidths);
+  const resizingRef = useRef < { idx: number; startX: number; startW: number } | null > (null);
+
+  useEffect(() => {
+    function onPointerMove(e: PointerEvent) {
+      if (!resizingRef.current) return;
+      const { idx, startX, startW } = resizingRef.current;
+      const delta = e.clientX - startX;
+      setColWidths(prev => {
+        const next = [...prev];
+        next[idx] = Math.max(80, Math.round(startW + delta)); // min 80px
+        return next;
+      });
+    }
+    function onPointerUp() {
+      resizingRef.current = null;
+    }
+    window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerup", onPointerUp);
+    return () => {
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", onPointerUp);
+    };
+  }, []);
+
+  // ---------- Actions ----------
+  const handleStatusChange = (applicantId: string, newStatus: Applicant["status"]) => {
+    setApplicantList(prev => prev.map(app => (app.id === applicantId ? { ...app, status: newStatus } : app)));
     setOpenActionDropdownId(null);
   };
 
   const handleRemove = (applicantId: string) => {
-    setApplicantList((prev) => prev.filter((p) => p.id !== applicantId));
+    setApplicantList(prev => prev.filter(p => p.id !== applicantId));
     setOpenActionDropdownId(null);
   };
 
-  const filteredApplicants = applicantList.filter((a) =>
-    a.name.toLowerCase().includes(search.toLowerCase())
-  );
+  // Handle dropdown positioning
+  const handleDropdownToggle = (appId: string) => {
+    if (openActionDropdownId === appId) {
+      setOpenActionDropdownId(null);
+    } else {
+      setOpenActionDropdownId(appId);
+
+      // Calculate position
+      const container = actionContainerRefs.current[appId];
+      if (container) {
+        const rect = container.getBoundingClientRect();
+        const spaceRight = window.innerWidth - rect.right;
+        const dropdownWidth = 160; // approximate dropdown width
+
+        setDropdownPositions(prev => ({
+          ...prev,
+          [appId]: spaceRight < dropdownWidth ? 'left' : 'right'
+        }));
+      }
+    }
+  };
+
+  // Helpers
+  const filteredApplicants = applicantList.filter(a => a.name.toLowerCase().includes(search.toLowerCase()));
   const getColor = (name: string) => {
     const colors = [
       "bg-red-400",
@@ -119,18 +166,18 @@ const JobApplicants: React.FC = () => {
     const index = name.charCodeAt(0) % colors.length;
     return colors[index];
   };
-  const tabs = ["Applicants", "Job Details", "Updates", "Chat"];
+
+  const tabs = ["Applicants", "Job Details", "Updates"];
 
   if (isLoading) return <div className="p-6">Loading applicants...</div>;
-  if (error)
-    return <div className="p-6 text-red-500">Failed to load applicants</div>;
+  if (error) return <div className="p-6 text-red-500">Failed to load applicants</div>;
 
   return (
-    <div className="p-6  min-h-screen">
+    <div className="p-6 min-h-screen">
       {/* Tabs */}
       <div className="mb-6 border-b border-gray-200">
         <nav className="-mb-px flex space-x-8">
-          {tabs.map((tab) => (
+          {tabs.map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -152,9 +199,7 @@ const JobApplicants: React.FC = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
             <h1 className="text-[20px] font-epilogue font-bold text-gray-900">
               Total Applicants :{" "}
-              <span className="font-normal text-gray-600">
-                {applicantList.length}
-              </span>
+              <span className="font-normal text-gray-600">{applicantList.length}</span>
             </h1>
 
             <div className="flex items-center gap-3 mt-4 md:mt-0">
@@ -167,7 +212,7 @@ const JobApplicants: React.FC = () => {
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
-              <button className="border border-gray-200  px-4 py-2 flex items-center gap-2 bg-white shadow-sm text-gray-700 hover:bg-gray-50">
+              <button className="border border-gray-200 px-4 py-2 flex items-center gap-2 bg-white shadow-sm text-gray-700 hover:bg-gray-50">
                 <Filter className="h-4 w-4" />
               </button>
             </div>
@@ -176,123 +221,120 @@ const JobApplicants: React.FC = () => {
           {/* Applicants Table */}
           <div className="bg-white shadow-sm border border-gray-200 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="min-w-full text-sm">
+              <table className="min-w-full text-sm h-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr className="text-gray-600 h-[60px] text-center text-[#141414]">
-                    <th className="px-6 py-3 font-medium text-[16px] font-inter">
-                      Full Name
-                    </th>
-                    <th className="px-6 py-3 font-medium text-[16px] font-inter">
-                      Rating
-                    </th>
-                    <th className="px-6 py-3 font-medium text-[16px] font-inter">
-                      Teacher Budget
-                    </th>
-                    <th className="px-6 py-3 font-medium text-[16px] font-inter">
-                      Teacher Deadline
-                    </th>
-                    <th className="px-6 py-3 font-medium text-[16px] font-inter">
-                      Applied Date
-                    </th>
-                    <th className="px-6 py-3 font-medium text-[16px] font-inter">
-                      Selection status
-                    </th>
-                    <th className="px-6 py-3 font-medium text-[16px] font-inter">Action</th>
+                    {[
+                      "Full Name",
+                      "Rating",
+                      "Teacher Budget",
+                      "Teacher Deadline",
+                      "Applied Date",
+                      "Selection status",
+                      "Action",
+                    ].map((label, idx) => (
+                      <th
+                        key={label}
+                        className="px-6 py-3 font-medium text-[16px] font-inter relative group"
+                        style={{ width: colWidths[idx], minWidth: 80 }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="truncate">{label}</span>
+
+                          {/* resize handle */}
+                          <div
+                            role="separator"
+                            aria-orientation="vertical"
+                            className="absolute right-0 top-0 h-full w-1 cursor-col-resize group-hover:bg-gray-200"
+                            onPointerDown={(e) => {
+                              // prevent text selection while dragging
+                              (e.target as Element).setPointerCapture?.((e as any).pointerId);
+                              resizingRef.current = { idx, startX: e.clientX, startW: colWidths[idx] };
+                            }}
+                            onDoubleClick={() => {
+                              // reset this column to initial default on double click
+                              setColWidths(prev => {
+                                const next = [...prev];
+                                next[idx] = initialColWidths[idx] ?? 140;
+                                return next;
+                              });
+                            }}
+                          />
+                        </div>
+                      </th>
+                    ))}
                   </tr>
                 </thead>
+
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredApplicants.map((app) => (
                     <tr key={app.id} className="hover:bg-gray-50 text-center">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center justify-center">
-                          {app.avatar ? (<img
-                            src={app.avatar}
-                            alt={app.name}
-                            className="h-10 w-10 rounded-full object-cover"
-                          />) : (<div
-                            className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-semibold text-lg flex-shrink-0 ${getColor(
-                              app.name
-                            )}`}
-                          >
-                            {app.name.charAt(0).toUpperCase()}
-                          </div>)}
+                      <td style={{ width: colWidths[0] }} className="px-6 py-4 text-left">
+                        <div className="flex items-center">
+                          {app.avatar ? (
+                            <img src={app.avatar} alt={app.name} className="h-10 w-10 rounded-full object-cover" />
+                          ) : (
+                            <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-semibold text-lg flex-shrink-0 ${getColor(app.name)}`}>
+                              {app.name.charAt(0).toUpperCase()}
+                            </div>
+                          )}
 
-                          <div className="ml-3 text-[16px] font-inter font-medium text-gray-900">
-                            {app.name}
-                          </div>
+                          <div className="ml-3 text-[16px] font-inter font-medium text-gray-900">{app.name}</div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-[16px] font-inter">{app.rating}</td>
-                      <td className="px-6 py-4 text-[16px] font-inter">{app.budget}</td>
-                      <td className="px-6 py-4 text-[16px] font-inter">{app.deadline}</td>
-                      <td className="px-6 py-4 text-[16px] font-inter">{app.applied}</td>
-                      <td className="px-6 py-4 text-[16px] font-inter">
-                        <span
-                          className={`px-4 py-2 border rounded-full ${statusColors[app.status]}`}
-                        >
+
+                      <td style={{ width: colWidths[1] }} className="px-6 py-4 text-[16px] font-inter">{app.rating}</td>
+                      <td style={{ width: colWidths[2] }} className="px-6 py-4 text-[16px] font-inter">{app.budget}</td>
+                      <td style={{ width: colWidths[3] }} className="px-6 py-4 text-[16px] font-inter">{app.deadline}</td>
+                      <td style={{ width: colWidths[4] }} className="px-6 py-4 text-[16px] font-inter">{app.applied}</td>
+
+                      <td style={{ width: colWidths[5] }} className="px-6 py-4 text-[16px] font-inter">
+                        <span className={`px-4 py-2 border rounded-full ${statusColors[app.status] || "bg-gray-50"}`}>
                           {app.status}
                         </span>
                       </td>
-                      <td
-                        className="px-6 py-4 relative"
-                        ref={(el) => (actionContainerRefs.current[app.id] = el)}
-                      >
+
+                      <td style={{ width: colWidths[6] }} className="px-6 py-4 relative" ref={(el) => (actionContainerRefs.current[app.id] = el)}>
                         <button
-                          onClick={() =>
-                            setOpenActionDropdownId(
-                              openActionDropdownId === app.id ? null : app.id
-                            )
-                          }
+                          onClick={() => handleDropdownToggle(app.id)}
                           className="p-2 rounded-lg hover:bg-gray-100"
+                          aria-expanded={openActionDropdownId === app.id}
                         >
                           <MoreVertical className="w-4 h-4 text-gray-500" />
                         </button>
 
                         {openActionDropdownId === app.id && (
-                          <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                          <div className={`absolute mt-2 w-40 bg-white border border-gray-200  shadow-lg z-999 ${dropdownPositions[app.id] === 'left' ? 'left-0' : 'right-0'
+                            }`}>
                             <button
-                              onClick={() =>
-                                handleStatusChange(app.id, "Good Fit")
-                              }
-                              className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 w-full"
+                              onClick={() => handleStatusChange(app.id, "Good Fit")}
+                              className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 w-full text-left"
                             >
-                              <img
-                                src={GoodIcon}
-                                alt="Good Fit"
-                                className="w-4 h-4"
-                              />
+                              <img src={GoodIcon} alt="Good Fit" className="w-4 h-4" />
                               Mark Good Fit
                             </button>
+
                             <button
-                              onClick={() =>
-                                handleStatusChange(app.id, "Rejected")
-                              }
-                              className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 w-full"
+                              onClick={() => handleStatusChange(app.id, "Rejected")}
+                              className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 w-full text-left"
                             >
-                              <img
-                                src={RejectIcon}
-                                alt="Reject"
-                                className="w-4 h-4"
-                              />
+                              <img src={RejectIcon} alt="Reject" className="w-4 h-4" />
                               Reject
                             </button>
+
                             <button
-                              onClick={() =>
-                                handleStatusChange(app.id, "Finalized")
-                              }
-                              className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 w-full"
+                              onClick={() => handleStatusChange(app.id, "Finalized")}
+                              className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 w-full text-left"
                             >
-                              <img
-                                src={FinalizeIcon}
-                                alt="Finalize"
-                                className="w-4 h-4"
-                              />
+                              <img src={FinalizeIcon} alt="Finalize" className="w-4 h-4" />
                               Finalize
                             </button>
+
                             <hr />
+
                             <button
                               onClick={() => handleRemove(app.id)}
-                              className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-50 w-full"
+                              className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-50 w-full text-left"
                             >
                               Remove
                             </button>
@@ -301,12 +343,10 @@ const JobApplicants: React.FC = () => {
                       </td>
                     </tr>
                   ))}
+
                   {filteredApplicants.length === 0 && (
                     <tr>
-                      <td
-                        colSpan={7}
-                        className="px-6 py-8 text-center text-gray-500"
-                      >
+                      <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
                         No applicants found.
                       </td>
                     </tr>
@@ -318,12 +358,9 @@ const JobApplicants: React.FC = () => {
         </>
       )}
 
-      {activeTab === "Job Details" && (
-        <div className="text-gray-600"><JobDetailsPage /></div>
-      )}
-
+      {activeTab === "Job Details" && <div className="text-gray-600"><JobDetailsPage /></div>}
       {activeTab === "Updates" && <Updates />}
-      {activeTab === "Chat" && <StudentDocuments />}
+      {/* {activeTab === "Chat" && <ChatScreen />} */}
     </div>
   );
 };

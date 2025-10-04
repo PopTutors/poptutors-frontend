@@ -122,6 +122,10 @@ export const createAppRouter = createBrowserRouter([
             path: paths.student.dashboard.path,
             element: <Student />,
           },
+          {
+            path: paths.manager.teacherProfile.path,
+            element: <Hirings />
+          },
           // {
           //   path: paths.student.livequestion.path,
           //   element: <BookExpertPage />,

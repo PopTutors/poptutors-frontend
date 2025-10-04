@@ -50,7 +50,7 @@ export default function StudentDocuments({
   // If parent didn't supply documents, fetch from backend
   const shouldFetch = !initialDocuments && jobId;
   const fetchUrl = jobId
-    ? `/api/manager-dashboard/job/${jobId}/documents?type=${encodeURIComponent(String(type))}${teacherId ? `&teacherId=${encodeURIComponent(teacherId)}` : ""
+    ? `/manager-dashboard/job/${jobId}/documents?type=${encodeURIComponent(String(type))}${teacherId ? `&teacherId=${encodeURIComponent(teacherId)}` : ""
     }`
     : null;
 
@@ -240,38 +240,35 @@ export default function StudentDocuments({
         <Card className="">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg font-semibold text-gray-900">Student Documents</CardTitle>
-              <div className="flex items-center gap-3">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input
-                    placeholder="Search..."
-                    className="pl-10 h-9 w-64 text-sm border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                    value={search}
-                    onChange={(e) => {
-                      setSearch(e.target.value);
-                      setPage(1);
-                    }}
-                  />
-                </div>
-
-                <Button variant="outline" size="sm" className="border-gray-300 bg-white h-9 w-9 p-0" onClick={() => { if (refetch) refetch(); }}>
-                  <Filter className="h-4 w-4 text-gray-600" />
-                </Button>
-
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  multiple
-                  className="hidden"
-                  onChange={(e) => handleUpload(e.target.files)}
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search..."
+                  className="pl-10 h-9 w-64 text-sm border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setPage(1);
+                  }}
                 />
-
-                <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white h-9 px-4 gap-2" onClick={onUploadClick}>
-                  <Upload className="h-4 w-4" />
-                  {uploading ? "Uploading..." : "Upload Document"}
-                </Button>
               </div>
+
+              {/* <Button variant="outline" size="sm" className="border-gray-300 bg-white h-9 w-9 p-0" onClick={() => { if (refetch) refetch(); }}>
+                  <Filter className="h-4 w-4 text-gray-600" />
+                </Button> */}
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                className="hidden"
+                onChange={(e) => handleUpload(e.target.files)}
+              />
+
+              <Button size="sm" className="bg-primary hover:bg-blue-700 text-white h-9 px-4 gap-2 rounded-none" onClick={onUploadClick}>
+                <Upload className="h-4 w-4" />
+                {uploading ? "Uploading..." : "Upload Document"}
+              </Button>
             </div>
           </CardHeader>
 

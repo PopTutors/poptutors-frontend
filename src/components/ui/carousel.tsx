@@ -1,4 +1,4 @@
-'use client';
+;
 
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -28,7 +28,7 @@ type CarouselContextProps = {
   canScrollNext: boolean;
 } & CarouselProps;
 
-const CarouselContext = React.createContext<CarouselContextProps | null>(null);
+const CarouselContext = React.createContext < CarouselContextProps | null > (null);
 
 function useCarousel() {
   const context = React.useContext(CarouselContext);

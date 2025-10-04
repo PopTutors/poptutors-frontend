@@ -26,16 +26,16 @@ type LoginFormProps = {
 };
 
 const LoginForm: React.FC<LoginFormProps> = ({ role }) => {
-  const [form, setForm] = useState<LoginPayload>({ email: '', password: '' });
+  const [form, setForm] = useState < LoginPayload > ({ email: '', password: '' });
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const loginMutation = useGenericMutation<{ token: string }>();
+  const loginMutation = useGenericMutation < { token: string } > ();
   const forgotPasswordMutation = useGenericMutation();
-  const googleLoginMutation = useGenericMutation<{ token: string }>();
-  const googleButtonRef = useRef<HTMLDivElement>(null);
-  const { refetch: fetchUserProfile } = useFetch<any>(
+  const googleLoginMutation = useGenericMutation < { token: string } > ();
+  const googleButtonRef = useRef < HTMLDivElement > (null);
+  const { refetch: fetchUserProfile } = useFetch < any > (
     ['user-profile', form.email],
     `/users/profile`,
     false,
@@ -67,8 +67,20 @@ const LoginForm: React.FC<LoginFormProps> = ({ role }) => {
           }
         }
         fetchUserProfile();
+        // normalize role to be safe (handles uppercase etc.)
+        const normalizedRole = String(role || "").toLowerCase();
+
+        const roleToPath: Record<string, string> = {
+          student: "/student/dashboard",
+          teacher: "/teacher/dashboard",
+          manager: "/manager/dashboard",
+        };
+
+        // fallback route if role is unknown
+        const target = roleToPath[normalizedRole] ?? "/";
+
         setTimeout(() => {
-          navigate(role === 'student' ? '/student/dashboard' : '/teacher/dashboard');
+          navigate(target);
         }, 1500);
       },
       onErrorCallback: (err) => {
@@ -97,8 +109,19 @@ const LoginForm: React.FC<LoginFormProps> = ({ role }) => {
           localStorage.setItem('token', data.token);
         }
         fetchUserProfile();
+        const normalizedRole = String(role || "").toLowerCase();
+
+        const roleToPath: Record<string, string> = {
+          student: "/student/dashboard",
+          teacher: "/teacher/dashboard",
+          manager: "/manager/dashboard",
+        };
+
+        // fallback route if role is unknown
+        const target = roleToPath[normalizedRole] ?? "/";
+
         setTimeout(() => {
-          navigate(role === 'student' ? '/student/dashboard' : '/teacher/dashboard');
+          navigate(target);
         }, 1500);
       },
       onErrorCallback: (err) => {

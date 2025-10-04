@@ -9,6 +9,7 @@ type BubbleBox = {
 
 type StatsCardsProps = {
   bubbleBox: BubbleBox;
+  setStat: (stat: string) => void;
 };
 
 type StatCardProps = {
@@ -28,16 +29,22 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, color }) => (
   </div>
 );
 
-const StatsCards: React.FC<StatsCardsProps> = ({ bubbleBox }) => {
+const StatsCards: React.FC<StatsCardsProps> = ({ bubbleBox, setStat }) => {
   const assignmentsCount = bubbleBox?.assignments?.length ?? 0;
   const sessionsCount = bubbleBox?.sessions?.length ?? 0;
   const liveHelpsCount = bubbleBox?.liveHelps?.length ?? 0;
 
   return (
-    <div className="grid grid-cols-3 gap-4 mb-6">
-      <StatCard title="Assignments" value={assignmentsCount} color="bg-[#BCEFFF]" />
-      <StatCard title="Exam Help" value={sessionsCount} color="bg-[#FFCED4]" />
-      <StatCard title="Sessions" value={liveHelpsCount} color="bg-[#FFE4BB]" />
+    <div className="grid gap-4 mb-6 xsm:grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+      <div className='cursor-pointer' onClick={(e) => setStat("assignment")}>
+        <StatCard title="Assignments" value={assignmentsCount} color="bg-[#BCEFFF]" />
+      </div>
+      <div className='cursor-pointer' onClick={(e) => setStat("liveHelp")}>
+        <StatCard title="Exam Help" value={sessionsCount} color="bg-[#FFCED4]" />
+      </div>
+      <div className='cursor-pointer' onClick={(e) => setStat("sessions")}>
+        <StatCard title="Sessions" value={liveHelpsCount} color="bg-[#FFE4BB]" />
+      </div>
     </div>
   );
 };

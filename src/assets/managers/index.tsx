@@ -1,7 +1,7 @@
 import DeleteIcon from './delete.svg';
 import InactiveIcon from './inactive.svg';
 import ReOpenIcon from './reopen.svg';
-import EditIcon from './edit.svg';
+import ManagerEditIcon from './edit.svg';
 import RejectIcon from './Reject.svg';
 import FinalizeIcon from './Finalize.svg';
 import GoodIcon from './Good.svg';
@@ -37,11 +37,21 @@ import SessionDateIcon from './SessionDate.svg';
 import SessionMoneyIcon from './SessionMoney.svg';
 import ClockIcon from './ClockIcon.svg';
 import Completed from './Completed.svg';
+import HeaderProfile from './Header.svg';
+import MyDashboardIcon from './Dashboard.svg';
+import ManagerMessagesIcon from './Message.svg';
+import ManagerLogOutIcon from './Logout.svg';
+import ManageTeacher from './ManageTeacher.svg';
+import MyProfileIcon from './MyProfile.svg';
+import MySessionIcon from './MySession.svg';
+import FinanceHub from './FinanceHub.svg';
+import ManagerHelpIcon from './Help.svg';
+import SettingsIcon from './Settings.svg';
 export {
   DeleteIcon,
   InactiveIcon,
   ReOpenIcon,
-  EditIcon,
+  ManagerEditIcon,
   RejectIcon,
   FinalizeIcon,
   GoodIcon,
@@ -77,4 +87,14 @@ export {
   SessionMoneyIcon,
   ClockIcon,
   Completed,
+  HeaderProfile,
+  MyDashboardIcon,
+  ManagerMessagesIcon,
+  ManagerLogOutIcon,
+  ManageTeacher,
+  MyProfileIcon,
+  MySessionIcon,
+  FinanceHub,
+  ManagerHelpIcon,
+  SettingsIcon
 };

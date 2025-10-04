@@ -6,7 +6,7 @@ import HeroSection from './components/heroSection';
 import LoginForm from './components/loginForm';
 
 export default function Login() {
-  const [role, setRole] = useState<'student' | 'teacher'>('student');
+  const [role, setRole] = useState < 'student' | 'teacher' | 'manager' > ('student');
 
   return (
     <>
@@ -46,6 +46,12 @@ export default function Login() {
                   className="data-[state=active]:bg-accent py-4 font-semibold data-[state=active]:text-primary transition-all duration-200"
                 >
                   Teacher
+                </TabsTrigger>
+                <TabsTrigger
+                  value="manager"
+                  className="data-[state=active]:bg-accent py-4 font-semibold data-[state=active]:text-primary transition-all duration-200"
+                >
+                  Manager
                 </TabsTrigger>
               </TabsList>
             </Tabs>

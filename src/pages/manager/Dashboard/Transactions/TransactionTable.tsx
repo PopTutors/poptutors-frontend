@@ -37,17 +37,17 @@ function StatusBadge({ status }: { status: TransactionType['status'] }) {
 
 export default function Transactions({ payments }: { payments?: any }) {
   const [search, setSearch] = useState('');
-  const [category, setCategory] = useState<Category>('All');
+  const [category, setCategory] = useState < Category > ('All');
 
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
 
   // menu open state: id of row which has a menu open (or null)
-  const [openMenuFor, setOpenMenuFor] = useState<string | null>(null);
+  const [openMenuFor, setOpenMenuFor] = useState < string | null > (null);
 
-  // portal menu position
-  const [menuPos, setMenuPos] = useState<{ top: number; left: number } | null>(null);
+  // portal menu position (on mobile we'll use bottom sheet style)
+  const [menuPos, setMenuPos] = useState < { top?: number; left?: number; bottom?: number } | null > (null);
   // reference map of buttons so we can position the portal
-  const buttonsRef = useRef<Record<string, HTMLButtonElement | null>>({});
+  const buttonsRef = useRef < Record < string, HTMLButtonElement | null >> ({});
 
   // outside click (use pointerdown to avoid click race)
   useEffect(() => {
@@ -77,7 +77,10 @@ export default function Transactions({ payments }: { payments?: any }) {
       const next = prev === rowId ? null : rowId;
       if (next) {
         const btn = buttonsRef.current[rowId];
-        if (btn) {
+        // on small screens use bottom sheet
+        if (window.innerWidth < 640) {
+          setMenuPos({ bottom: 8, left: 8 });
+        } else if (btn) {
           const rect = btn.getBoundingClientRect();
           // desired width ~185 (same as your menu), place to keep it in viewport
           const menuWidth = 185 + 16; // some slack
@@ -125,6 +128,7 @@ export default function Transactions({ payments }: { payments?: any }) {
       if (!d) return 'N/A';
       try {
         const dObj = typeof d === 'string' ? new Date(d) : d;
+        // short format: on mobile we'll show relative if needed; keep this safe & simple here
         return dObj.toLocaleString('en-US', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
       } catch {
         return String(d);
@@ -156,8 +160,7 @@ export default function Transactions({ payments }: { payments?: any }) {
 
       const rawAmount = p.amount ?? 0;
       const isPositive = p.status === 'paid';
-      // const amountStr = `${isPositive ? '+' : '-'} $${Math.abs(rawAmount)}`;
-      const amountStr = `${isPositive ? '+' : '-'}` + rawAmount;
+      const amountStr = `${isPositive ? '+' : '-'}${rawAmount}`;
 
       const status = mapStatus(p.status);
       const amountType: TransactionType['amountType'] = isPositive ? 'positive' : 'negative';
@@ -209,17 +212,17 @@ export default function Transactions({ payments }: { payments?: any }) {
 
   // columns
   const columns: Column<TransactionType>[] = useMemo(() => [
-    { key: 'id', label: 'Job ID', width: 110 },
+    { key: 'id', label: 'Job ID', width: 160 },
     { key: 'dateTime', label: 'Date & Time', width: 320 },
-    { key: 'payment', label: 'Payment', width: 130 },
-    { key: 'paymentType', label: 'Payment Type', width: 190 },
+    { key: 'payment', label: 'Payment', width: 160 },
+    { key: 'paymentType', label: 'Payment Type', width: 210 },
     {
       key: 'amount',
       label: 'Amount',
-      width: 190,
+      width: 240,
       render: (r) => <span className={`${r.amountType === 'positive' ? 'text-mentoos-status-success' : 'text-mentoos-status-danger'} whitespace-nowrap`}>{r.amount}</span>,
     },
-    { key: 'status', label: 'Status', width: 190, render: (r) => <StatusBadge status={r.status} /> },
+    { key: 'status', label: 'Status', width: 250, render: (r) => <StatusBadge status={r.status} /> },
     {
       key: 'action',
       label: 'Action',
@@ -250,85 +253,125 @@ export default function Transactions({ payments }: { payments?: any }) {
     });
   }, [search, category, rowsToUse]);
 
-  // Portal content for menu
+  // Portal content for menu: on mobile render a fixed bottom sheet, on desktop render small popup
   const menuPortal = (openMenuFor && menuPos) ? createPortal(
     <div
       data-action-menu-portal
       onClick={(e) => e.stopPropagation()}
-      style={{ position: 'absolute', top: menuPos.top, left: menuPos.left, zIndex: 9999 }}
+      // use fixed so it works with scrolling; styles below adapt for mobile vs desktop
+      style={{ position: 'fixed', zIndex: 9999, top: menuPos.top ?? undefined, bottom: menuPos.bottom ?? undefined, left: menuPos.bottom ? 8 : menuPos.left, right: menuPos.bottom ? 8 : undefined }}
     >
-      <div className="p-[16px] w-[185px] bg-white border border-black/10 shadow-lg rounded-md">
-        {/* Use the currently opened row data to wire handlers */}
-        {(() => {
-          const row = filtered.find((r) => r.id === openMenuFor) ?? rowsToUse.find((r) => r.id === openMenuFor);
-          if (!row) return null;
-          return (
-            <>
-              <button
-                onClick={(e) => { e.stopPropagation(); handleViewReceipt(row); }}
-                className="flex gap-2 w-full border-b border-gray text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors"
-              >
-                <img src={ReceiptIcon} alt="receipt" /> View receipt
-              </button>
+      {/* Desktop small popup */}
+      {menuPos.bottom ? (
+        <div className="p-4 bg-white border border-black/10 shadow-lg rounded-t-lg w-[calc(100%-16px)] mx-auto">
+          <div className="max-w-[640px] mx-auto">
+            {(() => {
+              const row = filtered.find((r) => r.id === openMenuFor) ?? rowsToUse.find((r) => r.id === openMenuFor);
+              if (!row) return null;
+              return (
+                <>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleViewReceipt(row); }}
+                    className="flex gap-2 w-full text-left px-4 py-3 text-base hover:bg-gray-50 transition-colors rounded"
+                  >
+                    <img src={ReceiptIcon} alt="receipt" /> View receipt
+                  </button>
 
-              <button
-                onClick={(e) => { e.stopPropagation(); handleViewJob(row); }}
-                className="flex gap-2 w-full border-b border-gray text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors mt-2"
-              >
-                <img src={JobIcon} alt="job" /> View job
-              </button>
-            </>
-          );
-        })()}
-      </div>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleViewJob(row); }}
+                    className="flex gap-2 w-full text-left px-4 py-3 text-base hover:bg-gray-50 transition-colors rounded mt-2"
+                  >
+                    <img src={JobIcon} alt="job" /> View job
+                  </button>
+                </>
+              );
+            })()}
+          </div>
+        </div>
+      ) : (
+        <div className="p-[16px] w-[185px] bg-white border border-black/10 shadow-lg rounded-md">
+          {/* Desktop popup */}
+          {(() => {
+            const row = filtered.find((r) => r.id === openMenuFor) ?? rowsToUse.find((r) => r.id === openMenuFor);
+            if (!row) return null;
+            return (
+              <>
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleViewReceipt(row); }}
+                  className="flex gap-2 w-full border-b border-gray text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors"
+                >
+                  <img src={ReceiptIcon} alt="receipt" /> View receipt
+                </button>
+
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleViewJob(row); }}
+                  className="flex gap-2 w-full border-b border-gray text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors mt-2"
+                >
+                  <img src={JobIcon} alt="job" /> View job
+                </button>
+              </>
+            );
+          })()}
+        </div>
+      )}
     </div>,
     document.body
   ) : null;
 
   return (
-    <div className="bg-white pb-6 p-[24px]">
-      <div className="flex items-center gap-3 mb-5">
-        <h2 className="text-[20px] font-semibold text-mentoos-text-primary flex-1">Recent Transactions</h2>
+    <div className="bg-white pb-6 px-4 sm:p-[24px]">
+      {/* Header + controls */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-5">
+        <h2 className="text-[20px] font-semibold text-mentoos-text-primary">Recent Transactions</h2>
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-3 px-4 py-3 border border-black/10 bg-white w-[320px]">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:ml-auto w-full sm:w-auto">
+          {/* Search (full width on mobile) */}
+          <div className="flex items-center gap-3 px-3 py-2 border border-black/10 bg-white w-full sm:w-[320px] rounded">
             <Search className="w-5 h-5 text-mentoos-text-primary/60" />
-            <input value={search} onChange={(e) => setSearch(e.target.value)} type="text" placeholder="Search..."
-              className="flex-1 bg-transparent border-none outline-none text-base text-mentoos-text-secondary placeholder:text-mentoos-text-secondary " />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              type="text"
+              placeholder="Search..."
+              className="flex-1 bg-transparent border-none outline-none text-base text-mentoos-text-secondary placeholder:text-mentoos-text-secondary"
+            />
           </div>
 
-          <div className="relative" data-category-filter>
-            <button onClick={() => setCategoryDropdownOpen((s) => !s)}
-              className="flex items-center h-[48px] gap-2 px-4 py-1.5 border border-black/10 bg-white text-mentoos-text-dark hover:bg-gray-50 transition-colors">
+          {/* Category dropdown (full width on mobile) */}
+          <div className="relative w-full sm:w-auto" data-category-filter>
+            <button
+              onClick={() => setCategoryDropdownOpen((s) => !s)}
+              className="flex items-center justify-between w-full sm:w-auto h-[48px] gap-2 px-4 py-1.5 border border-black/10 bg-white text-mentoos-text-dark hover:bg-gray-50 transition-colors rounded"
+            >
               <span className="text-base">{category}</span>
               <ChevronDown className="w-5 h-5 text-gray-400" />
             </button>
 
             {categoryDropdownOpen && (
-              <div className="absolute right-4 mt-2 w-[190px] bg-white border border-black/10 shadow-lg rounded-md z-50 p-[16px]">
+              <div className="absolute right-0 mt-2 w-[190px] bg-white border border-black/10 shadow-lg rounded-md z-50 p-[8px]">
                 <button onClick={() => { setCategory('All'); setCategoryDropdownOpen(false); }}
-                  className={`border-b border-grey w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors  ${category === 'All' ? 'font-medium' : ''}`}>
-                  All 
+                  className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-50 transition-colors ${category === 'All' ? 'font-medium' : ''}`}>
+                  All ({counts.All})
                 </button>
 
                 <button onClick={() => { setCategory('Student Payment'); setCategoryDropdownOpen(false); }}
-                  className={`border-b border-grey w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${category === 'Student Payment' ? 'font-medium' : ''}`}>
-                  Student Payment 
+                  className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-50 transition-colors ${category === 'Student Payment' ? 'font-medium' : ''}`}>
+                  Student Payment ({counts['Student Payment']})
                 </button>
 
                 <button onClick={() => { setCategory('Teacher Payment'); setCategoryDropdownOpen(false); }}
-                  className={`border-b border-grey w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${category === 'Teacher Payment' ? 'font-medium' : ''}`}>
-                  Teacher Payment 
+                  className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-50 transition-colors ${category === 'Teacher Payment' ? 'font-medium' : ''}`}>
+                  Teacher Payment ({counts['Teacher Payment']})
                 </button>
 
                 <button onClick={() => { setCategory('Refund'); setCategoryDropdownOpen(false); }}
-                  className={`border-b border-grey w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${category === 'Refund' ? 'font-medium' : ''}`}>
-                  Refund
+                  className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-50 transition-colors ${category === 'Refund' ? 'font-medium' : ''}`}>
+                  Refund ({counts.Refund})
                 </button>
 
                 <button onClick={() => { setCategory('Referral'); setCategoryDropdownOpen(false); }}
-                  className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${category === 'Referral' ? 'font-medium' : ''}`}>
-                  Referral 
+                  className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-50 transition-colors ${category === 'Referral' ? 'font-medium' : ''}`}>
+                  Referral ({counts.Referral})
                 </button>
               </div>
             )}
@@ -336,8 +379,15 @@ export default function Transactions({ payments }: { payments?: any }) {
         </div>
       </div>
 
-      {/* Table */}
-      <DataGrid columns={columns} rows={filtered} pageSize={5} />
+      {/* Table: allow horizontal scroll on small screens */}
+      <div className="-mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="overflow-x-auto">
+          {/* give table a reasonable min-width so columns don't collapse; user can scroll horizontally on mobile */}
+          <div className="min-w-[720px]">
+            <DataGrid columns={columns} rows={filtered} pageSize={5} />
+          </div>
+        </div>
+      </div>
 
       {/* Render portal menu into document.body */}
       {menuPortal}

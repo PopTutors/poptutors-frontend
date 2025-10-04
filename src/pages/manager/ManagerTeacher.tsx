@@ -35,6 +35,8 @@ import { useGenericMutation } from '../../api/useGenericMutation';
 
 // Bunny CDN uploader util (adjust path if needed)
 import { uploadToBunnyCDN } from '../../utils/uploadToBunnyCdn';
+import { paths } from '../../config/path';
+import { useNavigate } from 'react-router-dom';
 
 type Teacher = {
   id: number | string;
@@ -151,6 +153,7 @@ function TeacherCard({
   onBlockToggle: (t: Teacher) => void;
   onDelete: (id: string | number) => void;
 }) {
+  const navigate = useNavigate();
   return (
     <article className="bg-card overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-150">
       <div className="relative">
@@ -237,7 +240,9 @@ function TeacherCard({
           </div>
 
           <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center border border-border">
-            <img src={OpenIcon} alt="Open documents" />
+            <img src={OpenIcon} alt="Open documents" className='cursor-pointer' onClick={(e) => {
+              navigate(paths.manager.teacherProfile.getHref(teacher.id))
+            }} />
           </div>
         </div>
       </div>
@@ -282,13 +287,16 @@ export default function ManageTeacher(): JSX.Element {
             id: p._id,
             name: p.userId?.name || p.name || 'Unknown',
             subject: p.skills?.join(', ') || p.subject || 'N/A',
-            description: p.experience || p.description || 'No description',
+            description: Array.isArray(p.experience)
+              ? p.experience.map((exp) => `${exp.title} at ${exp.company}`).join(', ')
+              : p.experience || p.description || 'No description',
             image: p.profileImage || p.image,
-            rating: p.avgRating || 5,
+            rating: p.avgRating,
             blocked: p.blocked || false,
             linkedin: p.linkedin,
             instagram: p.instagram,
           }));
+
           setTeachers(mapped);
         }
       },

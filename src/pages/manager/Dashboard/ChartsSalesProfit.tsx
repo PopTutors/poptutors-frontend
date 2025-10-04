@@ -1,4 +1,4 @@
-'use client';
+;
 import React from 'react';
 import {
   BarChart,
@@ -67,7 +67,7 @@ function CustomTooltip({ active, payload, coordinate, totals }: any) {
   return null;
 }
 
-export default function SalesChart({ sales }: { sales?: any }) {
+export default function SalesChart({ sales, stat }: { sales?: any; stat?: string }) {
   // use sales.chartData if present, else fallback to static design data
   const chartData =
     sales && Array.isArray(sales.chartData) && sales.chartData.length ? sales.chartData : FALLBACK_DATA;
@@ -77,39 +77,68 @@ export default function SalesChart({ sales }: { sales?: any }) {
   const totalProfit = Number(sales?.totalProfit ?? sales?.data?.totalProfit ?? 0);
   const growthRate = Number(sales?.growthRate ?? sales?.data?.growthRate ?? 0);
 
+  // map many possible stat values to the label used in the data
+  const statKey = typeof stat === 'string' ? stat.trim().toLowerCase() : '';
+  const labelMap: Record<string, string> = {
+    assignment: 'Assignment',
+    assignemnet: 'Assignment', // common typo from user
+    assignments: 'Assignment',
+    session: 'Sessions',
+    sessions: 'Sessions',
+    'livehelp': 'Live Help',
+    'live_help': 'Live Help',
+    'live-help': 'Live Help',
+    'live help': 'Live Help',
+  };
+
+  const mappedLabel = labelMap[statKey] ?? null;
+
+  // filtered data — if mappedLabel is null, show all
+  const filteredData = mappedLabel ? chartData.filter((d: any) => String(d.label).toLowerCase().trim() === mappedLabel.toLowerCase().trim()) : chartData;
+
+  const chartTitle = mappedLabel ? `${mappedLabel} — Sales & Profit` : 'Sales & Profit';
+
   return (
-    <div className="bg-white border border-black/10 p-6 flex-1">
+    <div className="bg-white p-6 flex-1">
       <div className="flex items-start gap-4 mb-6">
         <div className="flex-1">
-          <h2 className="text-xl font-semibold text-mentoos-text-primary mb-2">Sales & Profit</h2>
+          <h2 className="text-xl font-semibold text-mentoos-text-primary mb-2">{chartTitle}</h2>
           <p className="text-sm text-mentoos-text-primary/60">Projections vs Actuals</p>
         </div>
       </div>
 
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={chartData} margin={{ top: 50, right: 30, left: 0, bottom: 20 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.1)" />
-          <XAxis dataKey="label" tick={{ fontSize: 12, fill: 'hsl(var(--mentoos-text-primary))' }} />
-          <YAxis tick={{ fontSize: 12, fill: 'hsl(var(--mentoos-text-primary))' }} domain={[0, 250]} />
-          <Tooltip
-            content={<CustomTooltip totals={{ totalRevenue, totalProfit, growthRate }} />}
-            cursor={{ fill: 'rgba(0,0,0,0.05)' }}
-          />
+      {filteredData.length === 0 ? (
+        <div className="flex h-[300px] items-center justify-center">
+          <div className="text-sm text-gray-500">
+            No data available for <span className="font-medium text-gray-700">{stat}</span>
+          </div>
+        </div>
+      ) : (
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={filteredData} margin={{ top: 50, right: 30, left: 0, bottom: 20 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.1)" />
+            <XAxis dataKey="label" tick={{ fontSize: 12, fill: 'hsl(var(--mentoos-text-primary))' }} />
+            <YAxis tick={{ fontSize: 12, fill: 'hsl(var(--mentoos-text-primary))' }} domain={[0, 250]} />
+            <Tooltip
+              content={<CustomTooltip totals={{ totalRevenue, totalProfit, growthRate }} />}
+              cursor={{ fill: 'rgba(0,0,0,0.05)' }}
+            />
 
-          {/* Base solid bar */}
-          <Bar dataKey="base" stackId="a" barSize={94}>
-            {chartData.map((entry: any, index: number) => (
-              <Cell key={`cell-base-${index}`} fill={entry.baseClass} />
-            ))}
-          </Bar>
+            {/* Base solid bar */}
+            <Bar dataKey="base" stackId="a" barSize={94}>
+              {filteredData.map((entry: any, index: number) => (
+                <Cell key={`cell-base-${index}`} fill={entry.baseClass} />
+              ))}
+            </Bar>
 
-          <Bar dataKey="extra" stackId="a" radius={[6, 6, 0, 0]} barSize={94}>
-            {chartData.map((entry: any, index: number) => (
-              <Cell key={`cell-extra-${index}`} fill={entry.extraClass} />
-            ))}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+            <Bar dataKey="extra" stackId="a" radius={[6, 6, 0, 0]} barSize={94}>
+              {filteredData.map((entry: any, index: number) => (
+                <Cell key={`cell-extra-${index}`} fill={entry.extraClass} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      )}
     </div>
   );
 }

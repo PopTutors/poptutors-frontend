@@ -37,7 +37,7 @@ const iconFor = (type: SocialType) => {
 const normalizeHref = (link: SocialLink): string | undefined => {
     if (link.href && link.href.trim().length) return link.href;
 
-    const v = link.value.trim();
+    const v = link?.value?.trim();
 
     if (link.type === "email") {
         return `mailto:${v}`;

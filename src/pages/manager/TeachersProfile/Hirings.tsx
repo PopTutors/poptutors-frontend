@@ -4,9 +4,7 @@ import Skills from "./Skills";
 import TabsSection from "./TabsSection";
 import { SocialLinks, type SocialLink } from "./SocialLinks";
 import { useFetch } from "../../../api";
-
-// TODO: Replace with actual userId from context, route, or props
-const userId = "USER_ID";
+import { useParams } from "react-router-dom";
 
 const DEFAULT_LINKS: SocialLink[] = [
   { id: "1", type: "email", label: "Email", value: "jakegyll@email.com" },
@@ -17,12 +15,30 @@ const DEFAULT_LINKS: SocialLink[] = [
 ];
 
 const Hirings = () => {
+  const params = useParams < { id?: string } > ();
+  const id = params.id;
+
+  // debug: check what params actually contain
+  console.log("route params:", params);
+
+  // If your useFetch hook accepts `null` as the url to skip the fetch, use that.
+  // If it doesn't, wrap it with a conditional (see note below).
+  const shouldFetch = Boolean(id);
   const { data: profile, isLoading, error } = useFetch(
-    ["profile"],
-    `/profile`,
+    // key includes id so cache is specific
+    ["profile", id],
+    shouldFetch ? `/profile/${id}` : null,
     true,
     { requiresAuth: true }
   );
+
+  if (!id) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-yellow-600">
+        Missing profile id in route. Check that the route is defined as <code>/profile/:id</code> and that you're navigating with an id.
+      </div>
+    );
+  }
 
   // Loading & Error UI
   if (isLoading) {
@@ -51,7 +67,7 @@ const Hirings = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="w-full mb-6">
           <ProfileHeader profile={profile} />

@@ -9,6 +9,7 @@ export type RequestItem = {
   amount?: number;
   status?: string;
   createdAt?: string;
+  deadline?: string; // optional deadline field
   createdBy?: {
     _id?: string;
     name?: string;
@@ -157,36 +158,94 @@ export default function RequestCards({ items = [], onViewAll }: RequestCardsProp
     if (!type) return 'Request';
     const normalized = String(type).toLowerCase();
     if (normalized === 'assignment') return 'Assignment';
-    if (normalized === 'livehelp' || normalized === 'liveHelp' || normalized === 'live_help') return 'Live Help';
+    if (normalized === 'livehelp' || normalized === 'livehelp' || normalized === 'live_help') return 'Live Help';
     if (normalized === 'session' || normalized === 'sessions') return 'Session';
     // fallback: capitalize first letter
     return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+  };
+
+  // relative time formatter (returns strings like "3 days ago", "2 hours ago", "in 4 days")
+  const formatRelative = (dateLike?: string | Date | null) => {
+    if (!dateLike) return 'N/A';
+    const date = dateLike instanceof Date ? dateLike : new Date(dateLike);
+    if (Number.isNaN(date.getTime())) return 'N/A';
+
+    const now = new Date();
+    const diffMs = date.getTime() - now.getTime(); // future positive, past negative
+    const diffSec = Math.round(diffMs / 1000);
+
+    const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' });
+
+    const units: [number, Intl.RelativeTimeFormatUnit][] = [
+      [60, 'second'],
+      [60, 'minute'],
+      [24, 'hour'],
+      [7, 'day'],
+      [4.34524, 'week'], // avg weeks per month
+      [12, 'month'],
+      [Number.POSITIVE_INFINITY, 'year'],
+    ];
+
+    let abs = Math.abs(diffSec);
+    let value: number;
+    let unit: Intl.RelativeTimeFormatUnit = 'second';
+
+    // seconds -> minutes -> hours -> days -> weeks -> months -> years
+    for (let i = 0, acc = abs; i < units.length; i++) {
+      const [threshold, unitName] = units[i];
+      if (i === 0) {
+        // seconds handled here
+        if (abs < 10) return 'just now';
+        if (abs < 60) {
+          value = diffSec;
+          unit = 'second';
+          return rtf.format(Math.round(value), unit);
+        }
+        acc = Math.round(abs / threshold);
+      } else {
+        const prevProduct = units.slice(0, i).reduce((p, c) => p * c[0], 1);
+        const nextThreshold = units[i][0];
+        const converted = Math.round(diffSec / prevProduct);
+
+        // decide if this unit makes sense
+        const approx = Math.abs(converted);
+        if (approx < nextThreshold || i === units.length - 1) {
+          value = converted;
+          // map unitName ('minute'|'hour'|'day'|...) typed as Intl.RelativeTimeFormatUnit
+          unit = unitName as Intl.RelativeTimeFormatUnit;
+          return rtf.format(value, unit);
+        }
+      }
+    }
+
+    // fallback
+    return date.toLocaleString();
   };
 
   // map incoming API items to card props (with safe fallbacks)
   const mappedRequests =
     items && items.length
       ? items.map((it) => {
-          const createdAt = it.createdAt ? new Date(it.createdAt) : undefined;
-          const date = createdAt ? createdAt.toLocaleDateString() : 'N/A';
-          const deadline = it['deadline'] ? new Date(it['deadline']).toLocaleDateString() : 'N/A';
-          const price = typeof it.amount === 'number' && it.amount > 0 ? `$${it.amount}` : 'TBD';
-          const title = it.title ?? it.type ?? 'Untitled request';
-          const status = it.status ?? 'Unknown';
-          const subject = it.subject ?? (it.type === 'liveHelp' ? 'Live Help' : 'General');
-          const badgeLabel = typeToBadge(it.type);
+        const createdAt = it.createdAt ? new Date(it.createdAt) : undefined;
+        const date = formatRelative(createdAt ?? undefined);
+        const deadline = it.deadline ? formatRelative(new Date(it.deadline)) : 'N/A';
+        const price = typeof it.amount === 'number' && it.amount > 0 ? `$${it.amount}` : 'TBD';
+        const title = it.title ?? it.type ?? 'Untitled request';
+        const status = it.status ?? 'Unknown';
+        const subject = it.subject ?? (it.type === 'liveHelp' ? 'Live Help' : 'General');
+        const badgeLabel = typeToBadge(it.type);
 
-          return {
-            key: it._id ?? Math.random().toString(36).slice(2, 9),
-            title,
-            price,
-            date,
-            deadline,
-            status,
-            subject,
-            badgeLabel,
-          };
-        })
+        return {
+          key: it._id ?? Math.random().toString(36).slice(2, 9),
+          title,
+          price,
+          date,
+          deadline,
+          status,
+          subject,
+          badgeLabel,
+        };
+      })
       : fallbackRequests;
 
   return (

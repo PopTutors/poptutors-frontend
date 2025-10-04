@@ -45,17 +45,17 @@ export function ProfileHeader({ profile }) {
                 </div>
                 <div className="flex-1 items-center self-center">
                     <h1 className="text-[24px] font-semibold text-gray-900">{user.name}</h1>
-                    <p className="text-[18px] text-gray-600 mb-2">{profile?.experience || ""}</p>
+                    <p className="text-[18px] text-gray-600 mb-2">{profile?.experience[0]?.title + " at " + profile?.experience[0]?.company || ""}</p>
                     <div className="flex items-center gap-1 text-gray-500 text-sm mb-4">
                         <MapPin className="w-[18px] h-[18px]" />
                         <span className="text-[18px] text-[#595959]">{profile?.country || ""}</span>
                     </div>
-                    {true && (
+                    {/* {true && (
                         <div className="inline-flex items-center justify-center gap-2 px-3 py-1 bg-[#56CDAD1A] text-[#56CDAD] text-[16px] text-center border border-green-200 w-[296px] h-[48px]">
                             <img src={FlagIcon} alt="FlagIcon" />
                             OPEN FOR OPPORTUNITIES
                         </div>
-                    )}
+                    )} */}
                 </div>
 
 

@@ -27,7 +27,7 @@ export function useFetch<T>(
     useTokenFromCookie?: boolean; // New option to use token from cookie
     cookieName?: string; // Custom cookie name (defaults to 'authToken')
     requiresAuth?: boolean; // Whether this request requires authentication
-  }
+  },
 ) {
   const {
     onSuccessCallback,
