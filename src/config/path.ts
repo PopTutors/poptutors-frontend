@@ -90,7 +90,10 @@ export const paths = {
       },
       assignmentDetails: {
         path: '/student/assignment/:id',
-        getHref: (id: string) => { console.log(`/student/assignment/${id}`); return `/student/assignment/${id}`; },
+        getHref: (id: string) => {
+          console.log(`/student/assignment/${id}`);
+          return `/student/assignment/${id}`;
+        },
       },
     },
     assignmentSubmission: {

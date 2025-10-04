@@ -35,8 +35,7 @@ export function useGenericMutation<TResponse = any>() {
       // Set headers if auth is not required (override default auth)
       if (!requiresAuth) {
         config.headers = {
-          'Authorization': '', // Clear auth header
-
+          Authorization: '', // Clear auth header
         };
       }
       // else {
@@ -49,7 +48,7 @@ export function useGenericMutation<TResponse = any>() {
       //     config.withCredentials = true;
       // }
 
-      console.log("Making API request:", config);
+      console.log('Making API request:', config);
 
       let axiosResponse;
 
