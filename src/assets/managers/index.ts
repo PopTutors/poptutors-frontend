@@ -19,7 +19,7 @@ import LiveHelp from './LiveHelp.svg';
 import Students from './Students.svg';
 import HiringFile from './HiringFile.svg';
 import Sessions from './Session.svg';
-import FeedbackIcon from './feedback.svg';
+import FeedbackIcon from './Feedback.svg';
 import OpenIcon from './open.svg';
 import DashboardFileIcon from './dashboard-file.svg';
 import JobIcon from './job.svg';
