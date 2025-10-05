@@ -100,17 +100,17 @@ export default function Notifications() {
   };
 
   return (
-    <div className="w-full max-h-[430px] bg-white p-6 flex flex-col gap-6 overflow-y-scroll">
+    <div className="w-full h-[430px] bg-white p-6 flex flex-col gap-6 overflow-y-scroll">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-mentoos-text-primary">Notifications</h2>
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-[20px] font-semibold text-[#141414] font-inter">Notifications</h2>
 
         {/* Filter Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <button
             ref={buttonRef}
             onClick={handleDropdownToggle}
-            className="flex items-center gap-4 px-4 py-1.5 border border-black/10 bg-white text-mentoos-text-primary hover:bg-gray-50 transition-colors"
+            className="self-end flex items-center gap-4 px-4 py-1.5 border border-black/10 bg-white text-mentoos-text-primary hover:bg-gray-50 transition-colors"
           >
             <span className="text-base">{currentFilterLabel}</span>
             <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
@@ -118,15 +118,15 @@ export default function Notifications() {
 
           {/* Dropdown Menu */}
           {isDropdownOpen && (
-            <div className={`absolute mt-2 w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-20 ${dropdownPosition === 'left' ? 'left-0' : 'right-0'
+            <div className={`absolute mt-2 w-36 bg-white border border-gray-200  shadow-lg z-20 ${dropdownPosition === 'left' ? 'right-100' : 'right-0'
               }`}>
               {filterOptions.map((option) => (
                 <button
                   key={option.value}
                   onClick={() => handleFilterSelect(option.value)}
-                  className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg transition-colors ${selectedFilter === option.value
-                    ? 'bg-blue-50 text-blue-600 font-medium'
-                    : 'text-mentoos-text-primary'
+                  className={`font-inter text-[16px] text-left w-full px-4 py-2  hover:bg-gray-50  transition-colors ${selectedFilter === option.value
+                    ? 'text-primary'
+                    : 'text-[#141414]'
                     }`}
                 >
                   {option.label}

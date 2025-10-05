@@ -14,6 +14,7 @@ import Line from '../../assets/line.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '../ui';
 import { paths } from '../../config/path';
+import { AddIcon } from '../../assets/managers';
 
 interface HeaderProps {
   onSidebarToggle?: () => void;
@@ -179,7 +180,7 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen }) => {
           // Manager: Post A Job button with dropdown actions
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button className="bg-primary w-[158px] h-[50px] font-inter text-[16px]">+ Post A Job</Button>
+              <Button className="bg-primary w-[158px] h-[50px] font-inter text-[16px]"><img src={AddIcon} className='w-[24px] h-[24px]' /> Post A Job</Button>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" className="w-[200px]">

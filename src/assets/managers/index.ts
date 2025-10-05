@@ -47,6 +47,10 @@ import MySessionIcon from './MySession.svg';
 import FinanceHub from './FinanceHub.svg';
 import ManagerHelpIcon from './Help.svg';
 import SettingsIcon from './Settings.svg';
+import DashboardAssignment from './DashboardAssignment.svg';
+import DashboardSession from './DashboardSession.svg';
+import DashboardLiveHelp from './DashboardLiveHelp.svg';
+import AddIcon from './add.svg';
 export {
   DeleteIcon,
   InactiveIcon,
@@ -96,5 +100,9 @@ export {
   MySessionIcon,
   FinanceHub,
   ManagerHelpIcon,
-  SettingsIcon
+  SettingsIcon,
+  DashboardAssignment,
+  DashboardLiveHelp,
+  DashboardSession,
+  AddIcon
 };

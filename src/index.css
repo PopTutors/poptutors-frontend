@@ -75,6 +75,9 @@
   --ag-font-size: 14px;
   --ag-font-family: 'Inter', sans-serif;
 }
+.rdp-root{
+  --rdp-accent-color: #019ACB;
+}
 :root {
   --radius: 0.625rem;
 
@@ -133,6 +136,7 @@
     --mentoos-pink-light: #ffb4bd;
     --mentoos-orange: #ffd089;
     --mentoos-orange-light: #ffd992;
+
 }
 
 .dark {
@@ -162,13 +166,30 @@
   --sidebar-accent-foreground: #f9fafb;
   --sidebar-border: rgba(255, 255, 255, 0.1);
   --sidebar-ring: #3b82f6;
-  
 }
 
 body {
   font-family: var(--font-inter);
   color: #000000;
   background: #ffff;
+}
+.rdp-root {
+  --rdp-accent-color: blue; /* Use blue as the accent color. */
+}
+.rdp-month{
+  width: 1000px;
+}
+.rdp-month_grid {
+  width: 100%;
+}
+
+.rdp-range_start .rdp-day_button {
+    background-color: #018cb9;
+    color: var(--rdp-range_start-color);
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.rdp-chevron{
+  fill: #018cb9;
 }
 
 @layer base {

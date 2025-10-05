@@ -34,7 +34,7 @@ interface RequestCardProps {
 }
 function RequestCard({ title, price, date, deadline, status, subject, badgeLabel }: RequestCardProps) {
   return (
-    <div className="bg-white border border-black/10 p-6 flex flex-col gap-4 shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white border border-black/10 p-6 flex flex-col gap-4 shadow-md hover:shadow-md transition-shadow">
       {/* Header */}
       <div className="flex items-start gap-4">
         <div className="flex-1 min-w-0">
@@ -252,7 +252,7 @@ export default function RequestCards({ items = [], onViewAll }: RequestCardsProp
     <div className="bg-white p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-mentoos-text-primary">New Requests</h2>
+        <h2 className="text-[20px] font-inter text-[#141414] font-semibold">New Requests</h2>
         <button
           onClick={() => onViewAll?.()}
           className="text-xl text-mentoos-text-primary hover:text-mentoos-primary transition-colors"

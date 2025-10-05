@@ -1,190 +1,268 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { DateIcon } from "../../../assets/managers";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Box, Dialog, DialogContent, DialogActions, DialogTitle, Button, Typography } from "@mui/material";
+import { DayPicker } from "react-day-picker";
+import type { DateRange } from "react-day-picker";
+import "react-day-picker/dist/style.css"; // Correct import path
 
-const startOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth(), 1);
-const endOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth() + 1, 0);
-const addMonths = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth() + n, 1);
-const isSameDay = (a?: Date | null, b?: Date | null) =>
-  !!a && !!b && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
-const dateKey = (d: Date) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
-const clamp = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
-
-const inRange = (day: Date, start?: Date | null, end?: Date | null) => {
-  if (!start || !end) return false;
-  const t = clamp(day).getTime();
-  const s = clamp(start).getTime();
-  const e = clamp(end).getTime();
-  return t >= Math.min(s, e) && t <= Math.max(s, e);
-};
-
-const weekdays = ["S", "M", "T", "W", "T", "F", "S"];
-
-export default function Header() {
+export default function Header(): JSX.Element {
   const [open, setOpen] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState<Date>(startOfMonth(new Date()));
-  const [startDate, setStartDate] = useState<Date | null>(new Date(2024, 2, 17));
-  const [endDate, setEndDate] = useState<Date | null>(new Date(2024, 2, 19));
+  const today = new Date();
+  const tomorrow = new Date(today);       // copy
+  tomorrow.setDate(today.getDate() + 1);
 
-  const monthGrid = useMemo(() => {
-    const start = startOfMonth(currentMonth);
-    const end = endOfMonth(currentMonth);
-    const days: Date[] = [];
+  const [startDate, setStartDate] = useState < Date | null > (today);
+  const [endDate, setEndDate] = useState < Date | null > (tomorrow);
+  const [range, setRange] = useState < DateRange | undefined > ({ from: today, to: tomorrow });
 
-    for (let i = 0; i < start.getDay(); i++) {
-      const d = new Date(start);
-      d.setDate(start.getDate() - (start.getDay() - i));
-      days.push(d);
-    }
-    for (let d = 1; d <= end.getDate(); d++) {
-      days.push(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), d));
-    }
-    while (days.length % 7 !== 0) {
-      const last = days[days.length - 1];
-      const next = new Date(last);
-      next.setDate(last.getDate() + 1);
-      days.push(next);
-    }
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-    const weeks: Date[][] = [];
-    for (let i = 0; i < days.length; i += 7) weeks.push(days.slice(i, i + 7));
-    return weeks;
-  }, [currentMonth]);
-
-  const handleDayClick = (d: Date) => {
-    if (!startDate || (startDate && endDate)) {
-      setStartDate(clamp(d));
-      setEndDate(null);
-      return;
-    }
-    if (startDate && !endDate) {
-      const clicked = clamp(d);
-      if (clicked.getTime() < startDate.getTime()) {
-        setEndDate(startDate);
-        setStartDate(clicked);
-      } else {
-        setEndDate(clicked);
-      }
-    }
+  const onSelectRange = (r?: DateRange) => {
+    setRange(r);
+    setStartDate(r?.from ?? null);
+    setEndDate(r?.to ?? null);
   };
 
   const clearRange = () => {
+    setRange(undefined);
     setStartDate(null);
     setEndDate(null);
   };
 
-  const apply = () => setOpen(false);
+  const applyRange = () => {
+    handleClose();
+  };
 
-  const labelText = () => {
+  const labelText = (): string => {
     if (!startDate && !endDate) return "Jul 19 - Jul 25";
     if (startDate && !endDate) return `${startDate.toLocaleDateString(undefined, { month: "short", day: "numeric" })} - ...`;
-    if (startDate && endDate) {
-      return `${startDate.toLocaleDateString(undefined, { month: "short", day: "numeric" })} - ${endDate.toLocaleDateString(undefined, { month: "short", day: "numeric" })}`;
-    }
+    if (startDate && endDate)
+      return `${startDate.toLocaleDateString(undefined, { month: "short", day: "numeric" })} - ${endDate.toLocaleDateString(
+        undefined,
+        { month: "short", day: "numeric" }
+      )}`;
     return "Select range";
   };
 
   return (
-    <div className="flex justify-between items-center mb-6">
+    <>
+      {/* CSS styling to match your screenshot exactly */}
+      <style>{`
+        :root {
+          --picker-primary: #019ACB;
+          --picker-range-bg: #eef6f8;
+          --picker-border-subtle: rgba(0,0,0,0.08);
+        }
+
+        /* Override default DayPicker variables */
+        .rdp {
+          --rdp-cell-size: 40px;
+          --rdp-accent-color: var(--picker-primary);
+          --rdp-background-color: var(--picker-range-bg);
+        }
+
+        /* Day button base styling */
+        .rdp-day_button {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          border: none;
+          background: transparent;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+          position: relative;
+          z-index: 2;
+        }
+
+        /* Range background band - these create the continuous background */
+        .rdp-range_start,
+        .rdp-range_middle,
+        .rdp-range_end {
+          background-color: #f1f1f1 !important;
+          position: relative;
+        }
+
+         .rdp-range_middle .rdp-day_button {
+          background-color: #f1f1f1 !important;
+
+         }
+
+         .rdp-day_button {
+          width: 35px;
+          height: 32px; 
+          color: #141414;
+         }
+
+        /* Rounded edges for the range band */
+        .rdp-range_start {
+          background-color: #f1f1f1 !important;
+          border-radius: 20px 0px 0px 20px !important;
+        }
+        .rdp-range_start .rdp-day_button {
+          width: 35px;
+          height: 32px;
+          margin-left: 2px;
+          background-color: #f1f1f1 !important;
+          color: #000;
+          border: 2px solid #c1c1c1;
+        }
+
+        .rdp-range_end{
+          background-color: #f1f1f1 !important;
+          border-radius: 0px 20px 20px 0px !important;
+        }
+
+        .rdp-range_end .rdp-day_button {
+          {/* border-radius: 0 8px 8px 0; */}
+          background-color: #019ACB !important;
+          border: 0;
+          width: 35px;
+          height: 32px;
+          margin: 0;
+        }
+
+        .rdp-day_range_middle {
+          border-radius: 0;
+        }
+
+        /* Selected day buttons sit on top of the background band */
+        .rdp-day_selected .rdp-day_button {
+          position: relative;
+          z-index: 3;
+          background-color: #019ACB !important
+
+        }
+
+        /* Start date - white circle with subtle border */
+        .rdp-day_range_start.rdp-day_selected .rdp-day_button,
+        .rdp-day_range_start .rdp-day_button[aria-selected="true"] {
+          background-color: #ffffff !important;
+          color: #222 !important;
+          border: 2px solid var(--picker-border-subtle) !important;
+          font-weight: 500;
+        }
+
+        /* End date - primary blue circle */
+        .rdp-day_range_end.rdp-day_selected .rdp-day_button,
+        .rdp-day_range_end .rdp-day_button[aria-selected="true"] {
+          background-color: var(--picker-primary) !important;
+          color: #ffffff !important;
+          border: 2px solid var(--picker-primary) !important;
+          font-weight: 500;
+        }
+
+        /* Hover effects */
+        .rdp-day_button:hover:not([aria-selected="true"]) {
+          background-color: rgba(1, 154, 203, 0.1);
+        }
+
+        /* Today styling */
+        .rdp-today .rdp-day_button {
+          {/* color: var(--picker-primary); */}
+          font-weight: 600;
+        }
+
+
+         .rdp-today .rdp-day_selected .rdp-day_button .rdp-day_selected{
+        color: #fff !important;
+        }
+
+        /* Disabled and outside days */
+        .rdp-day_disabled .rdp-day_button,
+        .rdp-day_outside .rdp-day_button {
+          opacity: 0.3;
+        }
+
+        .rdp-chevron{
+  fill: #018cb9;
+}
+      `}</style>
+
       <div>
-        <h2 className="text-xl font-semibold">Good morning, Maria</h2>
-        <p className="text-gray-500 text-sm">Here is your job linkage statistics report from {labelText()}.</p>
-      </div>
-
-      <div className="relative">
-        <button
-          onClick={() => setOpen(true)}
-          className="items-center border rounded-lg px-4 py-2 text-[16px] text-gray-600 hover:bg-gray-100 flex gap-2"
-        >
-          <img src={DateIcon} alt="date" className="w-[24px] h-[24px]" />
-          <span>{labelText()}</span>
-        </button>
-
-        {open && (
-          <div className="fixed inset-0 z-50 flex items-start justify-center pt-20" onClick={() => setOpen(false)}>
-            <div className="absolute inset-0 bg-black/30" />
-            <div className="relative z-10 bg-white rounded-md shadow-xl w-[420px] p-4" onClick={(e) => e.stopPropagation()}>
-              {/* header */}
-              <div className="flex items-center justify-between border-b pb-3 mb-3">
-                <button onClick={() => setCurrentMonth((m) => addMonths(m, -1))} className="p-2 hover:bg-gray-100">
-                  <ChevronLeft className="h-4 w-4" />
-                </button>
-                <div className="text-sm font-medium">
-                  {currentMonth.toLocaleString(undefined, { month: "long", year: "numeric" })}
-                </div>
-                <button onClick={() => setCurrentMonth((m) => addMonths(m, 1))} className="p-2 hover:bg-gray-100">
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-              </div>
-
-              {/* weekdays */}
-              <div className="grid grid-cols-7 text-xs text-gray-500 mb-1">
-                {weekdays.map((w) => (
-                  <div key={w} className="text-center">
-                    {w}
-                  </div>
-                ))}
-              </div>
-
-              {/* calendar */}
-              <div className="grid grid-cols-7 gap-1">
-                {monthGrid.flat().map((day) => {
-                  const otherMonth = day.getMonth() !== currentMonth.getMonth();
-                  const isStart = isSameDay(day, startDate);
-                  const isEnd = isSameDay(day, endDate);
-                  const inside = inRange(day, startDate, endDate);
-
-                  const baseBtn =
-                    "relative w-full h-8 flex items-center justify-center text-sm cursor-pointer rounded-full";
-                  const dayText = otherMonth ? "text-gray-300" : "text-gray-800";
-
-                  let classes = "";
-                  if (inside) classes += " bg-gray-200";
-                  if (isStart || isEnd) classes = " bg-[#019ACB] text-white";
-
-                  return (
-                    <button
-                      key={dateKey(day)}
-                      onClick={() => handleDayClick(day)}
-                      className={`${baseBtn} ${classes}`}
-                      title={day.toDateString()}
-                    >
-                      <span className={dayText}>{day.getDate()}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* footer */}
-              <div className="mt-4">
-                <div className="grid grid-cols-2 gap-3 mb-3">
-                  <input
-                    readOnly
-                    value={startDate ? startDate.toLocaleDateString(undefined, { day: "2-digit", month: "long", year: "numeric" }) : ""}
-                    placeholder="Start date"
-                    className="border rounded px-3 py-2 text-sm w-full"
-                  />
-                  <input
-                    readOnly
-                    value={endDate ? endDate.toLocaleDateString(undefined, { day: "2-digit", month: "long", year: "numeric" }) : ""}
-                    placeholder="End date"
-                    className="border rounded px-3 py-2 text-sm w-full"
-                  />
-                </div>
-
-                <div className="flex justify-between">
-                  <button onClick={clearRange} className="px-4 py-2 border rounded text-sm text-gray-700 hover:bg-gray-50">
-                    Clear
-                  </button>
-                  <button onClick={apply} className="px-4 py-2 rounded bg-[#1f8fd6] text-white text-sm">
-                    Apply
-                  </button>
-                </div>
-              </div>
-            </div>
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h2 className="text-xl font-semibold">Good morning, Maria</h2>
+            <p className="text-gray-500 text-sm">Here is your job linkage statistics report from {labelText()}.</p>
           </div>
-        )}
+
+          <div className="relative">
+            <button
+              onClick={handleOpen}
+              className="items-center border px-4 py-2 leading-[160%] text-[16px] text-[#27304a] hover:bg-gray-100 flex gap-2"
+            >
+              <img src={DateIcon} alt="date" className="w-[24px] h-[24px]" />
+              <span>{labelText()}</span>
+            </button>
+          </div>
+        </div>
+
+        <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth PaperProps={{ style: { width: 420 } }}>
+
+          <DialogContent dividers>
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "stretch", gap: 2 }}>
+              <DayPicker
+                mode="range"
+                navLayout="around"
+                numberOfMonths={1}
+                selected={range}
+                onSelect={onSelectRange}
+                initialMonth={today}
+                showOutsideDays
+                fixedWeeks
+              />
+
+              <Box sx={{ display: "flex", gap: 2, alignItems: "center", mt: 1 }}>
+                <Box
+                  sx={{
+                    flex: 1,
+                    border: "1px solid rgba(0,0,0,0.12)",
+                    borderRadius: 0.5,
+                    p: 1.25,
+                    textAlign: "center",
+                    background: "#fff",
+                  }}
+                >
+                  <Typography variant="body2">
+                    {startDate ? startDate.toLocaleDateString(undefined, { day: "2-digit", month: "long", year: "numeric" }) : "Start date"}
+                  </Typography>
+                </Box>
+
+                <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                  TO
+                </Typography>
+
+                <Box
+                  sx={{
+                    flex: 1,
+                    border: "1px solid rgba(0,0,0,0.12)",
+                    borderRadius: 0.5,
+                    p: 1.25,
+                    textAlign: "center",
+                    background: "#fff",
+                  }}
+                >
+                  <Typography variant="body2">
+                    {endDate ? endDate.toLocaleDateString(undefined, { day: "2-digit", month: "long", year: "numeric" }) : "End date"}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          </DialogContent>
+
+          <DialogActions sx={{ px: 2, pb: 2, display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
+            <Button variant="outlined" onClick={clearRange} className="font-inter px-[24px] py-[12px]" sx={{ width: "131px", height: "50px", borderRadius: 0, border: "2px solid #e8e8e8", color: "#000" }}>
+              Clear
+            </Button>
+
+            <Button variant="contained" onClick={applyRange} className="font-inter px-[24px] py-[12px]" sx={{ width: '136px', height: '50px', shadow: 0, borderRadius: 0, bgcolor: "#019ACB", "&:hover": { bgcolor: "#019ACB" } }}>
+              Apply
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
-    </div>
+    </>
   );
 }

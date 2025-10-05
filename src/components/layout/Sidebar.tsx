@@ -126,7 +126,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-40 h-full bg-white w-[256px] border-r shadow-md overflow-y-auto transform transition-transform duration-300
+        className={`fixed top-0 left-0 z-40 h-full bg-white w-[220px] border-r shadow-md overflow-y-auto transform transition-transform duration-300
         ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:block`}
       >
 
@@ -159,8 +159,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                     <button
                       key={tab.label}
                       onClick={() => navigate(tab.path)}
-                      className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg transition
-                        ${isActive ? 'bg-[#e9f5fb] text-slate-900' : 'text-slate-700 hover:bg-slate-50'}`}
+                      className={`w-full text-left flex items-center gap-3 px-4 py-3 transition
+                        ${isActive ? 'bg-[#e8f4fa] text-[16px] text-[#141414] font-inter' : 'text-[16px] text-[#141414] font-inter'}`}
                     >
                       {/* Icon (SVG component) */}
                       <span className="w-5 h-5 flex-shrink-0">
@@ -180,43 +180,43 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
                 <button
                   onClick={() => navigate('/manager/settings')}
-                  className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg transition text-slate-700 hover:bg-slate-50`}
+                  className={`w-full text-left flex items-center gap-3 px-2 py-3 transition text-slate-700 hover:bg-slate-50`}
                 >
                   <span className="w-5 h-5 flex-shrink-0">
                     {/* @ts-ignore */}
                     <img src={SettingsIcon} />
 
                   </span>
-                  <span className="text-sm font-medium">Settings</span>
+                  <span className="text-[16px] text-[#141414] font-inter">Settings</span>
                 </button>
 
                 <button
                   onClick={() => navigate('/help-center')}
-                  className="w-full text-left flex items-center gap-3 px-4 py-3 rounded-lg transition text-slate-700 hover:bg-slate-50 mt-2"
+                  className="w-full text-left flex items-center gap-3 px-2 py-2 transition text-[16px] text-[#141414] font-inter "
                 >
                   <span className="w-5 h-5 flex-shrink-0">
                     {/* @ts-ignore */}
                     <img src={ManagerHelpIcon} />
                   </span>
-                  <span className="text-sm font-medium">Help Center</span>
+                  <span className="text-[16px] text-[#141414] font-inter">Help Center</span>
                 </button>
               </div>
 
               {/* Logout dotted box */}
-              <div className="px-4 mt-5">
+              <div className="px-2 py-2">
                 <button
                   onClick={() => {
                     // call your logout logic here (navigate to logout or call context)
                     // example:
                     handleSelect('Logout');
                   }}
-                  className="w-full flex items-center justify-start gap-3 px-4 py-3 text-red"
+                  className="w-full flex items-center justify-start gap-3 px-4 py-2 text-red"
                 >
                   <span className="w-5 h-5 flex-shrink-0">
                     {/* @ts-ignore */}
                     <img src={ManagerLogOutIcon} />
                   </span>
-                  <span className="text-sm font-medium text-red">Log out</span>
+                  <span className="text-[16px] text-red font-inter">Log out</span>
                 </button>
               </div>
             </div>
