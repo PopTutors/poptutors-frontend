@@ -334,9 +334,9 @@ export default function FinancesHub() {
             width: 200,
             render: (row) => {
                 const noteStyles = {
-                    Done: "px-[8px] py-[2px] text-[14px] rounded-full border border-[#41BE90] bg-[#f6fbf9]   text-[#41BE90]",
-                    Rejected: "px-[8px] py-[2px] text-[14px] rounded-full border border-[#FF6550] bg-[#fef7f6] text-[#FF6550] font-medium",
-                    Waiting: "px-[8px] py-[2px] text-[14px] rounded-full bg-yellow-100 text-yellow-600 font-medium",
+                    Done: "px-[16px] py-[8px] text-[14px] rounded-full border border-[#41BE90] bg-[#f6fbf9]   text-[#41BE90]",
+                    Rejected: "px-[16px] py-[8px]  text-[14px] rounded-full border border-[#FF6550] bg-[#fef7f6] text-[#FF6550] font-medium",
+                    Waiting: "px-[16px] py-[8px]  text-[14px] rounded-full bg-yellow-100 text-yellow-600 font-medium",
                 };
                 return <span className={noteStyles[row.note] || "px-[8px] py-[2px] text-[14px] rounded-full border"}>{row.note}</span>;
             },
@@ -348,7 +348,7 @@ export default function FinancesHub() {
             render: (row) => {
                 const isApproved = row.status === "Approve";
                 return (
-                    <span className={`px-[8px] py-[2px] text-[14px] rounded-full border font-medium ${isApproved ? "border border-[#41BE90] bg-[#f6fbf9]   text-[#41BE90]" : "px-[8px] py-[2px] border border-[#FF6550] bg-[#fef7f6] text-[#FF6550] font-medium"}`}>
+                    <span className={`px-[16px] py-[8px]  text-[14px] rounded-full border font-medium ${isApproved ? "border border-[#41BE90] bg-[#f6fbf9]   text-[#41BE90]" : "px-[8px] py-[2px] border border-[#FF6550] bg-[#fef7f6] text-[#FF6550] font-medium"}`}>
                         {row.status}
                     </span>
                 );

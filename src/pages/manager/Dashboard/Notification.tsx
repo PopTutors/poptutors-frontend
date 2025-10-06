@@ -1,9 +1,9 @@
-import { ChevronDown } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
+import { ChevronDown } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
 
 interface NotificationItem {
   id: string;
-  type: 'message' | 'question' | 'comment' | 'mention';
+  type: "message" | "question" | "comment" | "mention";
   user: string;
   action: string;
   timeAgo: string;
@@ -12,86 +12,77 @@ interface NotificationItem {
 
 const notifications: NotificationItem[] = [
   {
-    id: '1',
-    type: 'message',
-    user: 'K',
+    id: "1",
+    type: "message",
+    user: "K",
     action: 'Kevin sent you message "What is ux" in Design Assignment',
-    timeAgo: 'Just now',
-    bgColor: 'bg-green-100',
+    timeAgo: "Just now",
+    bgColor: "bg-green-100",
   },
   {
-    id: '2',
-    type: 'question',
-    user: 'A',
+    id: "2",
+    type: "question",
+    user: "A",
     action: 'Avin asked "Can you explain Wireframes?" in UI Task',
-    timeAgo: '5 mins ago',
-    bgColor: 'bg-purple-100',
+    timeAgo: "5 mins ago",
+    bgColor: "bg-purple-100",
   },
   {
-    id: '3',
-    type: 'comment',
-    user: 'A',
+    id: "3",
+    type: "comment",
+    user: "A",
     action: 'Riya commented "Difference between UI and UX?" in Design Project',
-    timeAgo: '5 mins ago',
-    bgColor: 'bg-red-100',
+    timeAgo: "5 mins ago",
+    bgColor: "bg-red-100",
   },
   {
-    id: '4',
-    type: 'mention',
-    user: 'A',
-    action: 'Aman mentioned you "Please review my Layout Draft" in Prototype Assignment',
-    timeAgo: '5 mins ago',
-    bgColor: 'bg-green-100',
+    id: "4",
+    type: "mention",
+    user: "A",
+    action:
+      'Aman mentioned you "Please review my Layout Draft" in Prototype Assignment',
+    timeAgo: "5 mins ago",
+    bgColor: "bg-green-100",
   },
 ];
 
 const filterOptions = [
-  { value: 'all', label: 'All' },
-  { value: 'message', label: 'Messages' },
-  { value: 'question', label: 'Questions' },
-  { value: 'comment', label: 'Comments' },
-  { value: 'mention', label: 'Mentions' },
+  { value: "all", label: "All" },
+  { value: "message", label: "Messages" },
+  { value: "question", label: "Questions" },
+  { value: "comment", label: "Comments" },
+  { value: "mention", label: "Mentions" },
 ];
 
 export default function Notifications() {
-  const [selectedFilter, setSelectedFilter] = useState < string > ('all');
+  const [selectedFilter, setSelectedFilter] = useState < string > ("all");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [dropdownPosition, setDropdownPosition] = useState < 'left' | 'right' > ('right');
   const dropdownRef = useRef < HTMLDivElement > (null);
   const buttonRef = useRef < HTMLButtonElement > (null);
 
-  // Filter notifications based on selected filter
-  const filteredNotifications = selectedFilter === 'all'
-    ? notifications
-    : notifications.filter(notification => notification.type === selectedFilter);
+  const filteredNotifications =
+    selectedFilter === "all"
+      ? notifications
+      : notifications.filter(
+        (notification) => notification.type === selectedFilter
+      );
 
-  // Get current filter label
-  const currentFilterLabel = filterOptions.find(option => option.value === selectedFilter)?.label || 'All';
-
-  // Handle dropdown positioning
-  const handleDropdownToggle = () => {
-    if (!isDropdownOpen && buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      const spaceRight = window.innerWidth - rect.right;
-      const dropdownWidth = 140; // approximate dropdown width
-
-      setDropdownPosition(spaceRight < dropdownWidth ? 'left' : 'right');
-    }
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+  const currentFilterLabel =
+    filterOptions.find((option) => option.value === selectedFilter)?.label ||
+    "All";
 
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleFilterSelect = (filterValue: string) => {
@@ -103,30 +94,36 @@ export default function Notifications() {
     <div className="w-full h-[430px] bg-white p-6 flex flex-col gap-6 overflow-y-scroll">
       {/* Header */}
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-[20px] font-semibold text-[#141414] font-inter">Notifications</h2>
+        <h2 className="text-[20px] font-semibold text-[#141414] font-inter">
+          Notifications
+        </h2>
 
         {/* Filter Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <button
             ref={buttonRef}
-            onClick={handleDropdownToggle}
+            onClick={() => setIsDropdownOpen((prev) => !prev)}
             className="self-end flex items-center gap-4 px-4 py-1.5 border border-black/10 bg-white text-mentoos-text-primary hover:bg-gray-50 transition-colors"
           >
             <span className="text-base">{currentFilterLabel}</span>
-            <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown
+              className={`w-5 h-5 text-gray-400 transition-transform ${isDropdownOpen ? "rotate-180" : ""
+                }`}
+            />
           </button>
 
-          {/* Dropdown Menu */}
+          {/* Dropdown Menu — positioned to the LEFT of the button */}
           {isDropdownOpen && (
-            <div className={`absolute mt-2 w-36 bg-white border border-gray-200  shadow-lg z-20 ${dropdownPosition === 'left' ? 'right-100' : 'right-0'
-              }`}>
+            <div
+              className={`absolute top-0 right-full mr-2 w-36 bg-white border border-gray-200 shadow-lg z-20`}
+            >
               {filterOptions.map((option) => (
                 <button
                   key={option.value}
                   onClick={() => handleFilterSelect(option.value)}
-                  className={`font-inter text-[16px] text-left w-full px-4 py-2  hover:bg-gray-50  transition-colors ${selectedFilter === option.value
-                    ? 'text-primary'
-                    : 'text-[#141414]'
+                  className={`font-inter text-[16px] text-left w-full px-4 py-2 hover:bg-gray-50 transition-colors ${selectedFilter === option.value
+                    ? "text-primary"
+                    : "text-[#141414]"
                     }`}
                 >
                   {option.label}
@@ -156,7 +153,9 @@ export default function Notifications() {
                 <p className="text-sm font-medium text-mentoos-text-primary leading-normal mb-2">
                   {notification.action}
                 </p>
-                <p className="text-sm text-mentoos-text-secondary">{notification.timeAgo}</p>
+                <p className="text-sm text-mentoos-text-secondary">
+                  {notification.timeAgo}
+                </p>
               </div>
             </div>
           ))

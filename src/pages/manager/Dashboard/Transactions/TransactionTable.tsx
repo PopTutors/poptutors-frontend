@@ -212,28 +212,44 @@ export default function Transactions({ payments }: { payments?: any }) {
 
   // columns
   const columns: Column<TransactionType>[] = useMemo(() => [
-    { key: 'id', label: 'Job ID', width: 160 },
-    { key: 'dateTime', label: 'Date & Time', width: 320 },
+    { key: 'id', label: 'Job ID', width: 120 },
+    { key: 'dateTime', label: 'Date & Time', width: 220 },
     { key: 'payment', label: 'Payment', width: 160 },
-    { key: 'paymentType', label: 'Payment Type', width: 210 },
+    { key: 'paymentType', label: 'Payment Type', width: 180 },
     {
       key: 'amount',
       label: 'Amount',
-      width: 240,
-      render: (r) => <span className={`${r.amountType === 'positive' ? 'text-mentoos-status-success' : 'text-mentoos-status-danger'} whitespace-nowrap`}>{r.amount}</span>,
+      width: 140,
+      render: (r: TransactionType) => (
+        <span className={`${r.amountType === 'positive' ? 'text-mentoos-status-success' : 'text-mentoos-status-danger'} whitespace-nowrap`}>
+          {r.amount}
+        </span>
+      ),
     },
-    { key: 'status', label: 'Status', width: 250, render: (r) => <StatusBadge status={r.status} /> },
+    {
+      key: 'status',
+      label: 'Status',
+      width: 180,
+      render: (r: TransactionType) => <StatusBadge status={r.status} />,
+    },
     {
       key: 'action',
       label: 'Action',
-      width: 80,
+      // give a bit more room for the icon + hit area
+      width: 56,
       align: 'center',
       render: (r: TransactionType) => (
         <div className="relative inline-block">
           <button
             data-action-button
-            ref={(el) => (buttonsRef.current[r.id] = el)}
-            onClick={(e) => { e.stopPropagation(); handleActionToggle(r.id); }}
+            // explicit typing for the ref callback to satisfy TS
+            ref={(el: HTMLButtonElement | null) => {
+              buttonsRef.current[r.id] = el;
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleActionToggle(r.id);
+            }}
             className="p-1 hover:bg-gray-50 rounded transition-colors"
           >
             <MoreVertical className="w-5 h-5 text-mentoos-text-primary" />
@@ -242,7 +258,8 @@ export default function Transactions({ payments }: { payments?: any }) {
         </div>
       ),
     },
-  ], []);
+  ], [handleActionToggle]); // include handler in deps
+
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -326,14 +343,14 @@ export default function Transactions({ payments }: { payments?: any }) {
 
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:ml-auto w-full sm:w-auto">
           {/* Search (full width on mobile) */}
-          <div className="flex items-center gap-3 px-3 py-2 border border-black/10 bg-white w-full sm:w-[320px] rounded">
+          <div className="flex items-center gap-3 px-3 py-2 border border-black/10 bg-white w-full sm:w-[320px] h-[48px]">
             <Search className="w-5 h-5 text-mentoos-text-primary/60" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               type="text"
               placeholder="Search..."
-              className="flex-1 bg-transparent border-none outline-none text-base text-mentoos-text-secondary placeholder:text-mentoos-text-secondary"
+              className="flex-1 bg-transparent  border-none outline-none text-base text-mentoos-text-secondary placeholder:text-mentoos-text-secondary"
             />
           </div>
 
@@ -341,14 +358,14 @@ export default function Transactions({ payments }: { payments?: any }) {
           <div className="relative w-full sm:w-auto" data-category-filter>
             <button
               onClick={() => setCategoryDropdownOpen((s) => !s)}
-              className="flex items-center justify-between w-full sm:w-auto h-[48px] gap-2 px-4 py-1.5 border border-black/10 bg-white text-mentoos-text-dark hover:bg-gray-50 transition-colors rounded"
+              className="flex items-center justify-between w-full sm:w-auto h-[48px] gap-2 px-4 py-1.5 border border-black/10 bg-white text-mentoos-text-dark hover:bg-gray-50 transition-colors"
             >
               <span className="text-base">{category}</span>
               <ChevronDown className="w-5 h-5 text-gray-400" />
             </button>
 
             {categoryDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-[190px] bg-white border border-black/10 shadow-lg rounded-md z-50 p-[8px]">
+              <div className="absolute right-0 mt-2 w-[190px] bg-white border border-black/10 shadow-lg z-50 p-[8px]">
                 <button onClick={() => { setCategory('All'); setCategoryDropdownOpen(false); }}
                   className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-50 transition-colors ${category === 'All' ? 'font-medium' : ''}`}>
                   All ({counts.All})

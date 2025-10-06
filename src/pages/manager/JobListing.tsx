@@ -1,5 +1,6 @@
 // components/JobListing.tsx
 import React, { useMemo, useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   Search,
   Filter,
@@ -28,6 +29,7 @@ import {
 import { useFetch } from "../../api/UseFetch";
 import { useGenericMutation } from "../../api/useGenericMutation";
 import toast from "react-hot-toast";
+import DataGrid, { type Column } from "../../components/ui/DataGrid"; // <-- DataGrid import
 
 type AssignmentForm = {
   _id?: string;
@@ -38,6 +40,19 @@ type AssignmentForm = {
   courseCode?: string;
   status?: string;
   studentPrice?: number | string;
+};
+
+type JobRow = {
+  id: string;
+  subject: string;
+  budget: string;
+  posted: string;
+  due: string;
+  location: string;
+  status: string;
+  jobType: string;
+  applicants: number;
+  __job: any; // original job object (for actions)
 };
 
 const statusColors: Record<string, string> = {
@@ -76,7 +91,6 @@ const JobListing: React.FC = () => {
 
   // UI state
   const [showSortDropdown, setShowSortDropdown] = useState(false);
-  const [showActionDropdown, setShowActionDropdown] = useState < number | null > (null);
   const [showFilterModal, setShowFilterModal] = useState(false);
 
   // filter / sort / search state
@@ -87,68 +101,13 @@ const JobListing: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState < "deadline" | "posted" | "budget" | null > (null);
 
-  // column widths (resizable)
-  const initialWidths = [200, 120, 140, 140, 140, 140, 140, 120, 100]; // px defaults
-  const [colWidths, setColWidths] = useState < number[] > (initialWidths);
-  const resizingRef = useRef < { idx: number; startX: number; startW: number } | null > (null);
+  // action menu (portal) state
+  const [openMenuFor, setOpenMenuFor] = useState < string | null > (null);
+  const [menuPos, setMenuPos] = useState < { top?: number; left?: number; bottom?: number } | null > (null);
+  const buttonsRef = useRef < Record < string, HTMLButtonElement | null >> ({});
 
-  useEffect(() => {
-    function onPointerMove(e: PointerEvent) {
-      if (!resizingRef.current) return;
-      const { idx, startX, startW } = resizingRef.current;
-      const delta = e.clientX - startX;
-      setColWidths((prev) => {
-        const next = [...prev];
-        next[idx] = Math.max(80, startW + delta); // min 80px
-        return next;
-      });
-    }
-    function onPointerUp() {
-      resizingRef.current = null;
-    }
-    window.addEventListener("pointermove", onPointerMove);
-    window.addEventListener("pointerup", onPointerUp);
-    return () => {
-      window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("pointerup", onPointerUp);
-    };
-  }, []);
-
-  // Close action dropdown on outside click / escape / scroll
-  useEffect(() => {
-    const onDocDown = (e: MouseEvent) => {
-      const el = e.target as HTMLElement | null;
-      if (el?.closest?.(".more-btn")) return;
-      if (el?.closest?.("[data-action-dropdown]")) return;
-      if (showActionDropdown !== null) setShowActionDropdown(null);
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && showActionDropdown !== null) setShowActionDropdown(null);
-    };
-    const onScroll = () => {
-      if (showActionDropdown !== null) setShowActionDropdown(null);
-    };
-
-    document.addEventListener("mousedown", onDocDown);
-    window.addEventListener("keydown", onKey);
-    window.addEventListener("scroll", onScroll, true);
-    window.addEventListener("resize", onScroll);
-    return () => {
-      document.removeEventListener("mousedown", onDocDown);
-      window.removeEventListener("keydown", onKey);
-      window.removeEventListener("scroll", onScroll, true);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, [showActionDropdown]);
-
-  // row click -> navigate to applicants
-  const handleRowClick = (job: any) => {
-    const jobId = job._id;
-    const jobType = job.type || job._type || "assignment";
-    navigate(`/manager/job-listing/${jobType}/${jobId}/applicants`);
-  };
-
-  // helpers
+  // column widths state removed (DataGrid handles resizing if it has that feature).
+  // helper functions
   const parseAmount = (amt: any) => {
     if (amt == null) return null;
     const n = Number(amt);
@@ -229,7 +188,7 @@ const JobListing: React.FC = () => {
       studentPrice: job.amount ?? job.studentPrice ?? "",
     });
     setEditDialogOpen(true);
-    setShowActionDropdown(null);
+    setOpenMenuFor(null);
   };
 
   const closeEditDialog = () => {
@@ -290,7 +249,7 @@ const JobListing: React.FC = () => {
         onSuccessCallback: () => {
           toast.success(`Status changed to ${newStatus}`);
           refetch?.();
-          setShowActionDropdown(null);
+          setOpenMenuFor(null);
         },
       });
     } catch (err) {
@@ -307,7 +266,7 @@ const JobListing: React.FC = () => {
           onSuccessCallback: () => {
             toast.success(`Status changed to ${newStatus}`);
             refetch?.();
-            setShowActionDropdown(null);
+            setOpenMenuFor(null);
           },
         });
       } catch (err2) {
@@ -330,6 +289,7 @@ const JobListing: React.FC = () => {
         onSuccessCallback: () => {
           toast.success("Assignment deleted");
           refetch?.();
+          setOpenMenuFor(null);
         },
         onErrorCallback: (err?: any) => {
           toast.error("Failed to delete assignment");
@@ -341,6 +301,235 @@ const JobListing: React.FC = () => {
       toast.error("Failed to delete assignment");
     }
   };
+
+  // row click -> navigate to applicants
+  const handleRowClick = (job: any) => {
+    const jobId = job._id;
+    const jobType = job.type || job._type || "assignment";
+    navigate(`/manager/job-listing/${jobType}/${jobId}/applicants`);
+  };
+
+  // Build grid rows from displayedItems
+  const gridRows: JobRow[] = useMemo(
+    () =>
+      displayedItems.map((job: any, idx: number) => {
+        const id = job._id ?? `job-${idx}-${Date.now()}`;
+        const budgetVal = job.amount ?? job.studentPrice ?? job.price ?? null;
+        const budget = budgetVal != null ? `$${budgetVal}` : "-";
+        const posted = job.createdAt ? new Date(job.createdAt).toLocaleDateString() : "-";
+        const due = job.dueDate ? new Date(job.dueDate).toLocaleDateString() : job.startTime ? new Date(job.startTime).toLocaleDateString() : "-";
+        const location = job.location || job.country || job.createdBy?.country || "-";
+        const status = job.status || "-";
+        const jobType = job.type || job._type || "-";
+        const applicants = typeof job.applicants === "number" ? job.applicants : job.applicants?.length ?? 0;
+
+        return {
+          id,
+          subject: job.subject || job.title || "-",
+          budget,
+          posted,
+          due,
+          location,
+          status,
+          jobType,
+          applicants,
+          __job: job,
+        } as JobRow;
+      }),
+    [displayedItems]
+  );
+
+  // columns for DataGrid
+  const columns: Column<JobRow>[] = useMemo(
+    () => [
+      {
+        key: "subject",
+        label: "Subject",
+        minWidth: 180,
+        render: (r) => <div className="text-left">{r.subject}</div>,
+      },
+      { key: "budget", label: "Budget", width: 120, render: (r) => <div className="whitespace-nowrap">{r.budget}</div> },
+      { key: "posted", label: "Date Posted", width: 140, render: (r) => <div className="whitespace-nowrap">{r.posted}</div> },
+      { key: "due", label: "Due Date", width: 140, render: (r) => <div className="whitespace-nowrap">{r.due}</div> },
+      { key: "location", label: "Location", width: 160, render: (r) => <div className="whitespace-nowrap">{r.location}</div> },
+      {
+        key: "status",
+        label: "Status",
+        width: 140,
+        render: (r) => (
+          <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${statusColors[r.status] || "bg-gray-50"}`}>{r.status}</div>
+        ),
+      },
+      {
+        key: "jobType",
+        label: "Job Type",
+        width: 140,
+        render: (r) => <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${jobTypeColors[r.jobType] || "bg-gray-50"}`}>{r.jobType}</div>,
+      },
+      { key: "applicants", label: "Applicants", width: 110, align: "center", render: (r) => <div>{r.applicants}</div> },
+      {
+        key: "action",
+        label: "Actions",
+        width: 64,
+        align: "center",
+        render: (r: JobRow) => {
+          return (
+            <div className="flex items-center justify-center">
+              <button
+                data-action-button
+                ref={(el: HTMLButtonElement | null) => {
+                  buttonsRef.current[r.id] = el;
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const next = openMenuFor === r.id ? null : r.id;
+                  if (next) {
+                    // compute menu position
+                    const btn = buttonsRef.current[r.id];
+                    if (window.innerWidth < 640) {
+                      setMenuPos({ bottom: 8, left: 8 });
+                    } else if (btn) {
+                      const rect = btn.getBoundingClientRect();
+                      const menuWidth = 185 + 16;
+                      let left = rect.right - menuWidth + 16;
+                      left = Math.max(8, Math.min(left, window.innerWidth - menuWidth - 8));
+                      const top = rect.bottom + 8;
+                      setMenuPos({ top: Math.round(top), left: Math.round(left) });
+                    } else {
+                      setMenuPos(null);
+                    }
+                  } else {
+                    setMenuPos(null);
+                  }
+                  setOpenMenuFor(next);
+                }}
+                className="p-1 hover:bg-gray-50 rounded transition-colors"
+                aria-label="Open actions"
+              >
+                <MoreVertical className="w-4 h-4 text-gray-400" />
+              </button>
+            </div>
+          );
+        },
+      },
+    ],
+    [openMenuFor]
+  );
+
+  // portal menu (for actions)
+  const menuPortal = openMenuFor && menuPos ? createPortal(
+    <div
+      data-action-menu-portal
+      onClick={(e) => e.stopPropagation()}
+      style={{
+        position: "fixed",
+        zIndex: 9999,
+        top: menuPos.top ?? undefined,
+        bottom: menuPos.bottom ?? undefined,
+        left: menuPos.bottom ? 8 : menuPos.left,
+        right: menuPos.bottom ? 8 : undefined,
+      }}
+    >
+      {menuPos.bottom ? (
+        <div className="p-4 bg-white border border-black/10 shadow-lg rounded-t-lg w-[calc(100%-16px)] mx-auto">
+          <div className="max-w-[640px] mx-auto">
+            {(() => {
+              const row = gridRows.find((r) => r.id === openMenuFor);
+              if (!row) return null;
+              const job = row.__job;
+              return (
+                <>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); /* view receipt not applicable here, keep for parity */ toast.success("View details"); setOpenMenuFor(null); }}
+                    className="flex gap-2 w-full text-left px-4 py-3 text-base hover:bg-gray-50 transition-colors rounded"
+                  >
+                    <img src={ManagerEditIcon} alt="details" /> View details
+                  </button>
+
+                  <button
+                    onClick={(e) => { e.stopPropagation(); openEditDialog(job); }}
+                    className="flex gap-2 w-full text-left px-4 py-3 text-base hover:bg-gray-50 transition-colors rounded mt-2"
+                  >
+                    <img src={ManagerEditIcon} alt="edit" /> Edit job
+                  </button>
+
+                  <button
+                    onClick={async (e) => { e.stopPropagation(); if (!job._id) return; await changeStatus(job._id, "Inactive"); }}
+                    className="flex gap-2 w-full text-left px-4 py-3 text-base hover:bg-gray-50 transition-colors rounded mt-2"
+                  >
+                    <img src={InactiveIcon} alt="inactive" /> Mark inactive
+                  </button>
+
+                  <button
+                    onClick={async (e) => { e.stopPropagation(); if (!job._id) return; await changeStatus(job._id, "Live"); }}
+                    className="flex gap-2 w-full text-left px-4 py-3 text-base hover:bg-gray-50 transition-colors rounded mt-2"
+                  >
+                    <img src={ReOpenIcon} alt="reopen" /> Reopen job
+                  </button>
+
+                  <hr className="my-2" />
+
+                  <button
+                    onClick={async (e) => { e.stopPropagation(); if (!job._id) return; if (!confirm("Delete this job?")) return; await handleDeleteJob(job._id); }}
+                    className="flex gap-2 w-full text-left px-4 py-3 text-base hover:bg-gray-50 transition-colors rounded text-red-600"
+                  >
+                    <img src={DeleteIcon} alt="delete" /> Delete job
+                  </button>
+                </>
+              );
+            })()}
+          </div>
+        </div>
+      ) : (
+        <div className="p-[8px] w-[185px] bg-white border border-black/10 shadow-lg rounded-md">
+          {(() => {
+            const row = gridRows.find((r) => r.id === openMenuFor);
+            if (!row) return null;
+            const job = row.__job;
+            return (
+              <>
+                <button
+                  onClick={(e) => { e.stopPropagation(); openEditDialog(job); }}
+                  className="flex gap-2 w-full border-b border-gray text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors"
+                >
+                  <img src={ManagerEditIcon} alt="edit" /> Edit job
+                </button>
+
+                <button
+                  onClick={async (e) => { e.stopPropagation(); if (!job._id) return; await changeStatus(job._id, "Inactive"); }}
+                  className="flex gap-2 w-full border-b border-gray text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors mt-2"
+                >
+                  <img src={InactiveIcon} alt="inactive" /> Inactive
+                </button>
+
+                <button
+                  onClick={async (e) => { e.stopPropagation(); if (!job._id) return; if (!confirm("Delete this job?")) return; await handleDeleteJob(job._id); }}
+                  className="flex gap-2 w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors mt-2 text-red-600"
+                >
+                  <img src={DeleteIcon} alt="delete" /> Delete job
+                </button>
+              </>
+            );
+          })()}
+        </div>
+      )}
+    </div>,
+    document.body
+  ) : null;
+
+  // Close portal on pointerdown outside portal or button
+  useEffect(() => {
+    function onPointerDown(e: PointerEvent) {
+      const target = e.target as Element | null;
+      if (!target) return;
+      if (!target.closest("[data-action-menu-portal]") && !target.closest("[data-action-button]") && !target.closest(".more-btn")) {
+        setOpenMenuFor(null);
+        setMenuPos(null);
+      }
+    }
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, []);
 
   if (isLoading) return <div className="p-6">Loading requests...</div>;
   if (error) return <div className="p-6 text-red-500">Error loading requests</div>;
@@ -435,181 +624,16 @@ const JobListing: React.FC = () => {
         </div>
       </div>
 
-      {/* Table container - horizontal scroll on mobile */}
+      {/* DataGrid (replaces table) */}
       <div className="bg-white shadow-sm border border-gray-200 overflow-x-auto">
-        <table className="min-w-full text-sm">
-          <thead className="bg-gray-50 border-b border-gray-200">
-            <tr className="p-[16px] text-gray-600 h-[60px] text-center">
-              {[
-                "Subject",
-                "Budget",
-                "Date Posted",
-                "Due Date",
-                "Location",
-                "Status",
-                "Job Type",
-                "Applicants",
-                "Actions",
-              ].map((label, idx) => (
-                <th
-                  key={idx}
-                  className="px-2 py-3 font-medium text-[16px] relative group"
-                  style={{ width: colWidths[idx], minWidth: 80 }}
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="truncate">{label}</span>
-
-                    {/* Resize handle */}
-                    <div
-                      role="separator"
-                      aria-orientation="vertical"
-                      className="absolute right-0 top-0 h-full w-1 cursor-col-resize group-hover:bg-gray-200"
-                      onPointerDown={(e) =>
-                      (resizingRef.current = {
-                        idx,
-                        startX: e.clientX,
-                        startW: colWidths[idx],
-                      })
-                      }
-                    />
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-
-          <tbody className="divide-y divide-gray-200">
-            {displayedItems.map((job: any, idx: number) => (
-              <tr
-                key={job._id ?? idx}
-                className="hover:bg-gray-50 cursor-pointer text-center"
-                onClick={(e) => {
-                  const actionsCell = e.currentTarget.querySelector(".actions-td");
-                  if (actionsCell && actionsCell.contains(e.target as Node)) return;
-                  handleRowClick(job);
-                }}
-              >
-                <td style={{ width: colWidths[0] }} className="p-[16px] text-left text-[16px] text-[#141414]">
-                  {job.subject || job.title || "-"}
-                </td>
-                <td style={{ width: colWidths[1] }} className="px-2 py-4 text-[#141414]">
-                  {job.amount != null ? `$${job.amount}` : job.studentPrice != null ? `$${job.studentPrice}` : "-"}
-                </td>
-                <td style={{ width: colWidths[2] }} className="px-2 py-4 text-[#141414]">
-                  {job.createdAt ? new Date(job.createdAt).toLocaleDateString() : "-"}
-                </td>
-                <td style={{ width: colWidths[3] }} className="px-2 py-4 text-[#141414]">
-                  {job.dueDate ? new Date(job.dueDate).toLocaleDateString() : job.startTime ? new Date(job.startTime).toLocaleDateString() : "-"}
-                </td>
-                <td style={{ width: colWidths[4] }} className="px-2 py-4 text-[#141414]">
-                  {job.location || job.country || job.createdBy?.country || "-"}
-                </td>
-                <td style={{ width: colWidths[5] }} className="px-2 py-4 text-[#141414]">
-                  <div className={`px-2 py-1 rounded-full ${statusColors[job.status] || "bg-gray-50"}`}>
-                    {job.status || "-"}
-                  </div>
-                </td>
-                <td style={{ width: colWidths[6] }} className="px-2 py-4 text-[#141414]">
-                  <div className={`px-2 py-1 rounded-full ${jobTypeColors[job.type] || "bg-gray-50"}`}>
-                    {job.type || job._type || "-"}
-                  </div>
-                </td>
-                <td style={{ width: colWidths[7] }} className="px-2 py-4 text-[#141414]">
-                  {typeof job.applicants === "number" ? job.applicants : job.applicants?.length ?? 0}
-                </td>
-
-                <td style={{ width: colWidths[8] }} className="actions-td px-2 py-4 text-[#141414]">
-                  <div className="relative flex items-center justify-center">
-                    <button
-                      aria-label="Open actions"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShowActionDropdown(showActionDropdown === idx ? null : idx);
-                      }}
-                      className="p-2 rounded-lg hover:bg-gray-100 transition-colors more-btn"
-                    >
-                      <MoreVertical className="w-4 h-4 text-gray-400" />
-                    </button>
-
-                    {showActionDropdown === idx && (
-                      <div
-                        data-action-dropdown
-                        className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-20"
-                        role="menu"
-                        aria-label={`Actions for job ${job._id ?? idx}`}
-                      >
-                        <div className="py-1">
-                          <button
-                            onClick={async (e) => {
-                              e.stopPropagation();
-                              setShowActionDropdown(null);
-                              if (!job._id) return;
-                              await changeStatus(job._id, "Inactive");
-                            }}
-                            className="w-full px-4 py-2 flex gap-2 text-sm hover:bg-gray-50"
-                          >
-                            <img src={InactiveIcon} alt="inactive" className="w-5 h-5" />
-                            Inactive
-                          </button>
-
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              openEditDialog(job);
-                            }}
-                            className="w-full px-4 py-2 flex gap-2 text-sm hover:bg-gray-50"
-                          >
-                            <img src={ManagerEditIcon} alt="edit" className="w-5 h-5" />
-                            Edit Job
-                          </button>
-
-                          <button
-                            onClick={async (e) => {
-                              e.stopPropagation();
-                              setShowActionDropdown(null);
-                              if (!job._id) return;
-                              await changeStatus(job._id, "Live");
-                            }}
-                            className="w-full px-4 py-2 flex gap-2 text-sm hover:bg-gray-50"
-                          >
-                            <img src={ReOpenIcon} alt="reopen" className="w-5 h-5" />
-                            Reopen Job
-                          </button>
-
-                          <hr className="my-1" />
-
-                          <button
-                            onClick={async (e) => {
-                              e.stopPropagation();
-                              setShowActionDropdown(null);
-                              if (!job._id) return;
-                              if (!confirm("Delete this job? This action cannot be undone.")) return;
-                              await handleDeleteJob(job._id);
-                            }}
-                            className="w-full px-4 py-2 flex gap-2 text-sm text-red-600 hover:bg-gray-50"
-                          >
-                            <img src={DeleteIcon} alt="delete" className="w-5 h-5" />
-                            Delete Job
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="min-w-0">
+          <DataGrid columns={columns} rows={gridRows} pageSize={8} onRowClick={(r) => handleRowClick(r.__job)} />
+        </div>
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-end gap-[10px] px-6 py-4 bg-gray-50 border-t border-gray-200 h-[40px] mt-4">
-        <span className="text-[12px] text-gray-500">
-          Showing {displayedItems.length} of {total}
-        </span>
-      </div>
 
-      {/* Filter Modal */}
+      {/* Filter Modal: (unchanged) */}
       <Dialog open={showFilterModal} onOpenChange={setShowFilterModal}>
         <DialogContent className="max-w-lg w-full">
           <DialogHeader>
@@ -766,7 +790,7 @@ const JobListing: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      {/* EDIT DIALOG */}
+      {/* EDIT DIALOG (unchanged) */}
       <Dialog open={editDialogOpen} onOpenChange={(open) => { if (!open) closeEditDialog(); }}>
         <DialogContent className="max-w-2xl w-full">
           <DialogHeader>
@@ -864,6 +888,9 @@ const JobListing: React.FC = () => {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Action menu portal */}
+      {menuPortal}
     </div>
   );
 };

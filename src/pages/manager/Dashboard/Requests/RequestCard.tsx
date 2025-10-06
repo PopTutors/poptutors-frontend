@@ -32,7 +32,36 @@ interface RequestCardProps {
   subject: string;
   badgeLabel: string;
 }
-function RequestCard({ title, price, date, deadline, status, subject, badgeLabel }: RequestCardProps) {
+function getBadgeClasses(label?: string) {
+  if (!label) {
+    return "px-2.5 py-1.5 bg-gray-50 border border-gray-200 text-gray-700 text-xs font-medium rounded-full";
+  }
+  const key = label.toLowerCase().replace(/\s+/g, "");
+  if (key.includes("assign")) {
+    // assignment -> red
+    return "px-2.5 py-1.5 bg-red-50 border border-red-500 text-red-600 text-xs font-medium rounded-full";
+  }
+  if (key.includes("session")) {
+    // session -> green
+    return "px-2.5 py-1.5 bg-green-50 border border-green-500 text-green-600 text-xs font-medium rounded-full";
+  }
+  if (key.includes("livehelp") || key.includes("live-help") || key.includes("livehelp")) {
+    // liveHelp -> yellow
+    return "px-2.5 py-1.5 bg-yellow-50 border border-yellow-400 text-yellow-700 text-xs font-medium rounded-full";
+  }
+  // default
+  return "px-2.5 py-1.5 bg-gray-50 border border-gray-200 text-gray-700 text-xs font-medium rounded-full";
+}
+
+function RequestCard({
+  title,
+  price,
+  date,
+  deadline,
+  status,
+  subject,
+  badgeLabel,
+}: RequestCardProps) {
   return (
     <div className="bg-white border border-black/10 p-6 flex flex-col gap-4 shadow-md hover:shadow-md transition-shadow">
       {/* Header */}
@@ -42,8 +71,7 @@ function RequestCard({ title, price, date, deadline, status, subject, badgeLabel
             {title}
           </h3>
           <div className="flex items-center gap-1.5">
-            {/* Dynamic badge text only — preserving original styling classes */}
-            <span className="px-2.5 py-1.5 bg-mentoos-status-danger/5 border border-mentoos-status-danger text-mentoos-status-danger text-xs font-medium rounded-full">
+            <span className={getBadgeClasses(badgeLabel)}>
               {badgeLabel}
             </span>
             <span className="text-mentoos-text-primary/70 text-sm">•</span>

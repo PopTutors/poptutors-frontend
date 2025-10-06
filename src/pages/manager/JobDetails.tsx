@@ -4,6 +4,7 @@ import { X as XIcon, Edit2 as EditIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "../../components/ui/dialog";
 import { useFetch } from "../../api";
 import { useGenericMutation } from "../../api/useGenericMutation";
+import { ManagerEditIcon } from "../../assets/managers";
 
 /**
  * JobDetails page
@@ -179,7 +180,7 @@ export default function JobDetailsPage(): JSX.Element {
                         onClick={() => setOpenEdit(true)}
                         className="flex items-center gap-2 px-3 py-2 border bg-white hover:bg-gray-50 text-sm"
                     >
-                        <EditIcon className="w-4 h-4" />
+                        <img src={ManagerEditIcon} className="fill-primary" />
                         Edit Job Details
                     </button>
                 </div>
