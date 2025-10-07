@@ -51,6 +51,11 @@ import DashboardAssignment from './DashboardAssignment.svg';
 import DashboardSession from './DashboardSession.svg';
 import DashboardLiveHelp from './DashboardLiveHelp.svg';
 import AddIcon from './add.svg';
+import DarkAddIcon from './DarkAdd.svg';
+import LocationIcon from './location.svg';
+import MailIcon from './mail.svg';
+import LanguageIcon from './language.svg';
+import PhoneIcon from './mobile.svg';
 export {
   DeleteIcon,
   InactiveIcon,
@@ -104,5 +109,10 @@ export {
   DashboardAssignment,
   DashboardLiveHelp,
   DashboardSession,
-  AddIcon
+  AddIcon,
+  DarkAddIcon,
+  LocationIcon,
+  MailIcon,
+  PhoneIcon,
+  LanguageIcon
 };
