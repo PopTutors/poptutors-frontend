@@ -113,7 +113,7 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen }) => {
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm h-[75px] flex items-center px-4">
       {/* Left: Logo + Menu Button (Mobile) */}
-      <div className="flex items-center md:justify-center gap-1 w-[220px]">
+      <div className="flex items-center  gap-1 w-[200px]">
         <button
           onClick={onSidebarToggle}
           className="relative w-6 h-6 flex flex-col justify-between items-center p-[3px] z-50 lg:hidden"
@@ -131,7 +131,7 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen }) => {
               }`}
           />
         </button>
-        <img src={logo} alt="Logo" />
+        <img src={logo} alt="Logo" className='self-start' />
       </div>
 
       {/* Center: Search bar (non-manager) OR Page header (manager) */}
@@ -143,10 +143,11 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen }) => {
           </div>
         </div>
       ) : (
-        <div className="flex-1 flex items-center justify-start ml-4">
-          <img src={Line} alt="" className="h-[26px]" />
-          <div className="ml-3">
-            <h1 className="text-[24px] font-inter font-semibold text-slate-900">{managerPageTitle}</h1>
+        // Manager: Show page title only on desktop, hide on mobile
+        <div className="flex-1 flex items-center justify-start ml-0">
+          <img src={Line} alt="" className="h-full" />
+          <div className="ml-3 hidden lg:block">
+            <h1 className="text-[24px] font-inter font-semibold">{managerPageTitle}</h1>
           </div>
         </div>
       )}
@@ -180,7 +181,10 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle, isOpen }) => {
           // Manager: Post A Job button with dropdown actions
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button className="bg-primary w-[158px] h-[50px] font-inter text-[16px]"><img src={AddIcon} className='w-[24px] h-[24px]' /> Post A Job</Button>
+              <Button className="bg-primary w-[158px] h-[50px] font-inter text-[16px] hidden md:flex items-center gap-2">
+                <img src={AddIcon} className='w-[24px] h-[24px]' />
+                <span>Post A Job</span>
+              </Button>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" className="w-[200px]">

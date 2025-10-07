@@ -43,6 +43,23 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   // Detect portal type from URL
   const isManager = location.pathname.startsWith('/manager');
 
+  // Define routes where sidebar should be hidden
+  const hiddenRoutes = [
+    paths.manager.postAssignment.getHref(),
+    paths.manager.postSession.getHref(),
+    paths.manager.postLiveHelp.getHref(),
+  ];
+
+  // Check if current route should hide sidebar
+  const shouldHideSidebar = hiddenRoutes.some(route =>
+    location.pathname.startsWith(route)
+  );
+
+  // If current route is in hiddenRoutes, don't render sidebar
+  if (shouldHideSidebar) {
+    return null;
+  }
+
   // Student tabs (unchanged behavior)
   const studentTabs = [
     {
@@ -91,6 +108,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     // { label: 'Manager', icon: HubManagerIcon, path: paths.manager.hubManager.getHref() },
     { label: 'Manage Teacher', icon: ManageTeacher, path: paths.manager.teacher.getHref() },
   ];
+
   const clearAllCookies = () => {
     document.cookie.split(';').forEach((c) => {
       document.cookie = c
@@ -98,6 +116,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         .replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`);
     });
   };
+
   const handleSelect = (item: string) => {
     if (item === 'Logout') {
       // Clear all storage
@@ -111,6 +130,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       console.log('Selected:', item);
     }
   };
+
   const sidebarTabs = isManager ? managerTabs : studentTabs;
 
   return (
@@ -118,7 +138,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       {/* Overlay on mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black bg-opacity-40 lg:hidden"
+          className="fixed inset-0 z-90 bg-black bg-opacity-40 lg:hidden"
           onClick={onClose}
           aria-hidden
         />

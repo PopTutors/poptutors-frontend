@@ -34,7 +34,7 @@ import PostASession from './pages/manager/PostAJob/PostASession';
 import PostALiveHelp from './pages/manager/PostAJob/PostALiveHelp';
 import FinancesHub from './pages/manager/FinancesHub/FinancesHub';
 import MySessionPage from './pages/manager/MySessions/MySession';
-import ManageTeacher from './pages/manager/ManagerTeacher';
+import ManageTeacher from './pages/manager/ManageTeacher';
 import MyLiveHelpPage from './pages/manager/MyLiveHelps/MyLiveHelps';
 
 export const createAppRouter = createBrowserRouter([
