@@ -56,17 +56,17 @@ type JobRow = {
 };
 
 const statusColors: Record<string, string> = {
-  Live: "bg-green-100 text-green-600 border-green-200",
-  New: "bg-blue-100 text-blue-600 border-blue-200",
-  Ongoing: "bg-blue-50 text-blue-500 border-blue-200",
-  Closed: "bg-red-50 text-red-500 border-red-200",
-  Inactive: "bg-gray-50 text-gray-500 border-gray-200",
+  Live: "bg-green-100 text-green-600 border border-green-600 ",
+  New: "bg-blue-100  text-blue-600 border border-blue-600",
+  Ongoing: "bg-blue-50   text-blue-500 border border-blue-500",
+  Closed: "bg-red-50    text-red-500 border  border-red-500",
+  Inactive: "bg-gray-50   text-gray-500 border border-gray-500",
 };
 
 const jobTypeColors: Record<string, string> = {
-  liveHelp: "bg-red-50 text-red-500 border-red-200",
-  session: "bg-yellow-50 text-yellow-600 border-yellow-200",
-  assignment: "bg-blue-50 text-blue-500 border-blue-200",
+  liveHelp: "bg-red-50    text-red-500  border border-red-500",
+  session: "bg-yellow-50 text-yellow-600 border border-yellow-600",
+  assignment: "bg-blue-50   text-blue-500 border border-blue-500",
 };
 
 const allStatuses = ["Good fit", "New", "Rejected", "Finalized"];
@@ -357,14 +357,17 @@ const JobListing: React.FC = () => {
         label: "Status",
         width: 140,
         render: (r) => (
-          <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${statusColors[r.status] || "bg-gray-50"}`}>{r.status}</div>
+          <div className={`inline-flex items-center px-[16px] py-[8px] rounded-full text-sm ${(statusColors[(r?.status ?? '').split(' ')[0] !== 'requested' ? (r?.status ?? '').split(' ')[0] : 'New'] ?? 'bg-gray-50')
+            }`}>
+            {(r?.status ?? '').split(' ')[0] !== 'requested' ? (r?.status ?? '').split(' ')[0] : 'New'}
+          </div>
         ),
       },
       {
         key: "jobType",
         label: "Job Type",
         width: 140,
-        render: (r) => <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${jobTypeColors[r.jobType] || "bg-gray-50"}`}>{r.jobType}</div>,
+        render: (r) => <div className={`inline-flex items-center px-[16px] py-[8px] rounded-full text-sm ${jobTypeColors[r.jobType] || "bg-gray-50"}`}>{r.jobType}</div>,
       },
       { key: "applicants", label: "Applicants", width: 110, align: "center", render: (r) => <div>{r.applicants}</div> },
       {
@@ -658,7 +661,7 @@ const JobListing: React.FC = () => {
                     <button
                       key={s}
                       onClick={() => setFilterStatus(active ? null : s)}
-                      className={`px-3 py-1 rounded-full border text-sm ${active ? 'bg-green-100 border-green-200 text-green-700' : 'bg-white border-gray-200 text-gray-700'}`}
+                      className={`px - 3 py - 1 rounded - full border text - sm ${active ? 'bg-green-100 border-green-200 text-green-700' : 'bg-white border-gray-200 text-gray-700'} `}
                     >
                       {s}
                     </button>
@@ -680,8 +683,8 @@ const JobListing: React.FC = () => {
                       className="flex items-center gap-1"
                       aria-pressed={active}
                     >
-                      <div className={`inline-flex items-center justify-center w-7 h-7 rounded ${active ? 'bg-yellow-100' : ''}`}>
-                        <StarIcon className={`w-4 h-4 ${active ? 'text-yellow-500' : 'text-gray-300'}`} />
+                      <div className={`inline - flex items - center justify - center w - 7 h - 7 rounded ${active ? 'bg-yellow-100' : ''} `}>
+                        <StarIcon className={`w - 4 h - 4 ${active ? 'text-yellow-500' : 'text-gray-300'} `} />
                       </div>
                       <span className="text-sm">{n}</span>
                     </button>
@@ -710,7 +713,7 @@ const JobListing: React.FC = () => {
                         }}
                         className="hidden"
                       />
-                      <span className={`px-2 py-1 rounded border ${sortBudget === 'asc' && sortBy === 'budget' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'}`}>Ascending</span>
+                      <span className={`px - 2 py - 1 rounded border ${sortBudget === 'asc' && sortBy === 'budget' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'} `}>Ascending</span>
                     </label>
                     <label className="inline-flex items-center gap-2 cursor-pointer">
                       <input
@@ -723,7 +726,7 @@ const JobListing: React.FC = () => {
                         }}
                         className="hidden"
                       />
-                      <span className={`px-2 py-1 rounded border ${sortBudget === 'desc' && sortBy === 'budget' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'}`}>Descending</span>
+                      <span className={`px - 2 py - 1 rounded border ${sortBudget === 'desc' && sortBy === 'budget' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'} `}>Descending</span>
                     </label>
                   </div>
                 </div>
@@ -744,7 +747,7 @@ const JobListing: React.FC = () => {
                         }}
                         className="hidden"
                       />
-                      <span className={`px-2 py-1 rounded border ${sortDeadline === 'asc' && sortBy === 'deadline' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'}`}>Ascending</span>
+                      <span className={`px - 2 py - 1 rounded border ${sortDeadline === 'asc' && sortBy === 'deadline' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'} `}>Ascending</span>
                     </label>
                     <label className="inline-flex items-center gap-2 cursor-pointer">
                       <input
@@ -757,7 +760,7 @@ const JobListing: React.FC = () => {
                         }}
                         className="hidden"
                       />
-                      <span className={`px-2 py-1 rounded border ${sortDeadline === 'desc' && sortBy === 'deadline' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'}`}>Descending</span>
+                      <span className={`px - 2 py - 1 rounded border ${sortDeadline === 'desc' && sortBy === 'deadline' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'} `}>Descending</span>
                     </label>
                   </div>
                 </div>

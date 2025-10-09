@@ -13,9 +13,10 @@ import { useFetch } from '../../../api/UseFetch';
 import { useGenericMutation } from '../../../api/useGenericMutation';
 import { uploadToBunnyCDN } from '../../../utils/uploadToBunnyCdn';
 import type { Teacher, Filters } from './types';
+import { AddIcon } from '../../../assets/managers';
 
 // const cancelButtonClass = 'm-0 w-[164px] h-[50px] rounded-none text-[16px] font-semibold bg-[#fff]';
-const saveButtonClass = 'm-0 w-[164px] h-[37px] rounded-none text-[16px] font-semibold bg-[#019ACB]';
+const saveButtonClass = 'm-0 rounded-none text-[16px] font-semibold bg-[#019ACB]';
 
 export default function ManageTeacher(): JSX.Element {
     const [grid, setGrid] = useState(true);
@@ -98,7 +99,7 @@ export default function ManageTeacher(): JSX.Element {
             }
         }
 
-        const body = { ...payload, profileImage: imageUrl };
+        const body = { ...payload };
         addMutation.mutate({
             endpoint: '/teacher',
             data: body,
@@ -113,6 +114,7 @@ export default function ManageTeacher(): JSX.Element {
                     else {
                         const t: Teacher = {
                             id: returned._id || returned.id,
+                            email: returned.email || returned.email,
                             name: returned.userId?.name || returned.name || payload.name,
                             subject: returned.skills?.join(', ') || returned.subject || payload.subject,
                             description: returned.experience || returned.description || payload.description,
@@ -121,6 +123,7 @@ export default function ManageTeacher(): JSX.Element {
                             blocked: returned.blocked || false,
                             linkedin: returned.linkedin,
                             instagram: returned.instagram,
+                            profileImage: returned.profileImage
                         };
                         setTeachers((prev) => [t, ...prev]);
                     }
@@ -192,7 +195,7 @@ export default function ManageTeacher(): JSX.Element {
         <main className="min-h-screen bg-background">
             <div className="mx-auto px-6 py-6">
                 <div className="mb-6 flex items-center justify-between">
-                    <h2 className="text-xl font-semibold">Total {visibleTeachers.length} Teachers</h2>
+                    <h2 className="text-[20px] font-epilogue font-semibold">Total {visibleTeachers.length} Teachers</h2>
                     <div className="flex items-center gap-3">
                         <div className="relative">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground size-4" />
@@ -200,7 +203,7 @@ export default function ManageTeacher(): JSX.Element {
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
                                 placeholder="Search..."
-                                className="h-9 w-64 border border-border bg-background pl-10 pr-3 text-sm outline-none focus:ring-2 focus:ring-[color:var(--brand-primary)]"
+                                className="h-[48px] w-64 border border-border bg-background pl-10 pr-3 text-sm outline-none focus:ring-2 focus:ring-[color:var(--brand-primary)]"
                                 aria-label="Search teachers"
                             />
                         </div>
@@ -209,15 +212,15 @@ export default function ManageTeacher(): JSX.Element {
                             type="button"
                             aria-label="Filter"
                             onClick={() => { setTempFilters(appliedFilters); setIsFilterOpen(true); }}
-                            className="relative h-9 border border-border bg-card px-3 text-sm hover:bg-muted flex items-center gap-2"
+                            className="px-[16px] py-[12px] h-[48px] relative h-9 border border-border bg-card px-3 text-sm hover:bg-muted flex items-center gap-2"
                         >
                             <Filter className="size-4" />
                             {activeFilterCount > 0 && <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 rounded-full text-xs bg-[var(--brand-primary)] text-white">{activeFilterCount}</span>}
                         </button>
 
-                        <div className="flex bg-muted items-center h-[48px]">
+                        <div className="bg-primary px-[24px] py-[12px] items-center w-[180px] h-[48px] font-inter text-[16px] font-medium">
                             <button type="button" onClick={() => setIsAddOpen(true)} className={`${saveButtonClass} text-white`}>
-                                <span>+ Add Teacher</span>
+                                <span className='flex gap-2'><img src={AddIcon} /> Add Teacher</span>
                             </button>
                         </div>
                     </div>

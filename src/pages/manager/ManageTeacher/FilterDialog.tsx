@@ -21,7 +21,7 @@ export default function FilterDialog({
 }) {
     return (
         <Dialog open={open} onOpenChange={() => { }}>
-            <DialogContent className="w-full sm:max-w-md max-h-[70vh] rounded-lg overflow-hidden">
+            <DialogContent className="w-full sm:max-w-md max-h-[70vh] overflow-hidden">
                 <div className="flex flex-col h-full">
                     <div className="overflow-y-auto p-6 space-y-4">
                         <DialogHeader>
@@ -30,7 +30,7 @@ export default function FilterDialog({
 
                         <div className="grid gap-2">
                             <Label>Status</Label>
-                            <select value={tempFilters.status} onChange={(e) => setTempFilters((s) => ({ ...s, status: e.target.value as Filters['status'] }))} className="h-10 border border-border rounded-md px-3">
+                            <select value={tempFilters.status} onChange={(e) => setTempFilters((s) => ({ ...s, status: e.target.value as Filters['status'] }))} className="h-10 border border-border  px-3">
                                 <option value="all">All</option>
                                 <option value="active">Active (not blocked)</option>
                                 <option value="blocked">Blocked</option>
@@ -39,7 +39,7 @@ export default function FilterDialog({
 
                         <div className="grid gap-2">
                             <Label>Minimum rating</Label>
-                            <select value={tempFilters.minRating ?? ''} onChange={(e) => setTempFilters((s) => ({ ...s, minRating: e.target.value === '' ? null : Number(e.target.value) }))} className="h-10 border border-border rounded-md px-3">
+                            <select value={tempFilters.minRating ?? ''} onChange={(e) => setTempFilters((s) => ({ ...s, minRating: e.target.value === '' ? null : Number(e.target.value) }))} className="h-10 border border-border  px-3">
                                 <option value="">Any</option>
                                 <option value="1">1+</option>
                                 <option value="2">2+</option>
@@ -56,8 +56,8 @@ export default function FilterDialog({
                     </div>
 
                     <DialogFooter className="flex items-center justify-end gap-3 p-4 border-t border-border bg-card flex-shrink-0">
-                        <Button variant="outline" className="m-0" onClick={onReset}>Reset</Button>
-                        <Button onClick={onApply} className="m-0 w-[164px] h-[37px] rounded-none text-[16px] font-semibold bg-[#019ACB]">Apply</Button>
+                        <Button variant="outline" className="m-0 px-[24px] py-[12px] w-[164px] h-[48px] font-inter rounded-none text-[16px] font-semibold" onClick={onReset}>Reset</Button>
+                        <Button onClick={onApply} className="m-0 px-[24px] py-[12px] w-[164px] h-[48px] font-inter rounded-none text-[16px] font-semibold bg-[#019ACB]">Apply</Button>
                     </DialogFooter>
                 </div>
             </DialogContent>

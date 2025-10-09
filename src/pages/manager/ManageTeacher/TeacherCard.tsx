@@ -86,9 +86,9 @@ export default function TeacherCard({
                                 <img src={InstagramIcon} alt="Instagram" />
                             </a>
                         )}
-                        <a href="#" className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-muted hover:shadow-sm" aria-label="Facebook">
+                        {teacher.facebook && <a href={teacher.facebook} className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-muted hover:shadow-sm" aria-label="Facebook">
                             <img src={FacebookIcon} alt="facebook" />
-                        </a>
+                        </a>}
                     </div>
 
                     <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center border border-border">
