@@ -2,9 +2,17 @@ import ProfileHeader from "./ProfileHeader";
 import AboutMe from "./AboutMe";
 import Skills from "./Skills";
 import TabsSection from "./TabsSection";
-import { SocialLinks, type SocialLink } from "./SocialLinks";
 import { useFetch } from "../../../api";
 import { useParams } from "react-router-dom";
+
+import SocialLinks from "./SocialLinks"; // adjust relative path
+// export the same SocialLink type your Hirings expects
+export type SocialLink = {
+  id: string;
+  type: "email" | "phone" | "instagram" | "twitter" | "website" | "custom";
+  label?: string;
+  value: string;
+};
 
 const DEFAULT_LINKS: SocialLink[] = [
   { id: "1", type: "email", label: "Email", value: "jakegyll@email.com" },
@@ -14,18 +22,45 @@ const DEFAULT_LINKS: SocialLink[] = [
   { id: "5", type: "website", label: "Website", value: "www.jakegyll.com" },
 ];
 
+const normalizePlatformToType = (platform?: string): SocialLink["type"] => {
+  if (!platform) return "custom";
+  const p = platform.toLowerCase().trim();
+  if (p.includes("email") || p === "mailto") return "email";
+  if (p.includes("phone") || p === "tel") return "phone";
+  if (p.includes("instagram")) return "instagram";
+  if (p.includes("twitter")) return "twitter";
+  // backend has "Linkedin" — map to website (or to "custom" if you prefer)
+  if (p.includes("linkedin")) return "website";
+  if (p.includes("site") || p.includes("website") || p.includes("web")) return "website";
+  return "custom";
+};
+
+const makeLabelFromPlatform = (platform?: string, url?: string) => {
+  if (platform) {
+    // Capitalize first letter
+    const p = platform.charAt(0).toUpperCase() + platform.slice(1);
+    return p;
+  }
+  if (url) {
+    // fallback: hostname
+    try {
+      const u = url.startsWith("http") ? new URL(url) : new URL(`https://${url}`);
+      return u.hostname.replace(/^www\./, "");
+    } catch {
+      return url;
+    }
+  }
+  return "Link";
+};
+
 const Hirings = () => {
   const params = useParams < { id?: string } > ();
   const id = params.id;
 
-  // debug: check what params actually contain
   console.log("route params:", params);
 
-  // If your useFetch hook accepts `null` as the url to skip the fetch, use that.
-  // If it doesn't, wrap it with a conditional (see note below).
   const shouldFetch = Boolean(id);
   const { data: profile, isLoading, error } = useFetch(
-    // key includes id so cache is specific
     ["profile", id],
     shouldFetch ? `/profile/${id}` : null,
     true,
@@ -40,7 +75,6 @@ const Hirings = () => {
     );
   }
 
-  // Loading & Error UI
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -56,14 +90,64 @@ const Hirings = () => {
     );
   }
 
-  // Convert profile data into SocialLinks array if exists
-  const socialLinks: SocialLink[] =
-    profile?.socialLinks?.map((link: any, idx: number) => ({
-      id: String(idx + 1),
-      type: link.type,
-      label: link.label,
-      value: link.value,
-    })) || DEFAULT_LINKS;
+  // Build social links canonical array (email, phone, then backend socialLinks)
+  const buildSocialLinks = (): SocialLink[] => {
+    if (!profile) return DEFAULT_LINKS;
+
+    const seen = new Set < string > ();
+    const out: SocialLink[] = [];
+    let counter = 1;
+
+    // 1) Email from userId.email
+    const email = profile?.userId?.email;
+    if (email && typeof email === "string" && email.trim()) {
+      const value = email.trim();
+      if (!seen.has(value)) {
+        out.push({ id: String(counter++), type: "email", label: "Email", value });
+        seen.add(value);
+      }
+    }
+
+    // 2) Phone / mobile
+    const phone = profile?.mobile;
+    if (phone && typeof phone === "string" && phone.trim()) {
+      const value = phone.trim();
+      if (!seen.has(value)) {
+        out.push({ id: String(counter++), type: "phone", label: "Phone", value });
+        seen.add(value);
+      }
+    }
+
+    // 3) backend provided socialLinks array (platform + url)
+    if (Array.isArray(profile?.socialLinks)) {
+      profile.socialLinks.forEach((s: any) => {
+        const platform = (s?.platform ?? s?.name ?? s?.label ?? "").toString();
+        const rawUrl = (s?.url ?? s?.value ?? "").toString().trim();
+        if (!rawUrl) return;
+        if (seen.has(rawUrl)) return;
+
+        const type = normalizePlatformToType(platform);
+        const label = s?.label ? s.label : makeLabelFromPlatform(platform, rawUrl);
+
+        out.push({
+          id: String(counter++),
+          type,
+          label,
+          value: rawUrl,
+        });
+        seen.add(rawUrl);
+      });
+    }
+
+    // If we ended up with no links at all, fall back to DEFAULT_LINKS
+    if (!out.length) return DEFAULT_LINKS;
+
+    return out;
+  };
+
+  const socialLinks: SocialLink[] = buildSocialLinks();
+
+  console.log("", socialLinks);
 
   return (
     <div className="min-h-screen bg-gray-50">

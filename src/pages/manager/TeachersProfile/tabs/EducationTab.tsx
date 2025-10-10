@@ -7,7 +7,10 @@ interface EducationTabProps {
       institution: string;
       degree: string;
       duration?: string;
-      year?: string; // from schema
+      startYear?: string; // from schema
+      endYear?: string;
+      fieldOfStudy?: string;
+      currentlyStudying?: boolean;
     }[];
   };
 }
@@ -74,10 +77,11 @@ const EducationTab: React.FC<EducationTabProps> = ({ profile }) => {
                   {education.institution}
                 </h3>
                 <p className="text-[#141414] text-[16px] mb-2">
-                  {education.degree}
+                  {education.degree} , {education.fieldOfStudy}
                 </p>
                 <p className="text-[#595959] text-[16px]">
-                  {education.duration || education.year}
+                  {education.startYear} - {education.
+                    currentlyStudying ? "Present" : education.endYear}
                 </p>
               </div>
             </div>

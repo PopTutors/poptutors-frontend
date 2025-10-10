@@ -14,7 +14,7 @@ const Skills: React.FC<SkillsProps> = ({ skills = [] }) => {
           {skills.map((skill, index) => (
             <span
               key={index}
-              className="font-medium text-[14px] bg-[#019ACB14] text-[#019ACB] px-3 py-2 rounded-full"
+              className="font-medium text-[16px] bg-[#019ACB14] text-[#019ACB] px-[12px] py-[4px] "
             >
               {skill}
             </span>

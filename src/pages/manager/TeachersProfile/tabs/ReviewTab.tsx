@@ -82,7 +82,7 @@ const ReviewTab: React.FC<ReviewTabProps> = ({ profile }) => {
           <div className="relative">
             <button
               onClick={() => setServiceDropdownOpen((open) => !open)}
-              className="flex items-center gap-2 bg-white border border-gray-300 px-3 py-2 rounded-md cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-2 bg-white border border-gray-300 px-3 py-2  cursor-pointer whitespace-nowrap"
             >
               <span className="text-base sm:text-[16px] text-gray-600">
                 {selectedServiceType ? selectedServiceType : "Service Type"}
@@ -90,7 +90,7 @@ const ReviewTab: React.FC<ReviewTabProps> = ({ profile }) => {
               <ChevronDown className="w-4 h-4 text-gray-400" />
             </button>
             {serviceDropdownOpen && (
-              <ul className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-auto text-base sm:text-sm">
+              <ul className="absolute z-20 mt-1 w-full bg-white border border-gray-300  shadow-lg max-h-48 overflow-auto text-base sm:text-sm">
                 <li
                   className="cursor-pointer px-4 py-2 hover:bg-gray-100 flex items-center gap-2"
                   onClick={() => {
@@ -122,7 +122,7 @@ const ReviewTab: React.FC<ReviewTabProps> = ({ profile }) => {
           <div className="relative">
             <button
               onClick={() => setRatingDropdownOpen((open) => !open)}
-              className="flex items-center gap-2 bg-white border border-gray-300 px-3 py-2 rounded-md cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-2 bg-white border border-gray-300 px-3 py-2  cursor-pointer whitespace-nowrap"
             >
               <span className="text-base sm:text-[16px] text-gray-600">
                 {selectedRating ? `${selectedRating}+ Stars` : "Rating"}
@@ -130,7 +130,7 @@ const ReviewTab: React.FC<ReviewTabProps> = ({ profile }) => {
               <ChevronDown className="w-4 h-4 text-gray-400" />
             </button>
             {ratingDropdownOpen && (
-              <ul className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-auto text-base sm:text-sm">
+              <ul className="absolute z-20 mt-1 w-full bg-white border border-gray-300  shadow-lg max-h-48 overflow-auto text-base sm:text-sm">
                 <li
                   className="cursor-pointer px-4 py-2 hover:bg-gray-100 flex items-center gap-2"
                   onClick={() => {

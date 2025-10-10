@@ -48,7 +48,7 @@ const TabsSection: React.FC<TabsSectionProps> = ({ profile }) => {
               onClick={() => setActiveTab(tab)}
               className={`flex-shrink-0 py-3 px-3 sm:py-4 sm:px-1 border-b-2 font-medium text-[14px] sm:text-[16px] whitespace-nowrap ${activeTab === tab
                 ? "border-[#019ACB] text-[#141414]"
-                : "border-transparent text-[#8E8E93] hover:text-gray-700 hover:border-gray-300"
+                : "border-transparent text-[#8E8E93] font-inter text-[16px] hover:text-gray-700 hover:border-gray-300"
                 }`}
               aria-current={activeTab === tab ? "page" : undefined}
             >
