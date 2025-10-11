@@ -22,7 +22,7 @@ function normalizeFolderPath(folderPath?: string): string {
 export async function uploadToBunnyCDN({
   file,
   storageZone = "poptutors-dev",
-  accessKey = "560d8a4a-9412-4789-b32cca6b82fb-2199-47ca", // Use normal Password, NOT ReadOnly Password
+  accessKey = "619ea692-142a-4ef3-945fa72749df-c117-489d", // Use normal Password, NOT ReadOnly Password
   folderPath = "assignments",
 }: UploadConfig): Promise<UploadResponse> {
   try {
@@ -62,7 +62,7 @@ export async function uploadToBunnyCDN({
     }
 
     // Public URL
-    const publicUrl = `https://testing-bunny-poppy.b-cdn.net/${normalizedFolderPath}${fileName}`;
+    const publicUrl = `this-is-testing-poptutors.b-cdn.net/${normalizedFolderPath}${fileName}`;
 
     return {
       url: publicUrl,

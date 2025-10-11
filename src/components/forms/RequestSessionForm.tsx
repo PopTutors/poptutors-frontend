@@ -1,4 +1,5 @@
-import { useState, useRef } from 'react';
+// src/components/RequestSessionForm.tsx
+import React, { useState, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -6,7 +7,13 @@ import { UploadIcon, X, FileIcon } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { Select } from '../ui/select';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '../ui/select';
 import { MultiSelect } from '../ui/multi-select';
 import Textarea from '../ui/textarea';
 import { DateTimeDurationInput } from '../ui/DateTimeDurationInput';
@@ -15,6 +22,9 @@ import toast from 'react-hot-toast';
 import { useGenericMutation } from '../../api/useGenericMutation';
 import { uploadToBunnyCDN } from '../../utils/uploadToBunnyCdn';
 
+//
+// Validation schema
+//
 const formSchema = z.object({
   subject: z
     .union([z.string(), z.object({ value: z.string(), label: z.string() })])
@@ -44,6 +54,8 @@ const formSchema = z.object({
   duration: z.string().min(1, 'Duration is required'),
   requirements: z.string().optional(),
 });
+
+type FormData = z.infer<typeof formSchema>;
 
 const subjects = [
   { value: 'Computer Science', label: 'Computer Science' },
@@ -79,33 +91,32 @@ const agendaOptions = [
   'Skill Building',
 ];
 
-const RequestSessionForm = () => {
-  // Define UploadResponse type based on your uploadToBunnyCDN return value
-  type UploadResponse = { fileName?: string; fileSize?: number };
-  const [uploadedFiles, setUploadedFiles] = useState<UploadResponse[]>([]);
+const RequestSessionForm: React.FC = () => {
+  type UploadResponse = { fileName?: string; fileSize?: number; url?: string };
+  const [uploadedFiles, setUploadedFiles] = useState < UploadResponse[] > ([]);
   const [isUploading, setIsUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef < HTMLInputElement | null > (null);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
+  } = useForm < FormData > ({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subject: { value: 'Computer Science', label: 'Computer Science' },
+      subject: { value: 'Computer Science', label: 'Computer Science' } as any,
       topic: 'Case Studies',
-      expertiseLevel: { value: 'intermediate', label: 'Intermediate' },
+      expertiseLevel: { value: 'intermediate', label: 'Intermediate' } as any,
       skills: [
         { value: 'Python', label: 'Python' },
         { value: 'React Js', label: 'React Js' },
         { value: 'Node Js', label: 'Node Js' },
-      ],
-      language: { value: 'English', label: 'English' },
+      ] as any,
+      language: { value: 'English', label: 'English' } as any,
       budget: '',
       universityName: '',
-      sessionAgenda: { value: 'Subject tutoring', label: 'Subject tutoring' },
+      sessionAgenda: { value: 'Subject tutoring', label: 'Subject tutoring' } as any,
       additionalServices: '',
       dateTime: new Date(),
       duration: '1 hour',
@@ -115,12 +126,12 @@ const RequestSessionForm = () => {
 
   const { mutate, isLoading } = useGenericMutation();
 
+  // File upload handler
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
 
     setIsUploading(true);
-
     try {
       const uploadPromises = Array.from(files).map((file) =>
         uploadToBunnyCDN({
@@ -132,10 +143,7 @@ const RequestSessionForm = () => {
       const uploadResults = await Promise.all(uploadPromises);
       setUploadedFiles((prev) => [...prev, ...uploadResults]);
       toast.success(`${uploadResults.length} file(s) uploaded successfully!`);
-
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+      if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (error) {
       console.error('File upload error:', error);
       toast.error('File upload failed. Please try again.');
@@ -148,9 +156,11 @@ const RequestSessionForm = () => {
     setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (rawData: any) => {
     try {
-      const budgetMatch = data.budget.match(/\d+/);
+      // rawData fields have been transformed by zod (subject, language, etc. become strings)
+      const data: FormData = rawData;
+      const budgetMatch = data.budget.match(/[\d.]+/);
       const budgetNumber = budgetMatch ? parseInt(budgetMatch[0]) : 0;
 
       if (budgetNumber <= 0) {
@@ -158,28 +168,27 @@ const RequestSessionForm = () => {
         return;
       }
 
-      // Ensure dateTime is a valid Date object
-      let startTime;
-      if (data.dateTime instanceof Date) {
-        startTime = data.dateTime.toISOString();
+      // dateTime should be a Date (validation enforced by zod), but handle defensively
+      let startTimeISO: string;
+      if (data.dateTime instanceof Date && !isNaN(data.dateTime.getTime())) {
+        startTimeISO = data.dateTime.toISOString();
       } else {
-        // Handle case where dateTime might be a string
-        const parsedDate = new Date(data.dateTime);
-        if (isNaN(parsedDate.getTime())) {
+        const parsed = new Date(data.dateTime as any);
+        if (isNaN(parsed.getTime())) {
           toast.error('Please select a valid date and time');
           return;
         }
-        startTime = parsedDate.toISOString();
+        startTimeISO = parsed.toISOString();
       }
 
-      // Calculate end time based on duration
-      let endTime = startTime;
+      // duration parsing: if contains 'hour', add hours
+      let endTimeISO = startTimeISO;
       if (typeof data.duration === 'string' && data.duration.includes('hour')) {
         const durationMatch = data.duration.match(/\d+/);
-        const hours = durationMatch ? parseInt(durationMatch[0]) : 1;
-        const startDate = new Date(startTime);
+        const hours = durationMatch ? parseInt(durationMatch[0], 10) : 1;
+        const startDate = new Date(startTimeISO);
         startDate.setHours(startDate.getHours() + hours);
-        endTime = startDate.toISOString();
+        endTimeISO = startDate.toISOString();
       }
 
       const sessionPayload = {
@@ -191,10 +200,10 @@ const RequestSessionForm = () => {
         budget: budgetNumber,
         isNegotiable: true,
         sessionType: '1-on-1',
-        startTime,
-        endTime,
-        timezone: 'UTC',
-        documents: uploadedFiles,
+        startTime: startTimeISO,
+        endTime: endTimeISO,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+        documents: uploadedFiles.map((f) => f.url).filter(Boolean),
         universityName: data.universityName,
         sessionAgenda: data.sessionAgenda,
         additionalServices: data.additionalServices || '',
@@ -212,6 +221,7 @@ const RequestSessionForm = () => {
         onSuccessCallback: () => {
           reset();
           setUploadedFiles([]);
+          toast.success('Session requested successfully!');
         },
         onErrorCallback: (error) => {
           console.error('Session request error:', error);
@@ -225,7 +235,7 @@ const RequestSessionForm = () => {
   };
 
   return (
-    <div className="max-w-[100%]  p-0">
+    <div className="max-w-full p-0">
       <div className="mb-6">
         <div className="mb-4">
           <h1 className="text-xl font-semibold text-gray-800">Request Session</h1>
@@ -268,11 +278,6 @@ const RequestSessionForm = () => {
                   <span className="text-sm text-gray-700 truncate">
                     {file.fileName || `File ${index + 1}`}
                   </span>
-                  {/* {file.fileSize && (
-                    <span className="text-xs text-gray-500">
-                      ({Math.round(file.fileSize / 1024)}KB)
-                    </span>
-                  )} */}
                 </div>
                 <Button
                   type="button"
@@ -290,18 +295,36 @@ const RequestSessionForm = () => {
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Subject & Topic */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <Label>Subjects</Label>
             <Controller
               name="subject"
               control={control}
-              render={({ field }) => (
-                <Select options={subjects} placeholder="Select Subject" {...field} />
-              )}
+              render={({ field }) => {
+                // field.value can be string or {value,label}; normalize to primitive
+                const currentValue =
+                  typeof field.value === 'string' ? field.value : field.value?.value ?? '';
+                return (
+                  <Select value={currentValue} onValueChange={(v) => field.onChange(v ?? '')}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Subject" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {subjects.map((s) => (
+                        <SelectItem key={s.value} value={s.value}>
+                          {s.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                );
+              }}
             />
             <FieldError name="subject" errors={errors} />
           </div>
+
           <div>
             <Label>Topics</Label>
             <Controller
@@ -313,27 +336,34 @@ const RequestSessionForm = () => {
           </div>
         </div>
 
+        {/* Expertise & Skills */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <Label>Expertise Levels</Label>
             <Controller
               name="expertiseLevel"
               control={control}
-              render={({ field }) => (
-                <Select
-                  options={[
-                    { value: 'beginner', label: 'Beginner' },
-                    { value: 'intermediate', label: 'Intermediate' },
-                    { value: 'advanced', label: 'Advanced' },
-                    { value: 'expert', label: 'Expert' },
-                  ]}
-                  placeholder="Select Expertise Level"
-                  {...field}
-                />
-              )}
+              render={({ field }) => {
+                const currentValue =
+                  typeof field.value === 'string' ? field.value : field.value?.value ?? '';
+                return (
+                  <Select value={currentValue} onValueChange={(v) => field.onChange(v ?? '')}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Expertise Level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="beginner">Beginner</SelectItem>
+                      <SelectItem value="intermediate">Intermediate</SelectItem>
+                      <SelectItem value="advanced">Advanced</SelectItem>
+                      <SelectItem value="expert">Expert</SelectItem>
+                    </SelectContent>
+                  </Select>
+                );
+              }}
             />
             <FieldError name="expertiseLevel" errors={errors} />
           </div>
+
           <div>
             <Label>Skills</Label>
             <Controller
@@ -345,13 +375,10 @@ const RequestSessionForm = () => {
                   : [];
                 return (
                   <MultiSelect
-                    options={skillOptions.map((skill) => ({
-                      label: skill,
-                      value: skill,
-                    }))}
+                    options={skillOptions.map((skill) => ({ label: skill, value: skill }))}
                     placeholder="Select skills"
-                    {...field}
                     value={mappedValue}
+                    onChange={(vals: string[]) => field.onChange(vals)}
                   />
                 );
               }}
@@ -360,18 +387,35 @@ const RequestSessionForm = () => {
           </div>
         </div>
 
+        {/* Language & Budget */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <Label>Language</Label>
             <Controller
               name="language"
               control={control}
-              render={({ field }) => (
-                <Select options={languages} placeholder="Select Language" {...field} />
-              )}
+              render={({ field }) => {
+                const currentValue =
+                  typeof field.value === 'string' ? field.value : field.value?.value ?? '';
+                return (
+                  <Select value={currentValue} onValueChange={(v) => field.onChange(v ?? '')}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {languages.map((l) => (
+                        <SelectItem key={l.value} value={l.value}>
+                          {l.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                );
+              }}
             />
             <FieldError name="language" errors={errors} />
           </div>
+
           <div>
             <Label>Budget</Label>
             <Controller
@@ -385,6 +429,7 @@ const RequestSessionForm = () => {
           </div>
         </div>
 
+        {/* University & Agenda */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <Label>University Name/Organization</Label>
@@ -397,26 +442,36 @@ const RequestSessionForm = () => {
             />
             <FieldError name="universityName" errors={errors} />
           </div>
+
           <div>
             <Label>Session Agenda</Label>
             <Controller
               name="sessionAgenda"
               control={control}
-              render={({ field }) => (
-                <Select
-                  options={agendaOptions.map((option) => ({
-                    label: option,
-                    value: option,
-                  }))}
-                  placeholder="Select Session Agenda"
-                  {...field}
-                />
-              )}
+              render={({ field }) => {
+                const currentValue =
+                  typeof field.value === 'string' ? field.value : field.value?.value ?? '';
+                return (
+                  <Select value={currentValue} onValueChange={(v) => field.onChange(v ?? '')}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Session Agenda" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {agendaOptions.map((a) => (
+                        <SelectItem key={a} value={a}>
+                          {a}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                );
+              }}
             />
             <FieldError name="sessionAgenda" errors={errors} />
           </div>
         </div>
 
+        {/* Additional Services & Date/Time */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <Label>Additional Services</Label>
@@ -424,15 +479,12 @@ const RequestSessionForm = () => {
               name="additionalServices"
               control={control}
               render={({ field }) => (
-                <Input
-                  {...field}
-                  type="text"
-                  placeholder="Type if you need any additional services"
-                />
+                <Input {...field} type="text" placeholder="Type if you need any additional services" />
               )}
             />
             <FieldError name="additionalServices" errors={errors} />
           </div>
+
           <div>
             <Label>Date and Time Slot</Label>
             <Controller
@@ -440,9 +492,8 @@ const RequestSessionForm = () => {
               control={control}
               render={({ field }) => (
                 <DateTimeDurationInput
-                  {...field}
-                  value={field.value}
-                  onChange={field.onChange}
+                  value={field.value as Date}
+                  onChange={(val: Date) => field.onChange(val)}
                   durationField={{
                     name: 'duration',
                     control: control,
@@ -454,6 +505,7 @@ const RequestSessionForm = () => {
           </div>
         </div>
 
+        {/* Requirements */}
         <div>
           <Label>Specific Requirements or Instructions</Label>
           <Controller
@@ -464,6 +516,7 @@ const RequestSessionForm = () => {
           <FieldError name="requirements" errors={errors} />
         </div>
 
+        {/* Footer */}
         <div className="flex justify-end gap-3 pt-4">
           <Button
             variant="pill_outline"
@@ -476,12 +529,7 @@ const RequestSessionForm = () => {
           >
             Cancel
           </Button>
-          <Button
-            variant="pill_solid"
-            size="pill"
-            type="submit"
-            disabled={isLoading || isUploading}
-          >
+          <Button variant="pill_solid" size="pill" type="submit" disabled={isLoading || isUploading}>
             {isLoading ? 'Booking...' : 'Book Now'}
           </Button>
         </div>

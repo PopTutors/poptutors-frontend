@@ -1,29 +1,11 @@
+// src/ui/select.tsx  (replace your existing file)
 import * as React from "react";
 import { Listbox } from "@headlessui/react";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
 
 import { cn } from "../../utils/cn";
 
-/**
- * Headless UI based Select — compound API similar to the Radix version.
- *
- * Usage:
- * <Select value={value} onChange={setValue}>
- *   <SelectTrigger><SelectValue placeholder="Choose..." /></SelectTrigger>
- *   <SelectContent>
- *     <SelectLabel>Group A</SelectLabel>
- *     <SelectItem value="one">Option One</SelectItem>
- *     <SelectItem value="two">Option Two</SelectItem>
- *     <SelectSeparator />
- *     <SelectLabel>Group B</SelectLabel>
- *     <SelectItem value="three">Option Three</SelectItem>
- *   </SelectContent>
- * </Select>
- */
-
-/* -------------------------
-   Context & Root (Select)
-   ------------------------- */
+/* Context & Root */
 type SelectProps<T> = {
   value: T | null | undefined;
   onChange: (v: T) => void;
@@ -31,10 +13,10 @@ type SelectProps<T> = {
   as?: React.ElementType;
 };
 
-const SelectContext = React.createContext<{
+const SelectContext = React.createContext < {
   value: any;
   onChange: (v: any) => void;
-} | null>(null);
+} | null > (null);
 
 function Select<T>({ value, onChange, children }: SelectProps<T>) {
   return (
@@ -46,16 +28,14 @@ function Select<T>({ value, onChange, children }: SelectProps<T>) {
   );
 }
 
-/* -------------------------
-   Trigger / Value
-   ------------------------- */
-const SelectTrigger = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<"button">>(
+/* Trigger / Value */
+const SelectTrigger = React.forwardRef < HTMLButtonElement, React.ComponentPropsWithoutRef< "button" >> (
   ({ className, children, ...props }, ref) => {
     return (
       <Listbox.Button
         ref={ref}
         className={cn(
-          "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+          "flex h-10 w-full items-center justify-between rounded-md border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
           className,
         )}
         {...props}
@@ -77,58 +57,49 @@ function SelectValue({
 }) {
   const ctx = React.useContext(SelectContext);
   const value = ctx?.value;
-  // If value is string or number show it; for complex values user should pass a renderer in SelectItem children.
   return (
     <span className={cn("truncate", className)}>
       {value === null || value === undefined || value === "" ? (
         <span className="text-muted-foreground">{placeholder ?? ""}</span>
+      ) : typeof value === "string" || typeof value === "number" ? (
+        String(value)
       ) : (
-        // best-effort display; if value is object show JSON short string
-        typeof value === "string" || typeof value === "number" ? (
-          String(value)
-        ) : (
-          // fallback
-          JSON.stringify(value)
-        )
+        JSON.stringify(value)
       )}
     </span>
   );
 }
 SelectValue.displayName = "SelectValue";
 
-/* -------------------------
-   Content / Options
-   ------------------------- */
+/* Content / Options - FIXED: use Listbox.Options */
 type SelectContentProps = {
   children?: React.ReactNode;
   className?: string;
   position?: "absolute" | "popper";
 };
 
-const SelectContent = React.forwardRef<HTMLUListElement, SelectContentProps>(
+const SelectContent = React.forwardRef < HTMLDivElement, SelectContentProps> (
   ({ className, children, position = "popper", ...props }, ref) => {
-    // headlessui uses static DOM for options; we'll position absolutely relative to wrapper
     return (
-      <div
+      // IMPORTANT: Use Listbox.Options so Headless UI can manage open/close & focus
+      <Listbox.Options
         ref={ref as any}
+        static={false}
         className={cn(
-          "absolute z-50 mt-1 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md",
-          position === "popper" &&
-            "left-0 right-0",
+          "absolute z-50 mt-1 max-h-60 min-w-[8rem] overflow-auto rounded-md border-none  bg-white text-popover-foreground shadow-md",
+          position === "popper" && "left-0 right-0",
           className,
         )}
-        {...props}
+        {...(props as any)}
       >
-        <ul className="p-1">{children}</ul>
-      </div>
+        {children}
+      </Listbox.Options>
     );
   },
 );
 SelectContent.displayName = "SelectContent";
 
-/* -------------------------
-   Item / Option
-   ------------------------- */
+/* Item / Option */
 type SelectItemProps<T = string> = {
   value: T;
   children?: React.ReactNode;
@@ -138,11 +109,7 @@ type SelectItemProps<T = string> = {
 
 function SelectItem<T>({ value, children, className, disabled }: SelectItemProps<T>) {
   return (
-    <Listbox.Option
-      value={value}
-      disabled={disabled}
-      as={React.Fragment}
-    >
+    <Listbox.Option value={value} disabled={disabled} as={React.Fragment}>
       {({ active, selected }) => (
         <li
           className={cn(
@@ -163,10 +130,8 @@ function SelectItem<T>({ value, children, className, disabled }: SelectItemProps
 }
 SelectItem.displayName = "SelectItem";
 
-/* -------------------------
-   Label / Separator / Group
-   ------------------------- */
-const SelectLabel = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<"div">>(
+/* Label / Separator / Group */
+const SelectLabel = React.forwardRef < HTMLDivElement, React.ComponentPropsWithoutRef< "div" >> (
   ({ className, children, ...props }, ref) => (
     <div ref={ref} className={cn("py-1.5 pl-8 pr-2 text-sm font-semibold", className)} {...props}>
       {children}
@@ -175,7 +140,7 @@ const SelectLabel = React.forwardRef<HTMLDivElement, React.ComponentPropsWithout
 );
 SelectLabel.displayName = "SelectLabel";
 
-const SelectSeparator = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<"div">>(
+const SelectSeparator = React.forwardRef < HTMLDivElement, React.ComponentPropsWithoutRef< "div" >> (
   ({ className, ...props }, ref) => (
     <div ref={ref} className={cn("-mx-1 my-1 h-px bg-muted", className)} {...props} />
   ),
@@ -185,10 +150,8 @@ SelectSeparator.displayName = "SelectSeparator";
 const SelectGroup = ({ children }: { children?: React.ReactNode }) => <div>{children}</div>;
 SelectGroup.displayName = "SelectGroup";
 
-/* -------------------------
-   Scroll buttons (visual only)
-   ------------------------- */
-const SelectScrollUpButton = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<"div">>(
+/* Scroll buttons (visual only) */
+const SelectScrollUpButton = React.forwardRef < HTMLDivElement, React.ComponentPropsWithoutRef< "div" >> (
   ({ className, ...props }, ref) => (
     <div ref={ref} className={cn("flex cursor-default items-center justify-center py-1", className)} {...props}>
       <ChevronUp className="h-4 w-4" />
@@ -197,7 +160,7 @@ const SelectScrollUpButton = React.forwardRef<HTMLDivElement, React.ComponentPro
 );
 SelectScrollUpButton.displayName = "SelectScrollUpButton";
 
-const SelectScrollDownButton = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<"div">>(
+const SelectScrollDownButton = React.forwardRef < HTMLDivElement, React.ComponentPropsWithoutRef< "div" >> (
   ({ className, ...props }, ref) => (
     <div ref={ref} className={cn("flex cursor-default items-center justify-center py-1", className)} {...props}>
       <ChevronDown className="h-4 w-4" />
@@ -206,9 +169,7 @@ const SelectScrollDownButton = React.forwardRef<HTMLDivElement, React.ComponentP
 );
 SelectScrollDownButton.displayName = "SelectScrollDownButton";
 
-/* -------------------------
-   Exports
-   ------------------------- */
+/* Exports */
 export {
   Select,
   SelectGroup,
