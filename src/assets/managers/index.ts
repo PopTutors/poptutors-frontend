@@ -56,6 +56,11 @@ import LocationIcon from './location.svg';
 import MailIcon from './mail.svg';
 import LanguageIcon from './language.svg';
 import PhoneIcon from './mobile.svg';
+import SortIcon from './sort.svg';
+import DeadlineIcon from './deadline.svg';
+import PostedDateIcon from './postedDate.svg';
+import BudgetIcon from './budget.svg';
+import StarIcon from './star.svg';
 export {
   DeleteIcon,
   InactiveIcon,
@@ -114,5 +119,10 @@ export {
   LocationIcon,
   MailIcon,
   PhoneIcon,
-  LanguageIcon
+  LanguageIcon,
+  SortIcon,
+  DeadlineIcon,
+  PostedDateIcon,
+  BudgetIcon,
+  StarIcon
 };

@@ -18,11 +18,11 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
     return (
         <div className="bg-white shadow-sm mb-6 xs:h-[400px]">
-            <img src={HeaderProfile} className="w-full h-[90px] object-cover" />
+            <img src={HeaderProfile} className="w-full h-[130px] object-cover" />
             <div className="px-4 sm:px-6 lg:px-8 pb-6">
                 <div className="flex flex-col md:flex-row gap-6 -mt-16 items-center md:items-start">
                     <div className="relative flex-shrink-0">
-                        <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full border-4 border-white bg-white overflow-hidden">
+                        <div className="w-[140px] h-[140px] sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full border-8 border-white bg-white overflow-hidden">
                             <img
                                 src={profile.profileImage || Person}
                                 alt={profile.userId?.name || "User"}
@@ -41,14 +41,14 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                                         ? `${experiences[0].title} at ${experiences[0].company}`
                                         : "Member"}
                                 </p>
-                                <div className="flex items-center gap-1 text-sm text-gray-500 mt-1 sm:mt-2 justify-center md:justify-start">
+                                <div className="flex items-center gap-1 mt-1 sm:mt-2 justify-center md:justify-start">
                                     <img src={LocationIcon} />
                                     <span className="text-[16px] font-inter text-[#595959]">{profile.country || "Unknown location"}</span>
                                 </div>
                             </div>
                             <Button
                                 variant="outline"
-                                className={`${cancelButtonClass} text-primary w-full md:w-auto mt-4 md:mt-0`}
+                                className={`${cancelButtonClass} text-[16px] font-inter font-medium text-primary w-full md:w-auto mt-4 md:mt-0`}
                                 onClick={onEditProfile}
                             >
                                 Edit Profile

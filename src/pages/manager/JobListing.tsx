@@ -18,6 +18,10 @@ import {
   ManagerEditIcon,
   InactiveIcon,
   ReOpenIcon,
+  SortIcon,
+  DeadlineIcon,
+  PostedDateIcon,
+  BudgetIcon,
 } from "../../assets/managers";
 import {
   Dialog,
@@ -56,17 +60,17 @@ type JobRow = {
 };
 
 const statusColors: Record<string, string> = {
-  Live: "bg-green-100 text-green-600 border border-green-600 ",
-  New: "bg-blue-100  text-blue-600 border border-blue-600",
-  Ongoing: "bg-blue-50   text-blue-500 border border-blue-500",
-  Closed: "bg-red-50    text-red-500 border  border-red-500",
-  Inactive: "bg-gray-50   text-gray-500 border border-gray-500",
+  "Live": "bg-[rgb(245,251,249)] text-[rgb(65,190,144)] border border-[rgb(65,190,144)] ",
+  "New": "bg-[rgb(245,247,254 )]  text-[rgb(60,93,238)] border border-[rgb(60,93,238)]  ",
+  "Ongoing": "bg-[rgb(242,250,252)]  text-[rgb(1,154,203)] border border-[rgb(1,154,203)]  ",
+  "Closed": "bg-[rgb(255,247,246)]   text-[rgb(255,101,80)] border  border-[rgb(255,101,80)]",
+  "Inactive": "bg-gray-50   text-gray-500 border border-gray-500",
 };
 
 const jobTypeColors: Record<string, string> = {
-  liveHelp: "bg-red-50    text-red-500  border border-red-500",
-  session: "bg-yellow-50 text-yellow-600 border border-yellow-600",
-  assignment: "bg-blue-50   text-blue-500 border border-blue-500",
+  "Live Help": "bg-[#fff7f6]    text-[#ff6550]  border border-[#ff6550]",
+  "Session": "bg-[rgb(255,251,245)] text-[rgb(255,175,56)] border border-[rgb(255,175,56)]",
+  "Assignment": "bg-[rgb(242,250,252)]  text-[rgb(1,154,203)] border border-[rgb(1,154,203)]  ",
 };
 
 const allStatuses = ["Good fit", "New", "Rejected", "Finalized"];
@@ -309,6 +313,12 @@ const JobListing: React.FC = () => {
     navigate(`/manager/job-listing/${jobType}/${jobId}/applicants`);
   };
 
+  const jobTypeMap: object = {
+    "assignment": "Assignment",
+    "liveHelp": "Live Help",
+    "session": "Session",
+  }
+
   // Build grid rows from displayedItems
   const gridRows: JobRow[] = useMemo(
     () =>
@@ -320,7 +330,7 @@ const JobListing: React.FC = () => {
         const due = job.dueDate ? new Date(job.dueDate).toLocaleDateString() : job.startTime ? new Date(job.startTime).toLocaleDateString() : "-";
         const location = job.location || job.country || job.createdBy?.country || "-";
         const status = job.status || "-";
-        const jobType = job.type || job._type || "-";
+        const jobType = jobTypeMap[job.type] || job._type || "-";
         const applicants = typeof job.applicants === "number" ? job.applicants : job.applicants?.length ?? 0;
 
         return {
@@ -507,9 +517,15 @@ const JobListing: React.FC = () => {
 
                 <button
                   onClick={async (e) => { e.stopPropagation(); if (!job._id) return; if (!confirm("Delete this job?")) return; await handleDeleteJob(job._id); }}
-                  className="flex gap-2 w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors mt-2 text-red-600"
+                  className="flex gap-2 w-full border-b border-gray text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors mt-2 text-red-600"
                 >
                   <img src={DeleteIcon} alt="delete" /> Delete job
+                </button>
+                <button
+                  onClick={async (e) => { e.stopPropagation(); if (!job._id) return; await changeStatus(job._id, "Live"); }}
+                  className="flex gap-2 w-full text-left px-4 py-3 text-sm hover:bg-gray-50 transition-colors"
+                >
+                  <img src={ReOpenIcon} alt="reopen" /> Reopen job
                 </button>
               </>
             );
@@ -538,7 +554,7 @@ const JobListing: React.FC = () => {
   if (error) return <div className="p-6 text-red-500">Error loading requests</div>;
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-[#fff]">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
         <h1 className="text-[20px] font-bold text-gray-900">
@@ -551,8 +567,8 @@ const JobListing: React.FC = () => {
             <input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="border border-gray-200 pl-10 pr-4 py-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-              placeholder="Search subject or description..."
+              className="border border-gray-200 pl-10 pr-4 py-2 text-[16px] w-64 h-[48px] text-[#8E8E8E] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              placeholder="Search..."
               aria-label="Search jobs"
             />
           </div>
@@ -560,7 +576,7 @@ const JobListing: React.FC = () => {
           <div className="relative flex items-center gap-2">
             <button
               onClick={() => setShowFilterModal(true)}
-              className="border border-gray-200 px-4 py-2 flex items-center gap-2 bg-white shadow-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              className="border border-gray-200 px-4 py-2 h-[48px] flex items-center gap-2 bg-white shadow-sm text-gray-700 hover:bg-gray-50 transition-colors"
               aria-label="Open filters"
             >
               <Filter className="w-5 h-5" />
@@ -569,55 +585,47 @@ const JobListing: React.FC = () => {
             <div className="relative">
               <button
                 onClick={() => setShowSortDropdown((s) => !s)}
-                className="border border-gray-200 px-4 py-2 flex items-center gap-2 bg-white shadow-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                className="border border-gray-200 px-4 py-2 h-[48px] flex items-center gap-2 bg-white shadow-sm text-gray-700 hover:bg-gray-50 transition-colors"
               >
-                Sort by
+                <img src={SortIcon} /> Sort by
               </button>
 
               {showSortDropdown && (
-                <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                <div className="absolute right-0 top-full mt-1 w-[170px] bg-white border border-gray-200  shadow-lg z-10 p-2">
                   <div className="py-1">
                     <button
                       onClick={() => {
                         setSortBy("deadline");
                         setShowSortDropdown(false);
                       }}
-                      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                      className="w-full px-4 py-2 text-left text-[14px] text-[#141414] hover:bg-gray-50 flex items-center gap-2"
                     >
-                      <Clock className="w-4 h-4" />
+                      <img src={DeadlineIcon} />
                       Deadline
                     </button>
+                    <hr className="my-1" />
 
                     <button
                       onClick={() => {
                         setSortBy("posted");
                         setShowSortDropdown(false);
                       }}
-                      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                      className="w-full px-4 py-2 text-left text-[14px] text-[#141414] hover:bg-gray-50 flex items-center gap-2"
                     >
-                      <Calendar className="w-4 h-4" />
+                      <img src={PostedDateIcon} />
                       Posted date
                     </button>
+                    <hr className="my-1" />
 
                     <button
                       onClick={() => {
                         setSortBy("budget");
                         setShowSortDropdown(false);
                       }}
-                      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                      className="w-full px-4 py-2 text-left text-[14px] text-[#141414] hover:bg-gray-50 flex items-center gap-2"
                     >
-                      <DollarSign className="w-4 h-4" />
+                      <img src={BudgetIcon} />
                       Budget
-                    </button>
-                    <hr className="my-1" />
-                    <button
-                      onClick={() => {
-                        setShowSortDropdown(false);
-                      }}
-                      className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                    >
-                      <UserX className="w-4 h-4" />
-                      Inactive
                     </button>
                   </div>
                 </div>
@@ -628,7 +636,7 @@ const JobListing: React.FC = () => {
       </div>
 
       {/* DataGrid (replaces table) */}
-      <div className="bg-white shadow-sm border border-gray-200 overflow-x-auto">
+      <div className="bg-white overflow-x-auto">
         <div className="min-w-0">
           <DataGrid columns={columns} rows={gridRows} pageSize={8} onRowClick={(r) => handleRowClick(r.__job)} />
         </div>
@@ -637,8 +645,8 @@ const JobListing: React.FC = () => {
       {/* Footer */}
 
       {/* Filter Modal: (unchanged) */}
-      <Dialog open={showFilterModal} onOpenChange={setShowFilterModal}>
-        <DialogContent className="max-w-lg w-full">
+      <Dialog open={false} onOpenChange={setShowFilterModal}>
+        <DialogContent className="max-w-lg w-full p-6">
           <DialogHeader>
             <div className="flex items-start justify-between w-full">
               <DialogTitle className="text-lg font-semibold">Filter & Sort</DialogTitle>

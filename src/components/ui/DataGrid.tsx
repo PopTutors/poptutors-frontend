@@ -8,7 +8,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   TableSortLabel,
   Button,
   Select,
@@ -260,8 +259,7 @@ export default function DataGrid<T extends Record<string, any>>({
   }, [totalPages, page]);
 
   return (
-    <Paper
-      elevation={0}
+    <Box
       className={className}
       sx={{
         boxShadow: "none",
@@ -271,16 +269,16 @@ export default function DataGrid<T extends Record<string, any>>({
       }}
     >
       <TableContainer
-        component={Paper}
+        // component={Box}
         sx={{
           borderRadius: 0,
-          border: "1px solid #e5e7eb",
-          boxShadow: "none",
+          border: "1px solid #e6e6e6",
         }}
+        className="shadow-sm"
       >
-        <Table sx={{ width: "100%", minWidth: 0 }} size="medium">
+        <Table sx={{ width: "100%", minWidth: 0, overflow: "scroll" }} size="medium">
           <TableHead>
-            <TableRow sx={{ backgroundColor: "#fbfbfb", cursor: onRowClick ? "pointer" : "default" }} onClick={() => onRowClick?.(row)} >
+            <TableRow sx={{ backgroundColor: "#fafafa", cursor: onRowClick ? "pointer" : "default" }} onClick={() => onRowClick?.(row)} >
               {columns.map((col, index) => {
                 const width = columnWidths[col.key];
                 return (
@@ -290,7 +288,6 @@ export default function DataGrid<T extends Record<string, any>>({
                     sx={{
                       position: "relative",
                       fontFamily: "Inter, sans-serif",
-                      fontWeight: 600,
                       fontSize: 16,
                       width: width ? `${width}px` : "auto",
                       minWidth: col.minWidth ? `${col.minWidth}px` : undefined,
@@ -307,41 +304,43 @@ export default function DataGrid<T extends Record<string, any>>({
                         onClick={() => handleRequestSort(col.key)}
                         hideSortIcon={true}
                       >
-                        <Typography sx={{ fontFamily: "Inter, sans-serif", fontSize: 16, fontWeight: 600, color: "#141414" }}>
+                        <Typography sx={{ fontFamily: "Inter, sans-serif", fontSize: 16, fontWeight: 500, color: "#141414" }}>
                           {col.label}
                         </Typography>
                       </TableSortLabel>
                     </Box>
 
                     {/* Resize handle at right edge */}
-                    {index < columns.length - 1 && < div
-                      onMouseDown={(e) => startDrag(e, col.key)}
-                      onTouchStart={(e) => startTouchDrag(e, col.key)}
-                      style={{
-                        position: "absolute",
-                        right: 0,
-                        top: 0,
-                        height: "100%",
-                        width: 8,
-                        transform: "translateX(50%)",
-                        cursor: "col-resize",
-                        zIndex: 30,
-                        // make a bigger hit area but visually small
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <div
+                    {
+                      index < columns.length - 1 && < div
+                        onMouseDown={(e) => startDrag(e, col.key)}
+                        onTouchStart={(e) => startTouchDrag(e, col.key)}
                         style={{
-                          width: 2,
-                          height: "60%",
-                          background: "rgba(0,0,0,0.12)",
-                          borderRadius: 1,
-                          pointerEvents: "none",
+                          position: "absolute",
+                          right: 0,
+                          top: 0,
+                          height: "100%",
+                          width: 8,
+                          transform: "translateX(50%)",
+                          cursor: "col-resize",
+                          zIndex: 30,
+                          // make a bigger hit area but visually small
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
                         }}
-                      />
-                    </div>}
+                      >
+                        <div
+                          style={{
+                            width: 2,
+                            height: "60%",
+                            background: "rgba(0,0,0,0.12)",
+                            borderRadius: 1,
+                            pointerEvents: "none",
+                          }}
+                        />
+                      </div>
+                    }
                   </TableCell>
                 );
               })}
@@ -351,13 +350,13 @@ export default function DataGrid<T extends Record<string, any>>({
           <TableBody>
             {paginated.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={columns.length} align="center" sx={{ py: 6, color: "#6b7280", fontFamily: "Inter, sans-serif" }}>
+                <TableCell colSpan={columns.length} align="center" sx={{ py: 6, color: "#ffff", fontFamily: "Inter, sans-serif" }}>
                   {emptyState ?? "No records"}
                 </TableCell>
               </TableRow>
             ) : (
               paginated.map((row, idx) => (
-                <TableRow key={(row && (row.id ?? row.jobId ?? idx)) as React.Key} hover sx={{ backgroundColor: "#fbfbfb", cursor: onRowClick ? "pointer" : "default" }} onClick={() => onRowClick?.(row)}>
+                <TableRow key={(row && (row.id ?? row.jobId ?? idx)) as React.Key} hover sx={{ backgroundColor: "#ffff", cursor: onRowClick ? "pointer" : "default" }} onClick={() => onRowClick?.(row)}>
                   {columns.map((col) => (
                     <TableCell
                       key={col.key}
@@ -372,6 +371,7 @@ export default function DataGrid<T extends Record<string, any>>({
                         textOverflow: "ellipsis",
                         maxWidth: col.width ? `${col.width}px` : undefined,
                         width: columnWidths[col.key] ? `${columnWidths[col.key]}px` : undefined,
+                        fontWeight: 500
                       }}
                     >
                       {col.render ? col.render(row) : String((row as any)[col.key] ?? "")}
@@ -485,6 +485,6 @@ export default function DataGrid<T extends Record<string, any>>({
           </Box>
         </Box>
       </Box>
-    </Paper >
+    </Box >
   );
 }

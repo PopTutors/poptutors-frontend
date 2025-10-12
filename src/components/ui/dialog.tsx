@@ -4,7 +4,7 @@ import { cn } from '../../utils/cn'; // optional: if you have a classnames helpe
 
 /* --------------------------- Dialog Context --------------------------- */
 /* lightweight context so Trigger/Close can call onOpenChange */
-const DialogContext = React.createContext<{ setOpen?: (open: boolean) => void } | null>(null);
+const DialogContext = React.createContext < { setOpen?: (open: boolean) => void } | null > (null);
 
 /* ----------------------------- Types -------------------------------- */
 interface DialogProps {
@@ -50,7 +50,7 @@ export function Dialog({
 
         {/* Dialog Container */}
         <div
-          className={cn('fixed inset-0 flex items-center justify-center p-4', containerClassName)}
+          className={cn('fixed inset-0 flex items-center justify-center', containerClassName)}
         >
           {children}
         </div>
@@ -63,7 +63,7 @@ export function Dialog({
 export function DialogContent({ className, children, ...rest }: DialogContentProps) {
   return (
     <HeadlessDialog.Panel
-      className={cn('relative w-full max-w-lg bg-white p-6 shadow-lg transition-all', className)}
+      className={cn('relative w-full max-w-lg bg-white shadow-lg transition-all', className)}
       {...rest}
     >
       {children}

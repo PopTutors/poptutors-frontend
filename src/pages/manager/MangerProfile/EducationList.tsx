@@ -69,15 +69,15 @@ export const EducationList: React.FC<EducationListProps> = ({
                                 </div>
 
                                 {edu.description && (
-                                    <p className="text-[16px] text-[#141414CC] mt-3 leading-relaxed">
+                                    <p className="text-[16px] font-inter text-[#434343] mt-4 leading-relaxed">
                                         {edu.description}
                                     </p>
                                 )}
-                                {edu.currentlyStudying && (
+                                {/* {edu.currentlyStudying && (
                                     <span className="text-xs text-green-600 mt-1 inline-block">
                                         Currently studying
                                     </span>
-                                )}
+                                )} */}
                             </div>
                         </div>
                     ))

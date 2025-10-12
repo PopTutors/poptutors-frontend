@@ -49,7 +49,7 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-start justify-between">
                                         <div className="min-w-0">
-                                            <h3 className="text-[18px] font-inter font-bold text-gray-900 truncate mb-2">{xp.title}</h3>
+                                            <h3 className="text-[18px] font-inter font-semibold text-gray-900 truncate mb-2">{xp.title}</h3>
                                             <div className="mt-0.5 text-sm text-gray-700">
                                                 <span className="mr-1 font-inter text-[16px] text-[#141414] font-medium">{xp.company}</span>
                                                 {xp.employmentType && <span className="mx-1">•</span>}
@@ -62,6 +62,9 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({
                                                 )}
                                                 {xp.duration && <span className="mx-1">•</span>}
                                                 {xp.duration && <span>{xp.duration}</span>}
+                                            </div>
+                                            <div className="text-[16px] text-[#7C8493] whitespace-nowrap hidden md:block mt-2">
+                                                {xp.location}
                                             </div>
                                         </div>
 
@@ -78,14 +81,10 @@ export const ExperienceList: React.FC<ExperienceListProps> = ({
                                     </div>
 
                                     {xp.description && (
-                                        <p className="text-[16px] font-inter text-[rgba(20, 20, 20, 0.8)] mt-3 leading-relaxed">
+                                        <p className="text-[16px] font-inter font-normal text-[#434343] mt-4 leading-relaxed">
                                             {xp.description}
                                         </p>
                                     )}
-
-                                    <div className="text-[16px] text-[#8E8E93] whitespace-nowrap hidden md:block mt-2">
-                                        {xp.location}
-                                    </div>
                                 </div>
                             </div>
                         </div>

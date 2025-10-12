@@ -37,7 +37,7 @@ export const SocialLinksBlock: React.FC<SocialLinksBlockProps> = ({
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white  shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-[20px] font-inter font-semibold text-gray-900">
                     Social Links
@@ -83,7 +83,7 @@ export const SocialLinksBlock: React.FC<SocialLinksBlockProps> = ({
                                         href={link.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-sm text-blue-600 hover:underline break-all"
+                                        className="text-[16px] font-inter text-[#0088ff] underline break-all"
                                     >
                                         {link.url}
                                     </a>

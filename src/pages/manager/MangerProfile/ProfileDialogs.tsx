@@ -109,21 +109,21 @@ export const ProfileDialogs: React.FC<ProfileDialogsProps> = ({
     const renderAboutDialog = () => (
         <Dialog open={aboutDialogOpen} onOpenChange={(open) => onDialogChange("about", open)}>
             <DialogContent className="max-w-xl">
-                <DialogHeader className="flex items-center justify-between">
+                <DialogHeader className="flex items-center justify-between bg-[#fafafa] w-full px-[24px] py-[16px] border border-b-[#E1E1E1]">
                     <DialogTitle className="text-xl font-semibold">About</DialogTitle>
                     <button onClick={() => onDialogChange("about", false)} className="p-1 hover:bg-gray-100">
                         <X className="w-5 h-5" />
                     </button>
                 </DialogHeader>
-                <div className="border-t my-4" />
-                <div className="space-y-4">
+                {/*  */}
+                <div className="space-y-4 p-6">
                     <Textarea
                         value={tempProfile?.about || ""}
                         onChange={e => onUpdateTempProfile({ about: e.target.value })}
                         className="min-h-[200px] resize-none"
                         placeholder="Tell us about yourself..."
                     />
-                    <div className="flex justify-end gap-3">
+                    <div className="flex justify-end gap-3 border-t pt-3">
                         <Button variant="outline" className={cancelButtonClass} onClick={() => onDialogChange("about", false)}>
                             Cancel
                         </Button>
@@ -140,14 +140,14 @@ export const ProfileDialogs: React.FC<ProfileDialogsProps> = ({
     const renderAdditionalDetailsDialog = () => (
         <Dialog open={additionalDetailsDialogOpen} onOpenChange={(open) => onDialogChange("additionalDetails", open)}>
             <DialogContent className="max-w-xl">
-                <DialogHeader className="flex items-center justify-between">
+                <DialogHeader className="flex items-center justify-between bg-[#fafafa] w-full px-[24px] py-[16px] border border-b-[#E1E1E1]">
                     <DialogTitle className="text-xl font-semibold">Additional details</DialogTitle>
                     <button onClick={() => onDialogChange("additionalDetails", false)} className="p-1 hover:bg-gray-100">
                         <X className="w-5 h-5" />
                     </button>
                 </DialogHeader>
-                <div className="border-t my-4" />
-                <div className="space-y-4">
+
+                <div className="space-y-4 p-6">
                     <div className="space-y-2">
                         <Label htmlFor="email" className="text-sm font-medium">Email</Label>
                         <Input
@@ -193,17 +193,17 @@ export const ProfileDialogs: React.FC<ProfileDialogsProps> = ({
     const renderSocialLinksDialog = () => (
         <Dialog open={socialLinksDialogOpen} onOpenChange={(open) => onDialogChange("socialLinks", open)}>
             <DialogContent className="max-w-xl">
-                <DialogHeader className="flex items-center justify-between">
+                <DialogHeader className="flex items-center justify-between bg-[#fafafa] w-full px-[24px] py-[16px] border border-b-[#E1E1E1]">
                     <DialogTitle className="text-xl font-semibold">Social links</DialogTitle>
                     <button onClick={() => onDialogChange("socialLinks", false)} className="p-1 hover:bg-gray-100">
                         <X className="w-5 h-5" />
                     </button>
                 </DialogHeader>
-                <div className="border-t my-4" />
-                <div className="space-y-4">
+
+                <div className="space-y-4 p-6">
                     {tempSocialLinks.length > 0 ? (
                         tempSocialLinks.map((link, idx) => (
-                            <div key={idx} className="space-y-3 p-4 border rounded-lg">
+                            <div key={idx} className="space-y-3 p-4 border ">
                                 <div className="flex items-center justify-between">
                                     <Label className="text-sm font-medium">{link.platform || `Link ${idx + 1}`}</Label>
                                     <div className="flex items-center gap-2">
@@ -249,17 +249,17 @@ export const ProfileDialogs: React.FC<ProfileDialogsProps> = ({
     const renderSkillsDialog = () => (
         <Dialog open={skillsDialogOpen} onOpenChange={(open) => onDialogChange("skills", open)}>
             <DialogContent className="max-w-xl">
-                <DialogHeader className="flex items-center justify-between">
+                <DialogHeader className="flex items-center justify-between bg-[#fafafa] w-full px-[24px] py-[16px] border border-b-[#E1E1E1]">
                     <DialogTitle className="text-xl font-semibold">Skills</DialogTitle>
                     <button onClick={() => onDialogChange("skills", false)} className="p-1 hover:bg-gray-100">
                         <X className="w-5 h-5" />
                     </button>
                 </DialogHeader>
-                <div className="border-t my-4" />
-                <div className="space-y-4">
+
+                <div className="space-y-4 p-6">
                     {tempSkills.length > 0 ? (
                         tempSkills.map((skill, idx) => (
-                            <div key={idx} className="space-y-3 p-4 border rounded-lg">
+                            <div key={idx} className="space-y-3 p-4 border ">
                                 <div className="flex items-center justify-between">
                                     <Label className="text-sm font-medium">Skill {idx + 1}</Label>
                                     <button onClick={() => onRemoveSkill(idx)} className="p-1 hover:bg-gray-100">
@@ -296,14 +296,14 @@ export const ProfileDialogs: React.FC<ProfileDialogsProps> = ({
     const renderEditProfileDialog = () => (
         <Dialog open={editProfileDialogOpen} onOpenChange={(open) => onDialogChange("editProfile", open)}>
             <DialogContent className="max-w-xl overflow-scroll">
-                <DialogHeader className="flex items-center justify-between">
+                <DialogHeader className="flex items-center justify-between bg-[#fafafa] w-full px-[24px] py-[16px] border border-b-[#E1E1E1]">
                     <DialogTitle className="text-xl font-semibold">Edit Profile</DialogTitle>
                     <button onClick={() => onDialogChange("editProfile", false)} className="p-1 hover:bg-gray-100">
                         <X className="w-5 h-5" />
                     </button>
                 </DialogHeader>
-                <div className="border-t my-4" />
-                <div className="space-y-4">
+
+                <div className="space-y-4 p-6">
                     <div className="space-y-2">
                         <Label className="text-sm font-medium">Profile image URL</Label>
                         <Input
@@ -376,14 +376,14 @@ export const ProfileDialogs: React.FC<ProfileDialogsProps> = ({
         return (
             <Dialog open={experienceItemDialogOpen} onOpenChange={(open) => onOpenExperienceItem(open, null)}>
                 <DialogContent className="max-w-2xl h-[700px] overflow-scroll">
-                    <DialogHeader className="flex items-center justify-between">
+                    <DialogHeader className="flex items-center justify-between bg-[#fafafa] w-full px-[24px] py-[16px] border border-b-[#E1E1E1]">
                         <DialogTitle className="text-xl font-semibold">{isEdit ? `Edit Experience ${experienceItemIndex! + 1}` : 'Add Experience'}</DialogTitle>
                         <button onClick={() => onOpenExperienceItem(false, null)} className="p-1 hover:bg-gray-100">
                             <X className="w-5 h-5" />
                         </button>
                     </DialogHeader>
-                    <div className="border-t my-4" />
-                    <div className="space-y-4">
+
+                    <div className="space-y-4 p-6">
                         <Input value={xp.title} onChange={e => onUpdateExperienceField(isEdit ? experienceItemIndex! : tempExperiences.length, 'title', e.target.value)} placeholder="Role" className="h-11" />
                         <Input value={xp.company} onChange={e => onUpdateExperienceField(isEdit ? experienceItemIndex! : tempExperiences.length, 'company', e.target.value)} placeholder="Company" className="h-11" />
                         <Input value={xp.location || ''} onChange={e => onUpdateExperienceField(isEdit ? experienceItemIndex! : tempExperiences.length, 'location', e.target.value)} placeholder="Location" className="h-11" />
@@ -445,14 +445,14 @@ export const ProfileDialogs: React.FC<ProfileDialogsProps> = ({
         return (
             <Dialog open={educationItemDialogOpen} onOpenChange={(open) => onOpenEducationItem(open, null)}>
                 <DialogContent className="max-w-xl h-[700px] overflow-scroll">
-                    <DialogHeader className="flex items-center justify-between">
+                    <DialogHeader className="flex items-center justify-between bg-[#fafafa] w-full px-[24px] py-[16px] border border-b-[#E1E1E1]">
                         <DialogTitle className="text-xl font-semibold">{isEdit ? `Edit Education ${educationItemIndex! + 1}` : 'Add Education'}</DialogTitle>
                         <button onClick={() => onOpenEducationItem(false, null)} className="p-1 hover:bg-gray-100">
                             <X className="w-5 h-5" />
                         </button>
                     </DialogHeader>
-                    <div className="border-t my-4" />
-                    <div className="space-y-4">
+
+                    <div className="space-y-4 p-6">
                         <Input value={edu.degree} onChange={e => onUpdateEducationField(isEdit ? educationItemIndex! : tempEducation.length, 'degree', e.target.value)} placeholder="Degree" className="h-11" />
                         <Input value={edu.fieldOfStudy || ''} onChange={e => onUpdateEducationField(isEdit ? educationItemIndex! : tempEducation.length, 'fieldOfStudy', e.target.value)} placeholder="Field of Study" className="h-11" />
                         <Input value={edu.institution || ''} onChange={e => onUpdateEducationField(isEdit ? educationItemIndex! : tempEducation.length, 'institution', e.target.value)} placeholder="Institution" className="h-11" />
