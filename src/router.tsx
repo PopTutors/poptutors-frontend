@@ -23,6 +23,15 @@ import ProtectedRoute from './protectedRoute';
 import RequestSessionForm from './components/forms/RequestSessionForm';
 import { BookExpertForm } from './components/forms/BookExpert';
 import LiveQuestionDetailsPage from './pages/student/liveQuestion/details';
+import Teacher from './teacher/Teacher';
+import TeacherProfile from './teacher/Profile/Profile';
+import TeacherJobListing from './teacher/JobListing/JobListing';
+import ExamHelp from './teacher/ExamHelp/ExamHelp';
+import Settings from './teacher/Settings/Settings';
+import AssignmentList from './teacher/AssignmentList/AssignmentList';
+import SessionsList from './teacher/SessionList/SessionList';
+
+const dummy = () => <div>Dummy Component</div>;
 
 export const createAppRouter = createBrowserRouter([
   {
@@ -56,7 +65,35 @@ export const createAppRouter = createBrowserRouter([
             path: paths.student.dashboard.path,
             element: <Student />,
           },
-          // {
+          {
+            path: paths.teacher.dashboard.path,
+            element: <Teacher />,
+          },
+          {
+            path: paths.teacher.jobListing.path,
+            element: <TeacherJobListing />
+          },
+          {
+            path: paths.teacher.profile.path,
+            element: <TeacherProfile />
+          },
+          {
+            path: paths.teacher.examHelpList.path,
+            element: <ExamHelp />
+          },
+          {
+            path: paths.teacher.settings.path,
+            element: <Settings />
+          },
+          {
+            path: paths.teacher.assignmentList.path,
+            element: <AssignmentList />
+          },
+          {
+            path: paths.teacher.sessionList.path,
+            element: <SessionsList />
+          },
+          // {  
           //   path: paths.student.livequestion.path,
           //   element: <BookExpertPage />,
           // },

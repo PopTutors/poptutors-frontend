@@ -25,8 +25,9 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
+  // const role = localStorage.getItem('role');
 
-  const sidebarTabs = [
+  const studentNavigationTabs = [
     {
       label: 'Dashboard',
       icon: DashboardIcon,
@@ -57,8 +58,26 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       iconActive: WalletIconActive,
       path: paths.student.wallet.getHref(),
     },
-    { label: 'Help & Support', icon: HelpIcon, iconActive: HelpIconActive, path: '/help-support' },
+    {
+      label: 'Help & Support',
+      icon: HelpIcon,
+      iconActive: HelpIconActive,
+      path: '/help-support'
+    },
   ];
+
+  const teacherNavigationTabs = [
+    {
+      label: 'Dashboard',
+      icon: DashboardIcon,
+      iconActive: DashboardIconActive,
+      // path: paths.teacher.dashboard.getHref(),
+    }
+  ];
+
+  // const sidebarTabs = local === 'teacher' ? teacherNavigationTabs : studentNavigationTabs;
+  // const sidebarTabs = teacherNavigationTabs;
+  const sidebarTabs = studentNavigationTabs;
 
   return (
     <>
@@ -73,7 +92,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:block`}
       >
         <nav className="mt-6 px-4 space-y-2">
-          {sidebarTabs.map((tab) => {
+          {studentNavigationTabs.map((tab) => {
             const isActive = location.pathname === tab.path;
             return (
               <SidebarTab
