@@ -349,6 +349,13 @@ const JobListing: React.FC = () => {
     [displayedItems]
   );
 
+  const [filterJobType, setFilterJobType] = useState < string | null > (null);
+  const [budgetMin, setBudgetMin] = useState < string > ("");
+  const [budgetMax, setBudgetMax] = useState < string > ("");
+  const [dateFrom, setDateFrom] = useState < string > ("");
+  const [dateTo, setDateTo] = useState < string > ("");
+  const [locationFilter, setLocationFilter] = useState < string > ("");
+
   // columns for DataGrid
   const columns: Column<JobRow>[] = useMemo(
     () => [
@@ -444,7 +451,7 @@ const JobListing: React.FC = () => {
       }}
     >
       {menuPos.bottom ? (
-        <div className="p-4 bg-white border border-black/10 shadow-lg rounded-t-lg w-[calc(100%-16px)] mx-auto">
+        <div className="p-4 bg-white border border-black/10 shadow-lg  w-[calc(100%-16px)] mx-auto">
           <div className="max-w-[640px] mx-auto">
             {(() => {
               const row = gridRows.find((r) => r.id === openMenuFor);
@@ -494,7 +501,7 @@ const JobListing: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="p-[8px] w-[185px] bg-white border border-black/10 shadow-lg rounded-md">
+        <div className="p-[8px] w-[185px] bg-white border border-black/10 shadow-lg">
           {(() => {
             const row = gridRows.find((r) => r.id === openMenuFor);
             if (!row) return null;
@@ -645,11 +652,12 @@ const JobListing: React.FC = () => {
       {/* Footer */}
 
       {/* Filter Modal: (unchanged) */}
-      <Dialog open={false} onOpenChange={setShowFilterModal}>
-        <DialogContent className="max-w-lg w-full p-6">
-          <DialogHeader>
+      {/* Filter Modal */}
+      <Dialog open={showFilterModal} onOpenChange={setShowFilterModal}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader className="flex items-center justify-between bg-[#fafafa] w-full px-[24px] py-[16px] border border-b-[#E1E1E1]">
             <div className="flex items-start justify-between w-full">
-              <DialogTitle className="text-lg font-semibold">Filter & Sort</DialogTitle>
+              <DialogTitle className="text-[20px] font-epilogue font-semibold">Filter Jobs</DialogTitle>
               <DialogClose asChild>
                 <button className="p-1 rounded hover:bg-gray-100">
                   <XIcon className="w-5 h-5" />
@@ -658,18 +666,18 @@ const JobListing: React.FC = () => {
             </div>
           </DialogHeader>
 
-          <div className="divide-y divide-gray-200">
+          <div className="p-6">
             {/* Status */}
-            <div className="py-4">
-              <h4 className="text-sm font-medium mb-3">Status</h4>
+            <div className="py-2">
+              <h4 className="text-[18px] font-inter font-medium mb-3">Status</h4>
               <div className="flex gap-2 flex-wrap">
-                {allStatuses.map((s) => {
+                {["Live", "New", "On going", "Closed"].map((s) => {
                   const active = filterStatus === s;
                   return (
                     <button
                       key={s}
                       onClick={() => setFilterStatus(active ? null : s)}
-                      className={`px - 3 py - 1 rounded - full border text - sm ${active ? 'bg-green-100 border-green-200 text-green-700' : 'bg-white border-gray-200 text-gray-700'} `}
+                      className={`px-3 py-1 rounded-full border text-sm ${active ? "bg-green-100 border-green-200 text-green-700" : "bg-white border-gray-200 text-gray-700"}`}
                     >
                       {s}
                     </button>
@@ -678,128 +686,122 @@ const JobListing: React.FC = () => {
               </div>
             </div>
 
-            {/* Rating */}
-            <div className="py-4">
-              <h4 className="text-sm font-medium mb-3">Rating (min)</h4>
-              <div className="flex items-center gap-3">
-                {numericStars.map((n) => {
-                  const active = filterRating === n;
+            {/* Job type */}
+            <div className="py-2">
+              <h4 className="text-[18px] font-inter font-medium mb-3">Job type</h4>
+              <div className="flex gap-2 flex-wrap">
+                {["Live help", "Assignment", "Session", "Closed"].map((t) => {
+                  const active = filterJobType === t;
                   return (
                     <button
-                      key={n}
-                      onClick={() => setFilterRating(active ? null : n)}
-                      className="flex items-center gap-1"
-                      aria-pressed={active}
+                      key={t}
+                      onClick={() => setFilterJobType(active ? null : t)}
+                      className={`px-3 py-1 rounded-full border text-sm ${active ? "bg-indigo-50 border-indigo-200 text-indigo-700" : "bg-white border-gray-200 text-gray-700"}`}
                     >
-                      <div className={`inline - flex items - center justify - center w - 7 h - 7 rounded ${active ? 'bg-yellow-100' : ''} `}>
-                        <StarIcon className={`w - 4 h - 4 ${active ? 'text-yellow-500' : 'text-gray-300'} `} />
-                      </div>
-                      <span className="text-sm">{n}</span>
+                      {t}
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* Sort by */}
-            <div className="py-4">
-              <h4 className="text-sm font-medium mb-3">Sort by</h4>
-              <div className="grid gap-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Budget</p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <label className="inline-flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="budget"
-                        checked={sortBudget === "asc" && sortBy === "budget"}
-                        onChange={() => {
-                          setSortBy("budget");
-                          setSortBudget("asc");
-                        }}
-                        className="hidden"
-                      />
-                      <span className={`px - 2 py - 1 rounded border ${sortBudget === 'asc' && sortBy === 'budget' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'} `}>Ascending</span>
-                    </label>
-                    <label className="inline-flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="budget"
-                        checked={sortBudget === "desc" && sortBy === "budget"}
-                        onChange={() => {
-                          setSortBy("budget");
-                          setSortBudget("desc");
-                        }}
-                        className="hidden"
-                      />
-                      <span className={`px - 2 py - 1 rounded border ${sortBudget === 'desc' && sortBy === 'budget' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'} `}>Descending</span>
-                    </label>
-                  </div>
+            {/* Budget Range */}
+            <div className="py-2">
+              <h4 className="text-[18px] font-inter font-medium mb-3">Budget Range</h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[14px] font-inter font-medium text-[#141414]">Minimum</label>
+                  <input
+                    value={budgetMin}
+                    onChange={(e) => setBudgetMin(e.target.value)}
+                    placeholder="$0"
+                    className="w-full border px-3 py-2 "
+                  />
                 </div>
-
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Deadline</p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <label className="inline-flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="deadline"
-                        checked={sortDeadline === "asc" && sortBy === "deadline"}
-                        onChange={() => {
-                          setSortBy("deadline");
-                          setSortDeadline("asc");
-                        }}
-                        className="hidden"
-                      />
-                      <span className={`px - 2 py - 1 rounded border ${sortDeadline === 'asc' && sortBy === 'deadline' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'} `}>Ascending</span>
-                    </label>
-                    <label className="inline-flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="deadline"
-                        checked={sortDeadline === "desc" && sortBy === "deadline"}
-                        onChange={() => {
-                          setSortBy("deadline");
-                          setSortDeadline("desc");
-                        }}
-                        className="hidden"
-                      />
-                      <span className={`px - 2 py - 1 rounded border ${sortDeadline === 'desc' && sortBy === 'deadline' ? 'bg-white border-blue-500 text-blue-600' : 'bg-gray-50 border-gray-200 text-gray-500'} `}>Descending</span>
-                    </label>
-                  </div>
+                <div>
+                  <label className="text-[14px] font-inter font-medium text-[#141414]">Maximum</label>
+                  <input
+                    value={budgetMax}
+                    onChange={(e) => setBudgetMax(e.target.value)}
+                    placeholder="$10000"
+                    className="w-full border px-3 py-2"
+                  />
                 </div>
               </div>
             </div>
+
+            {/* Date posted */}
+            <div className="py-2">
+              <h4 className="text-[18px] font-inter font-medium mb-3">Date posted</h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-[14px] font-inter font-medium  text-[#141414]">From</label>
+                  <input
+                    type="date"
+                    value={dateFrom}
+                    onChange={(e) => setDateFrom(e.target.value)}
+                    className="w-full border px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="text-[14px] font-inter font-medium text-[#141414]">To</label>
+                  <input
+                    type="date"
+                    value={dateTo}
+                    onChange={(e) => setDateTo(e.target.value)}
+                    className="w-full border px-3 py-2"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Location */}
+            <div className="py-2">
+              <h4 className="text-[18px] font-inter font-medium mb-3">Location</h4>
+              <input
+                value={locationFilter}
+                onChange={(e) => setLocationFilter(e.target.value)}
+                placeholder="Enter location"
+                className="w-full border px-3 py-2"
+              />
+            </div>
           </div>
 
-          <div className="mt-6 border-t border-gray-100 pt-4 flex items-center justify-end gap-3">
+          <div className="mt-6 border-t border-gray-100 pt-4 flex items-center justify-end gap-3 p-2">
             <button
               onClick={() => {
+                // clear all filter fields
                 setFilterStatus(null);
-                setFilterRating(null);
+                setFilterJobType(null);
+                setBudgetMin("");
+                setBudgetMax("");
+                setDateFrom("");
+                setDateTo("");
+                setLocationFilter("");
                 setSortBudget(null);
                 setSortDeadline(null);
                 setSortBy(null);
                 setSearchQuery("");
-                setShowFilterModal(false);
               }}
-              className="px-4 py-2 border rounded bg-white text-sm hover:bg-gray-50"
+              className="px-[24px] py-[12px] h-[50px] border bg-white text-[16px] font-inter hover:bg-gray-50"
             >
               Clear
             </button>
             <button
-              onClick={() => setShowFilterModal(false)}
-              className="px-4 py-2 bg-[#2196F3] text-white rounded text-sm hover:opacity-90"
+              onClick={() => {
+                // apply the filter — you can translate these fields into existing filter state
+                // Example: if you want to filter by amount range, update your filtering logic to consider budgetMin/budgetMax
+                // For now we close the modal and rely on displayedItems useMemo reading the states you added.
+                setShowFilterModal(false);
+              }}
+              className="px-[24px] py-[12px] h-[50px] bg-primary text-white text-[16px] font-inter hover:opacity-90"
             >
               Apply Filter
             </button>
           </div>
         </DialogContent>
       </Dialog>
+
 
       {/* EDIT DIALOG (unchanged) */}
       <Dialog open={editDialogOpen} onOpenChange={(open) => { if (!open) closeEditDialog(); }}>
