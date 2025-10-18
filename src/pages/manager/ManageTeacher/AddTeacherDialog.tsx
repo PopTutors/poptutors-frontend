@@ -12,7 +12,7 @@ import { Label } from '../../../components/ui/label';
 import { Input } from '../../../components/ui/input';
 import Textarea from '../../../components/ui/textarea';
 import { Button } from '../../../components/ui';
-import { Upload, Linkedin, Instagram } from 'lucide-react';
+import { Upload, Linkedin, Instagram, X } from 'lucide-react';
 import { uploadToBunnyCDN } from '../../../utils/uploadToBunnyCdn';
 
 export default function AddTeacherDialog({
@@ -114,7 +114,14 @@ export default function AddTeacherDialog({
 
     return (
         <Dialog open={open} onOpenChange={onClose}>
+
             <DialogContent className="w-full sm:max-w-2xl max-h-[80vh] overflow-scroll">
+                <DialogHeader className="flex items-center justify-between bg-[#fafafa] w-full px-[24px] py-[16px] border border-b-[#E1E1E1]">
+                    <DialogTitle className="text-xl font-semibold">Add New Teacher</DialogTitle>
+                    <button onClick={() => onClose()} className="p-1 hover:bg-gray-100">
+                        <X className="w-5 h-5" />
+                    </button>
+                </DialogHeader>
                 <div className="flex flex-col h-full">
                     <div className="overflow-y-auto p-6 space-y-4">
                         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">

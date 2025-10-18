@@ -61,6 +61,8 @@ import DeadlineIcon from './deadline.svg';
 import PostedDateIcon from './postedDate.svg';
 import BudgetIcon from './budget.svg';
 import StarIcon from './star.svg';
+import StudentSwitchIcon from './StudentSwitch.svg';
+import TeacherSwitchIcon from './TeacherSwitch.svg';
 export {
   DeleteIcon,
   InactiveIcon,
@@ -124,5 +126,7 @@ export {
   DeadlineIcon,
   PostedDateIcon,
   BudgetIcon,
-  StarIcon
+  StarIcon,
+  StudentSwitchIcon,
+  TeacherSwitchIcon
 };

@@ -25,7 +25,7 @@ interface ProfileHeaderProps {
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile }) => {
   return (
-    <div className="bg-white p-6 mb-6 shadow-sm">
+    <div className="p-6 mb-6 ">
       <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
         {/* Profile Image */}
         <div className="relative flex-shrink-0">

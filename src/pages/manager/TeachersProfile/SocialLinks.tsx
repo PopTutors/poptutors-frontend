@@ -89,13 +89,13 @@ export const SocialLinks: React.FC<{ links: SocialLink[]; className?: string }> 
                     <div key={it.id} className="flex items-start gap-3">
                         {iconFor(it.type)}
                         <div className="flex flex-col">
-                            <span className="text-sm text-gray-700 font-medium">{it.label}</span>
+                            <span className="text-sm text-[#595959] font-medium">{it.label}</span>
                             {it.href ? (
                                 <a
                                     href={it.href}
                                     target={it.type === "email" || it.type === "phone" ? undefined : "_blank"}
                                     rel={it.type === "email" || it.type === "phone" ? undefined : "noopener noreferrer"}
-                                    className="text-blue-600 hover:underline text-sm break-all"
+                                    className="text-[#0088FF] underline text-sm break-all"
                                     aria-label={`${it.label}: ${it.value}`}
                                 >
                                     {it.value}

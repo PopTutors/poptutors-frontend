@@ -17,6 +17,7 @@ import {
   DialogTitle,
   DialogClose,
 } from "../../components/ui/dialog";
+import ChatPage from "./ChatScreen";
 
 interface Applicant {
   id: string;
@@ -408,7 +409,7 @@ const JobApplicants: React.FC = () => {
       {/* Tabs */}
       <div className="mb-6 border-b border-gray-200">
         <nav className="-mb-px flex space-x-8">
-          {["Applicants", "Job Details", "Updates"].map(tab => (
+          {["Applicants", "Job Details", "Updates", "Chat"].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -462,6 +463,7 @@ const JobApplicants: React.FC = () => {
 
       {activeTab === "Job Details" && <div className="text-gray-600"><JobDetailsPage /></div>}
       {activeTab === "Updates" && <Updates />}
+      {activeTab === "Chat" && <div className="flex gap-6 flex-1 overflow-hidden"><ChatPage /></div>}
 
       {menuPortal}
 
