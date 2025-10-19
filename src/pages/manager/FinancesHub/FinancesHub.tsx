@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useFetch } from "../../../api";
 import { createPortal } from "react-dom";
 import DataGrid from "../../../components/ui/DataGrid"; // adjust path if necessary
+import { Divider } from "@mui/material";
 
 // Lucide-like inline icons
 const X = ({ className = "h-5 w-5" }) => (
@@ -29,7 +30,7 @@ const Button = ({ children, className = "", variant = "default", onClick, ...pro
     let composedClass = className;
 
     if (variant === "outline") {
-        composedClass = `${baseClass} border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 ${className}`.trim();
+        composedClass = `${baseClass} border border-[#e3e3e3] bg-white text-gray-700 hover:bg-gray-50 ${className}`;
     } else {
         composedClass = `${baseClass} ${className}`.trim();
     }
@@ -531,55 +532,57 @@ export default function FinancesHub() {
                                 <X className="h-5 w-5 text-gray-600" />
                             </button>
                         </div>
-                        <div className="p-6 space-y-4">
+                        <div className="p-6 space-y-6">
+                            <div className="space-y-0">
 
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-sm border border-gray-200 rounded-md">
-                                    <thead className="bg-gray-50">
-                                        <tr>
-                                            <th className="px-4 py-3 text-left font-medium text-gray-700">Description</th>
-                                            <th className="px-4 py-3 text-left font-medium text-gray-700">Amount</th>
-                                            <th className="px-4 py-3 text-left font-medium text-gray-700">Transaction ID</th>
-                                            <th className="px-4 py-3 text-left font-medium text-gray-700">Payment Date & Time</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr className="border-t">
-                                            <td className="px-4 py-3">1st Payment</td>
-                                            <td className="px-4 py-3 font-semibold">$50</td>
-                                            <td className="px-4 py-3 text-[#019ACB]">I#48464664</td>
-                                            <td className="px-4 py-3">12 September 2024 12PM</td>
-                                        </tr>
-                                        <tr className="border-t">
-                                            <td className="px-4 py-3">2nd Payment</td>
-                                            <td className="px-4 py-3 font-semibold">$50</td>
-                                            <td className="px-4 py-3 text-[#019ACB]">I#48464665</td>
-                                            <td className="px-4 py-3">12 September 2024 12PM</td>
-                                        </tr>
-                                        <tr className="border-t">
-                                            <td className="px-4 py-3">3rd Payment</td>
-                                            <td className="px-4 py-3 font-semibold">$100</td>
-                                            <td className="px-4 py-3 text-[#019ACB]">I#48464666</td>
-                                            <td className="px-4 py-3">12 September 2024 12PM</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div className="flex justify-between gap-2 bg-[#e8f4fa] p-4">
-                                <div className="bg-white p-[12px] w-full">
-                                    <p className="text-gray-600 text-sm">Remaining Amount</p>
-                                    <p className="text-xl font-semibold text-gray-900">$80</p>
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-sm border border-gray-200">
+                                        <thead className="bg-[#FAFAFA]">
+                                            <tr>
+                                                <th className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414] text-left font-medium text-gray-700">Description</th>
+                                                <th className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414] text-left font-medium text-gray-700">Amount</th>
+                                                <th className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414] text-left font-medium text-gray-700">Transaction ID</th>
+                                                <th className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414] text-left font-medium text-gray-700">Payment Date & Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr className="border-t">
+                                                <td className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414]">1st Payment</td>
+                                                <td className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414] font-regular">$50</td>
+                                                <td className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414] text-[#019ACB]">I#48464664</td>
+                                                <td className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414]">12 September 2024 <br /> 12PM</td>
+                                            </tr>
+                                            <tr className="border-t">
+                                                <td className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414]">2nd Payment</td>
+                                                <td className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414] font-regular">$50</td>
+                                                <td className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414] text-[#019ACB]">I#48464665</td>
+                                                <td className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414]">12 September 2024 <br /> 12PM</td>
+                                            </tr>
+                                            <tr className="border-t">
+                                                <td className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414]">3rd Payment</td>
+                                                <td className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414] font-regular">$100</td>
+                                                <td className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414] text-[#019ACB]">I#48464666</td>
+                                                <td className="px-[16px] py-[16px] font-inter text-[16px] text-[#141414]">12 September 2024 <br /> 12PM</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div className="bg-white p-[12px] w-full">
-                                    <p className="text-gray-600 text-sm">Total Price</p>
-                                    <p className="text-xl font-semibold text-gray-900">$400</p>
-                                </div>
-                            </div>
 
+                                <div className="flex justify-between gap-2 bg-[#e8f4fa] p-4 ">
+                                    <div className="bg-white p-[12px] w-full">
+                                        <p className="text-[#141414] text-[14px] font-inter mb-1">Remaining Amount</p>
+                                        <p className="text-[24px] font-inter text-[#141414] font-medium">$80</p>
+                                    </div>
+                                    <div className="bg-white p-[12px] w-full">
+                                        <p className="text-[#141414] text-[14px] font-inter mb-1">Total Price</p>
+                                        <p className="text-[24px] font-inter text-[#141414] font-medium">$400</p>
+                                    </div>
+                                </div>
+
+                            </div>
                             <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
-                                <Button variant="outline">View Receipt</Button>
-                                <Button className="bg-[#019ACB] text-white hover:bg-[#0182aa]">Request Student</Button>
+                                <Button className="px-[24px] py-[12px] text-[#141414] border border-[#e3e3e3]" variant="outline" onClick={() => { }}>View Receipt</Button>
+                                <Button className="px-[24px] py-[12px] bg-[#019ACB] text-white hover:bg-[#0182aa]" onClick={() => { }}>Request Student</Button>
                             </div>
                         </div>
                     </div>

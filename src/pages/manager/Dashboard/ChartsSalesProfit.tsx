@@ -1,4 +1,3 @@
-;
 import React from 'react';
 import {
   BarChart,
@@ -85,8 +84,8 @@ export default function SalesChart({ sales, stat }: { sales?: any; stat?: string
     assignments: 'Assignment',
     session: 'Sessions',
     sessions: 'Sessions',
-    'livehelp': 'Live Help',
-    'live_help': 'Live Help',
+    livehelp: 'Live Help',
+    live_help: 'Live Help',
     'live-help': 'Live Help',
     'live help': 'Live Help',
   };
@@ -94,7 +93,12 @@ export default function SalesChart({ sales, stat }: { sales?: any; stat?: string
   const mappedLabel = labelMap[statKey] ?? null;
 
   // filtered data — if mappedLabel is null, show all
-  const filteredData = mappedLabel ? chartData.filter((d: any) => String(d.label).toLowerCase().trim() === mappedLabel.toLowerCase().trim()) : chartData;
+  const filteredData = mappedLabel
+    ? chartData.filter((d: any) => String(d.label).toLowerCase().trim() === mappedLabel.toLowerCase().trim())
+    : chartData;
+
+  // NEW: check if there is any non-zero value among the visible items
+  const hasNonZero = filteredData.some((d: any) => Number(d.base) !== 0 && Number(d.extra) !== 0);
 
   const chartTitle = mappedLabel ? `${mappedLabel} — Sales & Profit` : 'Sales & Profit';
 
@@ -107,10 +111,11 @@ export default function SalesChart({ sales, stat }: { sales?: any; stat?: string
         </div>
       </div>
 
-      {filteredData.length === 0 ? (
+      {/* If there is no data (either filtered out, or all zeros) show placeholder */}
+      {filteredData.length === 0 || !hasNonZero ? (
         <div className="flex h-[300px] items-center justify-center">
           <div className="text-sm text-gray-500">
-            No data available for <span className="font-medium text-gray-700">{stat}</span>
+            No data available{stat ? <> for <span className="font-medium text-gray-700">{stat}</span></> : ''}.
           </div>
         </div>
       ) : (
