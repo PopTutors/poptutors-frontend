@@ -446,7 +446,7 @@
 // }
 
 import { useState } from "react";
-import { Calendar, Star, DollarSign, Clock } from "lucide-react";
+import { Calendar, Star, DollarSign, Clock, Video } from "lucide-react";
 import RescheduleModal from "../components/RescheduleModal";
 import SessionDetail from "./SessionDetail";
 
@@ -791,25 +791,38 @@ export default function SessionsList() {
                                     </div>
                                 </div>
 
-                                {/* Footer */}
-                                <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                                    {session.status === "complete" && session.rating ? (
-                                        <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                                            <Star size={16} className="text-amber-400 fill-amber-400" />
-                                            <span>{session.rating.toFixed(1)} Ratings</span>
+                                {/* Bottom Section */}
+                                <div className="flex items-center justify-between mt-6">
+                                    {session.status === "complete" && (
+                                        <div className="flex items-center gap-2">
+                                            <Star className="w-6 h-6 text-orange-500 fill-orange-500" />
+                                            <span className="text-gray-900 font-medium text-base">{session.rating} Rating</span>
                                         </div>
-                                    ) : (
-                                        <div></div>
                                     )}
-                                    <button
-                                        className="px-4 py-2 border border-gray-300 bg-transparent text-gray-900 text-sm font-medium hover:bg-gray-50 transition-colors"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleSessionClick(session);
-                                        }}
-                                    >
-                                        View Recording
-                                    </button>
+                                    {session.status === "complete" && (
+                                        <button className="flex items-center gap-2 px-6 py-3 border border-gray-200 text-gray-900 font-medium text-base hover:bg-gray-50">
+                                            <Video size={20} className="text-gray-700" />
+                                            View Recording
+                                        </button>
+                                    )}
+                                    {session.status === "upcoming" && (
+                                        <div className="flex gap-4 w-full">
+                                            <button
+                                                className="flex items-center justify-center gap-2 flex-1 p-4 text-black text-base text-lg border border-gray-300"
+                                                onClick={() => {
+                                                    setSelectedSession(session);
+                                                    setRescheduleModal(true);
+                                                }}
+                                            >
+                                                <Calendar size={16} className="text-black" />
+                                                <span>Reschedule</span>
+                                            </button>
+                                            <button className="flex items-center justify-center gap-2 flex-1 p-4 bg-cyan-600 text-white text-base text-lg">
+                                                <span className="text-white">+</span>
+                                                <span>Join Meeting</span>
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ))}

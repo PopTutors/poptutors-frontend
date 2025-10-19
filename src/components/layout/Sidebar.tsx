@@ -24,6 +24,7 @@ import {
 } from '../../assets/sidebar-icon';
 import { paths } from '../../config/path';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { LogOut } from 'lucide-react';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -179,12 +180,29 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   />
                 );
               })}
+
+              {/* Logout button styled like tabs */}
+              <div
+                onClick={() => {
+                  localStorage.clear();
+                  navigate('/login'); // your login path
+                }}
+                className="flex items-center ml-3 gap-3 p-2 rounded hover:bg-gray-100 cursor-pointer mt-1"
+              >
+                {/* Icon */}
+                <LogOut className="w-5 h-5 text-red-600" />
+
+                {/* Label */}
+                <span className="text-lg font-medium text-red-600">Logout</span>
+              </div>
             </div>
 
             {/* Teacher User Profile at bottom */}
             <div
-              onClick={() => { navigate(paths.teacher.profile.getHref()) }}
-              className="mt-4 flex items-center gap-3 p-2 cursor-pointer hover:bg-gray-100 rounded"
+              onClick={() => {
+                navigate(paths.teacher.profile.getHref());
+              }}
+              className="mt-32 flex items-center gap-3 p-2 cursor-pointer hover:bg-gray-100 rounded"
             >
               <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
                 <img
