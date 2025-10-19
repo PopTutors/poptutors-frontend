@@ -805,12 +805,12 @@ const JobListing: React.FC = () => {
 
       {/* EDIT DIALOG (unchanged) */}
       <Dialog open={editDialogOpen} onOpenChange={(open) => { if (!open) closeEditDialog(); }}>
-        <DialogContent className="max-w-2xl w-full">
+        <DialogContent className="max-w-2xl w-full p-6">
           <DialogHeader>
             <div className="flex items-start justify-between w-full">
               <DialogTitle className="text-lg font-semibold">Edit Job</DialogTitle>
               <DialogClose asChild>
-                <button className="p-1 rounded hover:bg-gray-100">
+                <button className="p-1  hover:bg-gray-100">
                   <XIcon className="w-5 h-5" />
                 </button>
               </DialogClose>
@@ -824,7 +824,7 @@ const JobListing: React.FC = () => {
                 <input
                   value={editForm.title ?? ""}
                   onChange={(e) => setEditForm((f) => ({ ...f, title: e.target.value }))}
-                  className="w-full border px-3 py-2 rounded"
+                  className="w-full border px-3 py-2 "
                 />
               </div>
 
@@ -833,7 +833,7 @@ const JobListing: React.FC = () => {
                 <input
                   value={editForm.subject ?? ""}
                   onChange={(e) => setEditForm((f) => ({ ...f, subject: e.target.value }))}
-                  className="w-full border px-3 py-2 rounded"
+                  className="w-full border px-3 py-2 "
                 />
               </div>
 
@@ -842,7 +842,7 @@ const JobListing: React.FC = () => {
                 <input
                   value={editForm.course ?? ""}
                   onChange={(e) => setEditForm((f) => ({ ...f, course: e.target.value }))}
-                  className="w-full border px-3 py-2 rounded"
+                  className="w-full border px-3 py-2 "
                 />
               </div>
 
@@ -851,7 +851,7 @@ const JobListing: React.FC = () => {
                 <input
                   value={editForm.courseCode ?? ""}
                   onChange={(e) => setEditForm((f) => ({ ...f, courseCode: e.target.value }))}
-                  className="w-full border px-3 py-2 rounded"
+                  className="w-full border px-3 py-2 "
                 />
               </div>
             </div>
@@ -861,7 +861,7 @@ const JobListing: React.FC = () => {
               <textarea
                 value={editForm.description ?? ""}
                 onChange={(e) => setEditForm((f) => ({ ...f, description: e.target.value }))}
-                className="w-full border px-3 py-2 rounded h-28"
+                className="w-full border px-3 py-2  h-28"
               />
             </div>
 
@@ -872,7 +872,7 @@ const JobListing: React.FC = () => {
                   type="number"
                   value={editForm.studentPrice ?? ""}
                   onChange={(e) => setEditForm((f) => ({ ...f, studentPrice: e.target.value }))}
-                  className="w-full border px-3 py-2 rounded"
+                  className="w-full border px-3 py-2 "
                 />
               </div>
 
@@ -881,7 +881,7 @@ const JobListing: React.FC = () => {
                 <select
                   value={editForm.status ?? ""}
                   onChange={(e) => setEditForm((f) => ({ ...f, status: e.target.value }))}
-                  className="w-full border px-3 py-2 rounded"
+                  className="w-full border px-3 py-2 "
                 >
                   <option value="">Select status</option>
                   <option value="New">New</option>
@@ -891,11 +891,12 @@ const JobListing: React.FC = () => {
                 </select>
               </div>
 
-              <div className="flex items-end justify-end">
-                <div className="flex gap-2">
-                  <button type="button" onClick={closeEditDialog} className="px-4 py-2 border rounded bg-white">Cancel</button>
-                  <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
-                </div>
+
+            </div>
+            <div className="flex items-end justify-end">
+              <div className="flex gap-2">
+                <button type="button" onClick={closeEditDialog} className="px-[24px] py-[12px] border  bg-white font-inter text-[16px]">Cancel</button>
+                <button type="submit" className="px-[24px] py-[12px] bg-primary text-white font-inter text-[16px]">Save</button>
               </div>
             </div>
           </form>
