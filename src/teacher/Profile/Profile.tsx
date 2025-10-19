@@ -141,7 +141,7 @@ const TeacherProfile: React.FC = () => {
                     <div className="flex items-center gap-2 flex-wrap">
                         <h1 className="text-2xl md:text-3xl font-bold text-gray-800">{teacherData.name}</h1>
                         {teacherData.topRated && (
-                            <span className="px-2 py-0.5 text-xs md:text-sm font-medium text-blue-600 border border-blue-600 rounded-md">
+                            <span className="px-3 py-0.5 text-xs md:text-sm font-medium text-blue-600 bg-[rgba(38,164,255,0.05)] border border-blue-400 rounded-full">
                                 Top Rated
                             </span>
                         )}
@@ -208,18 +208,24 @@ const TeacherProfile: React.FC = () => {
                     </div>
 
                     {/* Social Links */}
-                    <div className="bg-white p-4 shadow-md">
+                    <div className="bg-white p-4 shadow-md space-y-4">
                         <h2 className="text-xl font-semibold mb-3">Social Links</h2>
-                        <div className="flex flex-col gap-2 text-gray-700">
+                        <div className="flex flex-col gap-4 text-gray-700">
                             {teacherData.social.map(social => {
                                 let Icon;
                                 if (social.type === "Mail") Icon = Mail;
                                 if (social.type === "Instagram") Icon = Instagram;
                                 if (social.type === "Facebook") Icon = Facebook;
                                 return (
-                                    <div key={social.value} className="flex items-center gap-2">
-                                        {Icon && <Icon size={16} />} <span>{social.value}</span>
-                                    </div>
+                                    <a
+                                        key={social.value}
+                                        href={social.value}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 hover:text-blue-400"
+                                    >
+                                        {Icon && <Icon size={20} />} <span>{social.value}</span>
+                                    </a>
                                 );
                             })}
                         </div>

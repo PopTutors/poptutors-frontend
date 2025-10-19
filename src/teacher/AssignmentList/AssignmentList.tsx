@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, SlidersHorizontal, Calendar, Briefcase } from "lucide-react";
+import { Calendar, Briefcase } from "lucide-react";
 import AssignmentDetail from "./AssignmentDetail";
 
 interface Assignment {
@@ -256,14 +256,9 @@ export default function AssignmentList() {
                                 </div>
 
                                 {/* Job Status */}
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                                        <Briefcase className="w-5 h-5 text-green-600" />
-                                    </div>
-                                    <div>
-                                        <div className="text-base font-semibold text-gray-900">Open</div>
-                                        <div className="text-sm text-gray-400">Job</div>
-                                    </div>
+                                <div>
+                                    <div className="text-base font-semibold text-gray-900">Open</div>
+                                    <div className="text-sm text-gray-400">Job</div>
                                 </div>
                             </div>
                         ))}
@@ -271,9 +266,6 @@ export default function AssignmentList() {
 
                     {filteredAssignments.length === 0 && (
                         <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-                            <div className="text-gray-400 mb-2">
-                                <Search className="w-16 h-16 mx-auto mb-4" />
-                            </div>
                             <h3 className="text-lg font-semibold text-gray-900 mb-2">No assignments found</h3>
                             <p className="text-gray-500">
                                 {searchQuery

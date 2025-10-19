@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 const WEEK_DAYS = ["S", "M", "T", "W", "T", "F", "S"];
 
 interface RescheduleModalProps {
+    isOpen: boolean;
     session: {
         meetingDate: string;
         meetingTime: string;
@@ -10,7 +11,7 @@ interface RescheduleModalProps {
     onClose: () => void;
 }
 
-export default function RescheduleComponent({ session, onClose }: RescheduleModalProps) {
+export default function RescheduleModal({ isOpen, session, onClose }: RescheduleModalProps) {
     // Parse session data for defaults
     const parseSessionDate = (dateString: string) => {
         const date = new Date(dateString);
@@ -47,14 +48,12 @@ export default function RescheduleComponent({ session, onClose }: RescheduleModa
     const [timeZone, setTimeZone] = useState("");
     const [currentMonth, setCurrentMonth] = useState(selectedDate.getMonth());
     const [currentYear, setCurrentYear] = useState(selectedDate.getFullYear());
-    const [isOpen, setIsOpen] = useState(true);
     const modalRef = useRef<HTMLDivElement>(null);
 
     // Close modal when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-                setIsOpen(false);
                 onClose();
             }
         };
@@ -180,10 +179,7 @@ export default function RescheduleComponent({ session, onClose }: RescheduleModa
                 <div className="flex justify-end gap-4">
                     <button
                         className="border border-gray-300 px-6 py-2"
-                        onClick={() => {
-                            setIsOpen(false);
-                            onClose();
-                        }}
+                        onClick={onClose}
                     >
                         Clear
                     </button>

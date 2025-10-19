@@ -31,8 +31,6 @@ import Settings from './teacher/Settings/Settings';
 import AssignmentList from './teacher/AssignmentList/AssignmentList';
 import SessionsList from './teacher/SessionList/SessionList';
 
-const dummy = () => <div>Dummy Component</div>;
-
 export const createAppRouter = createBrowserRouter([
   {
     path: paths.auth.login.path,

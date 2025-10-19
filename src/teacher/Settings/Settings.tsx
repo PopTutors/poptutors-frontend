@@ -294,7 +294,7 @@ export default function Settings() {
                         <div className="relative">
                             <div className="w-24 h-24 rounded-full bg-cyan-500 flex items-center justify-center overflow-hidden">
                                 <img
-                                    src="https://via.placeholder.com/96"
+                                    src="https://randomuser.me/api/portraits/men/12.jpg"
                                     alt="Profile"
                                     className="w-full h-full object-cover"
                                 />
