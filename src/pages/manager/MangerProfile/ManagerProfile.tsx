@@ -582,8 +582,6 @@ export default function ManagerProfile(): JSX.Element {
           onOpenEducationItem={onOpenEducationItem}
           onSaveEducationItem={onSaveEducationItem}
 
-          onSaveEducation={handleSaveEducation}
-
           // Loading state
           isUpdating={isUpdating}
         />

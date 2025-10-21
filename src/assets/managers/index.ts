@@ -63,6 +63,12 @@ import BudgetIcon from './budget.svg';
 import StarIcon from './star.svg';
 import StudentSwitchIcon from './StudentSwitch.svg';
 import TeacherSwitchIcon from './TeacherSwitch.svg';
+import ChatIcon from './chat.svg';
+import MySessionDateIcon from './timedate.svg';
+import MySessionStarIcon from './MySessionStar.svg';
+import ReScheduleStudentIcon from './RescheduleStudent.svg';
+import ReScheduleCurrentIcon from './RescheduleCurrent.svg';
+import ArrowSession from './ArrowSession.svg';
 export {
   DeleteIcon,
   InactiveIcon,
@@ -128,5 +134,11 @@ export {
   BudgetIcon,
   StarIcon,
   StudentSwitchIcon,
-  TeacherSwitchIcon
+  TeacherSwitchIcon,
+  ChatIcon,
+  MySessionDateIcon,
+  MySessionStarIcon,
+  ReScheduleStudentIcon,
+  ReScheduleCurrentIcon,
+  ArrowSession
 };

@@ -815,14 +815,14 @@ export default function MyLiveHelpPage() {
 
                     {/* Desktop Tabs */}
                     <div className="hidden lg:flex mb-6 gap-6 border-b border-gray-200">
-                        {["calendar", "list", "reschedule", "completed"].map(tab => (
+                        {["calendar", "Active Exams", "list", "reschedule Exams", "completed Exams"].map(tab => (
                             <button
                                 key={tab}
-                                onClick={() => setActiveTab(tab)}
+                                onClick={() => setActiveTab(tab.split(" ")[0].toLowerCase())}
                                 className={`pb-[16px] pt-0 pr-[24px] pl-[24px] text-[16px] font-inter font-medium capitalize transition-colors ${activeTab === tab ? "border-b-2 border-primary text-[#141414]" : "text-[#8E8E93] hover:text-gray-700"
                                     }`}
                             >
-                                {tab === "list" ? "Requests" : tab}
+                                {tab === "list" ? "Upcoming Exams" : tab}
                             </button>
                         ))}
                     </div>
