@@ -18,6 +18,7 @@ import Rating from './Rating.svg';
 import LiveHelp from './LiveHelp.svg';
 import Students from './Students.svg';
 import HiringFile from './HiringFile.svg';
+import HiringFilePrimary from './HiringFilePrimary.svg';
 import Sessions from './Session.svg';
 import FeedbackIcon from './Feedback.svg';
 import OpenIcon from './open.svg';
@@ -140,5 +141,6 @@ export {
   MySessionStarIcon,
   ReScheduleStudentIcon,
   ReScheduleCurrentIcon,
-  ArrowSession
+  ArrowSession,
+  HiringFilePrimary
 };

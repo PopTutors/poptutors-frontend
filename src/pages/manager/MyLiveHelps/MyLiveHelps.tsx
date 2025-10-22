@@ -19,8 +19,14 @@ import {
     CheckCircle,
     User,
     FileText,
-    Menu
+    Menu,
+    TriangleAlert,
+    CalendarClock
 } from "lucide-react";
+import { CircleCheck } from "lucide-react"
+import { formatDateTime } from "../../../utils/mappers"
+import type { ScheduleItem } from "../MySessions/types"
+import { ChatIcon, ReScheduleCurrentIcon, ReScheduleStudentIcon, SessionStudentIcon } from "../../../assets/managers"
 
 import { useFetch } from "../../../api/UseFetch"
 import { useGenericMutation } from "../../../api/useGenericMutation"
@@ -32,10 +38,11 @@ import {
     ProfileIcon,
     SessionDateIcon,
     SessionMoneyIcon,
-    SessionStudentIcon,
     SessionTeacherIcon,
     TimeIcon
 } from "../../../assets/managers"
+import ActiveLiveHelpCard from "./ActiveLiveHelpCard"
+import { Tooltip } from "@mui/material"
 
 // API prefix for livehelps
 const API_PREFIX = "/myLivehelp"
@@ -61,151 +68,149 @@ type LiveHelpItem = {
 const STORAGE_KEY = "my_livehelp_items_v1"
 const defaultItems: LiveHelpItem[] = []
 
-// CategoryDropdown component with mobile optimization
-function CategoryDropdown({ selectedFilters, toggleFilter }: { selectedFilters: Record<string, boolean>; toggleFilter: (k: string) => void }) {
-    const [open, setOpen] = useState(false)
-    const [dropdownPosition, setDropdownPosition] = useState < 'left' | 'right' > ('right')
-    const ref = useRef < HTMLDivElement | null > (null)
-    const buttonRef = useRef < HTMLButtonElement > (null)
 
-    useEffect(() => {
-        function onDoc(e: MouseEvent) {
-            if (!ref.current) return
-            if (e.target instanceof Node && !ref.current.contains(e.target)) setOpen(false)
-        }
-        document.addEventListener("mousedown", onDoc)
-        return () => document.removeEventListener("mousedown", onDoc)
-    }, [])
-
-    const handleDropdownToggle = () => {
-        if (!open && buttonRef.current) {
-            const rect = buttonRef.current.getBoundingClientRect()
-            const spaceRight = window.innerWidth - rect.right
-            const dropdownWidth = 256 // w-64 = 256px
-
-            setDropdownPosition(spaceRight < dropdownWidth ? 'left' : 'right')
-        }
-        setOpen((v) => !v)
-    }
-
-    return (
-        <div className="relative" ref={ref}>
-            <button
-                ref={buttonRef}
-                onClick={handleDropdownToggle}
-                aria-expanded={open}
-                aria-haspopup="true"
-                className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-            >
-                Category
-                <ChevronDown className={`h-4 w-4 text-gray-600 transition-transform ${open ? 'rotate-180' : ''}`} />
-            </button>
-
-            {open && (
-                <div
-                    role="menu"
-                    aria-label="Category filters"
-                    className={`absolute z-40 mt-2 w-64 border border-gray-200 bg-white shadow-lg rounded-lg ${dropdownPosition === 'left' ? 'left-0' : 'right-0'
-                        }`}
-                >
-                    <div className="p-3 text-sm font-medium text-gray-800">Category</div>
-                    <div className="divide-y divide-gray-100">
-                        <div className="p-3 space-y-2 w-full">
-                            <label className="flex items-center gap-2 cursor-pointer">
-                                <Checkbox checked={selectedFilters.assignment} onCheckedChange={() => toggleFilter('assignment')} />
-                                <span className="text-sm">Assignment</span>
-                            </label>
-                            <label className="flex items-center gap-2 cursor-pointer">
-                                <Checkbox checked={selectedFilters.project} onCheckedChange={() => toggleFilter('project')} />
-                                <span className="text-sm">Project</span>
-                            </label>
-                            <label className="flex items-center gap-2 cursor-pointer">
-                                <Checkbox checked={selectedFilters.consultation} onCheckedChange={() => toggleFilter('consultation')} />
-                                <span className="text-sm">Consultation</span>
-                            </label>
-                            <label className="flex items-center gap-2 cursor-pointer">
-                                <Checkbox checked={selectedFilters.other} onCheckedChange={() => toggleFilter('other')} />
-                                <span className="text-sm">Other</span>
-                            </label>
-                        </div>
-                        <div className="p-2">
-                            <button
-                                onClick={() => { (Object.keys(selectedFilters) as string[]).forEach((k) => { if (!selectedFilters[k]) toggleFilter(k) }) }}
-                                className="w-full rounded px-3 py-2 text-sm font-medium text-cyan-600 hover:bg-gray-50"
-                            >
-                                + Add
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
-    )
+type RescheduleCardProps = {
+    item: ScheduleItem
+    onApprove: (item: ScheduleItem) => void
+    onDecline: (item: ScheduleItem) => void
+    onReschedule: (item: ScheduleItem) => void
+    onChat: (item: ScheduleItem) => void
 }
 
-// RescheduleCard component with mobile optimization
-function RescheduleCard({ item, onApprove, onDecline, onReschedule, onChat }: { item: any; onApprove: (s: any) => void; onDecline: (s: any) => void; onReschedule: (s: any) => void; onChat: (s: any) => void }) {
-    const formatDateTime = (iso?: string) => {
-        if (!iso) return "—"
-        const date = new Date(iso)
-        return date.toLocaleDateString("en-US", {
-            weekday: "short",
-            month: "short",
-            day: "numeric",
-            hour: "numeric",
-            minute: "2-digit",
-            hour12: true
-        })
-    }
+function RescheduleCard({
+    item,
+    onApprove,
+    onDecline,
+    onReschedule,
+    onChat,
+}: RescheduleCardProps) {
+    // requested time fallback (keeps your original logic)
+    const requested = useMemo(() => (item as any).requestedStart ?? item.endAt ?? (item as any).requestedAt ?? null, [item])
 
     return (
-        <div className="border-l-4 border-primary bg-white shadow-sm p-4 rounded-lg">
-            {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-4 gap-2">
-                <div className="text-sm font-semibold text-gray-800">{item.title}</div>
-                <div className="text-xs text-gray-500">{formatDateTime(item.scheduledAt)}</div>
-            </div>
-
-            {/* Time slot rows - Mobile optimized */}
-            <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
-                    <div className="flex-shrink-0 h-8 w-8 bg-white border border-gray-200 rounded-full flex items-center justify-center">
-                        <User className="h-4 w-4 text-gray-600" />
-                    </div>
-                    <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                        <div className="flex-1">
-                            <div className="text-sm font-medium text-gray-900">{formatDateTime(item.scheduledAt)}</div>
-                            <div className="text-xs text-gray-400">Current</div>
+        <div className="bg-white shadow-sm border border-transparent overflow-hidden rounded-lg">
+            {/* Left blue accent + inner padding */}
+            <div className="flex">
+                <div className="w-1 bg-primary" />
+                <div className="flex-1 p-5">
+                    {/* Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-4">
+                        <div className="flex items-baseline gap-3">
+                            <h3 className="text-lg font-semibold text-slate-900">
+                                {item.title ?? "Computer science"}
+                            </h3>
+                            <span className="text-sm text-slate-500">|</span>
+                            <div className="text-sm text-slate-500">
+                                ID: <span className="font-medium text-slate-700">JB-{item.jobId ?? "2024-001"}</span>
+                            </div>
                         </div>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-gray-400 flex-shrink-0 hidden sm:block">
-                            <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                        <div className="flex-1">
-                            <div className="text-sm font-medium text-gray-900">{formatDateTime(item.requestedAt)}</div>
-                            <div className="text-xs text-gray-400">Requested</div>
+
+                        <div className="text-sm text-slate-400 sm:self-start">
+                            {item.startAt ? new Date(item.startAt).toLocaleDateString() : "—"}
                         </div>
                     </div>
-                </div>
-            </div>
 
-            {/* Reason and Actions row - Mobile optimized */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                {item.reason && (
-                    <div className="text-sm text-rose-600">
-                        <span className="font-medium">Reason: </span>
-                        <span>{item.reason}</span>
+                    {/* Time slot rows */}
+                    <div className="space-y-3 mb-5">
+                        {/* Row 1 - gray */}
+                        <div className="flex items-center gap-4 bg-[#f6f6f6] p-3 rounded-md">
+                            <div className="flex-shrink-0 h-10 w-10 bg-[#eaeaea] flex items-center justify-center rounded">
+                                <img src={ReScheduleStudentIcon} alt="student" />
+                            </div>
+
+                            <div className="flex-1 flex flex-col justify-between sm:flex-row sm:items-center gap-2 sm:gap-4">
+                                <div className="flex-1">
+                                    <div className="text-sm font-medium text-slate-900">{formatDateTime(item.startAt)}</div>
+                                    <div className="text-xs text-slate-400">Current</div>
+                                </div>
+
+                                {/* Arrow (visible on sm+) */}
+                                <div className="hidden sm:flex items-center justify-center">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13 6L19 12L13 18M18.5 12L5 12" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                </div>
+
+                                <div className="flex-1 ml-6">
+                                    <div className="text-sm font-medium text-slate-900">{formatDateTime(requested)}</div>
+                                    <div className="text-xs text-slate-400">Requested</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Row 2 - sky tint */}
+                        <div className="flex items-center gap-4 bg-[#f6fbfd] p-3 rounded-md">
+                            <div className="flex-shrink-0 h-10 w-10 bg-[#e0f0f7] flex items-center justify-center rounded">
+                                <img src={ReScheduleCurrentIcon} alt="current" />
+                            </div>
+
+                            <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                                <div className="flex-1">
+                                    <div className="text-sm font-medium text-slate-900">{formatDateTime(item.startAt)}</div>
+                                    <div className="text-xs text-slate-400">Current</div>
+                                </div>
+
+                                <div className="hidden sm:flex items-center justify-center">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13 6L19 12L13 18M18.5 12L5 12" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                </div>
+
+                                <div className="flex-1 ml-6">
+                                    <div className="text-sm font-medium text-slate-900">{formatDateTime(requested)}</div>
+                                    <div className="text-xs text-slate-400">Requested</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                )}
-                <div className="flex items-center gap-2 justify-end">
-                    <button onClick={() => onChat(item)} className="inline-flex items-center justify-center rounded-full border border-gray-200 bg-white p-2 hover:bg-gray-50">
-                        <MessageCircle className="h-4 w-4 text-gray-600" />
-                    </button>
-                    <button onClick={() => onDecline(item)} className="inline-flex items-center justify-center rounded-full border border-gray-200 bg-white p-2 hover:bg-gray-50">
-                        <XCircle className="h-4 w-4 text-gray-600" />
-                    </button>
-                    <button onClick={() => onApprove(item)} className="bg-[rgba(52, 199, 89, 0.1)] inline-flex items-center justify-center rounded-full border border-gray-200 bg-white p-2 hover:bg-gray-50">
-                        <CheckCircle className="h-4 w-4 text-gray-600" />
-                    </button>
+
+                    {/* Reason + Actions */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-3 justify-end">
+                            <Tooltip title={(item as any)?.reason ?? ""}>
+                                <button
+                                    title="Chat"
+                                    className="inline-flex items-center justify-center rounded-full border border-gray-200 bg-[#FFFAE6] p-3 shadow-sm hover:bg-gray-50"
+                                >
+                                    <TriangleAlert className="w-[18px] h-[18px]" />
+                                </button></Tooltip>
+
+                            {/* Chat - neutral white circle */}
+                            <button
+                                onClick={() => onChat(item)}
+                                title="Chat"
+                                className="inline-flex items-center justify-center rounded-full border border-gray-200 bg-white p-3 shadow-sm hover:bg-gray-50"
+                            >
+                                <img src={ChatIcon} className="w-[18px] h-[18px]" alt="chat" />
+                            </button>
+
+                            {/* Decline - pink circular background */}
+                            <button
+                                onClick={() => onDecline(item)}
+                                title="Decline"
+                                className="inline-flex items-center justify-center rounded-full bg-[rgb(255,236,236)] p-3 hover:bg-rose-100 shadow-sm"
+                            >
+                                <XCircle className="h-[18px] w-[18px] text-[#141414]" />
+                            </button>
+
+                            {/* Approve - green circular background */}
+                            <button
+                                onClick={() => onApprove(item)}
+                                title="Approve"
+                                className="inline-flex items-center justify-center rounded-full bg-emerald-50 p-3 hover:bg-emerald-100 shadow-sm"
+                            >
+                                <CircleCheck className="h-[18px] w-[18px] text-[#141414]" />
+                            </button>
+                        </div>
+
+                        <button
+                            onClick={() => handlers.handleReschedule?.(item)}
+                            className="py-[12px] px-[24px] border text-[16px] font-inter font-medium bg-white text-[#141414] flex items-center gap-2 justify-center font-inter font-medium text-[16px]"
+                        >
+                            <CalendarClock className="w-[18px] h-[18px]" />
+                            Reschedule
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -232,6 +237,12 @@ export default function MyLiveHelpPage() {
 
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [form, setForm] = useState({ title: "", description: "", pricePerHour: 0, liveHelpHours: 1, timezone: "Asia/Kolkata", scheduledDate: "", scheduledHour: 9 })
+
+    const activeItems = useMemo(() => items.filter(it => {
+        // treat 'in-progress', 'active', or any item with startAt as active
+        const s = (it.status ?? "").toLowerCase();
+        return s === "in-progress" || s === "active" || !!it.startAt;
+    }), [items]);
 
     // Helper function to map live help data
     const mapLiveHelpToItem = useCallback((s: any): LiveHelpItem => {
@@ -518,40 +529,12 @@ export default function MyLiveHelpPage() {
 
     // LiveHelp Card component - Mobile optimized with working menu
     const LiveHelpCard = ({ item, showActions = true }: { item: LiveHelpItem; showActions?: boolean }) => {
-        const [isMenuOpen, setIsMenuOpen] = useState(false);
-        const [menuPosition, setMenuPosition] = useState < 'left' | 'right' > ('right');
-        const menuRef = useRef < HTMLDivElement > (null);
-        const buttonRef = useRef < HTMLButtonElement > (null);
-        const isPendingReschedule = item.status === "pending-reschedule"
+        const isPendingReschedule = item.status === "pending-reschedule";
 
-        // Close menu when clicking outside
-        useEffect(() => {
-            function handleClickOutside(event: MouseEvent) {
-                if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-                    setIsMenuOpen(false);
-                }
-            }
-
-            if (isMenuOpen) {
-                document.addEventListener('mousedown', handleClickOutside);
-                return () => document.removeEventListener('mousedown', handleClickOutside);
-            }
-        }, [isMenuOpen]);
-
-        const handleMenuToggle = () => {
-            if (!isMenuOpen && buttonRef.current) {
-                const rect = buttonRef.current.getBoundingClientRect();
-                const spaceRight = window.innerWidth - rect.right;
-                const menuWidth = 176; // approximate menu width
-
-                setMenuPosition(spaceRight < menuWidth ? 'left' : 'right');
-            }
-            setIsMenuOpen(!isMenuOpen);
-        };
-
-        const handleMenuItemClick = (action: () => void) => {
-            action();
-            setIsMenuOpen(false);
+        // Local chat opener — replace with your real chat handler if available
+        const openChat = (it: LiveHelpItem) => {
+            // TODO: replace with handlers.openChat(it)
+            alert("Open chat for " + (it.title ?? it.id));
         };
 
         return (
@@ -559,52 +542,22 @@ export default function MyLiveHelpPage() {
                 <div className="flex">
                     <div className="w-1 bg-primary" />
                     <div className="flex-1 p-4">
+                        {/* Header */}
                         <div className="flex items-start justify-between mb-3">
-                            <h3 className="text-base font-semibold text-gray-900 pr-2">{item.title}</h3>
-                            {showActions && (
-                                <div className="relative" ref={menuRef}>
-                                    <button
-                                        ref={buttonRef}
-                                        onClick={handleMenuToggle}
-                                        aria-label="open menu"
-                                        className="p-1 rounded hover:bg-gray-50 transition-colors"
-                                    >
-                                        <MoreVertical className="h-5 w-5 text-gray-600" />
-                                    </button>
-                                    {isMenuOpen && (
-                                        <div className={`absolute top-8 z-50 w-44 rounded-lg border bg-white shadow-lg ${menuPosition === 'left' ? 'left-0' : 'right-0'
-                                            }`}>
-                                            <div className="py-1">
-                                                <button
-                                                    onClick={() => handleMenuItemClick(() => handleViewDetails(item))}
-                                                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 flex items-center gap-2"
-                                                >
-                                                    <Play className="h-4 w-4" /> View details
-                                                </button>
-                                                <button
-                                                    onClick={() => handleMenuItemClick(() => handleAssignTeacher(item))}
-                                                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 flex items-center gap-2"
-                                                >
-                                                    <User className="h-4 w-4" /> Assign teacher
-                                                </button>
-                                                <button
-                                                    onClick={() => handleMenuItemClick(() => handleRemoveTeacher(item))}
-                                                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 flex items-center gap-2"
-                                                >
-                                                    <XCircle className="h-4 w-4" /> Remove teacher
-                                                </button>
-                                                <div className="border-t border-gray-100 my-1"></div>
-                                                <button
-                                                    onClick={() => handleMenuItemClick(() => handleDelete(item))}
-                                                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 text-red-600 flex items-center gap-2"
-                                                >
-                                                    <Trash2 className="h-4 w-4" /> Delete
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )}
+                            <div className="min-w-0">
+                                <div className="flex items-center gap-3">
+                                    <h3 className="text-base font-semibold text-gray-900 truncate">{item.title}</h3>
+                                    <span className="text-xs text-gray-500">ID: {item.id}</span>
                                 </div>
-                            )}
+                                <div className="mt-1 text-xs text-[#8E8E93]">
+                                    {item.status ? item.status.charAt(0).toUpperCase() + item.status.slice(1) : "Requested"}
+                                </div>
+                            </div>
+
+                            {/* small right column could hold small metadata if needed */}
+                            <div className="text-xs text-gray-400 hidden sm:block">
+                                {item.scheduledAt ? new Date(item.scheduledAt).toLocaleDateString() : "—"}
+                            </div>
                         </div>
 
                         <div className="mt-3 grid grid-cols-1 gap-3 lg:grid-cols-2 lg:gap-4">
@@ -625,8 +578,12 @@ export default function MyLiveHelpPage() {
                                         <img src={SessionDateIcon} alt="Date/Time" />
                                     </div>
                                     <div className="min-w-0 flex-1">
-                                        <div className="text-[16px] font-inter font-medium text-[#141414]">{item.scheduledAt ? new Date(item.scheduledAt).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }) : "—"}</div>
-                                        <div className="text-[14px] text-[#8E8E93]">{item.scheduledAt ? new Date(item.scheduledAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "—"}</div>
+                                        <div className="text-[16px] font-inter font-medium text-[#141414]">
+                                            {item.scheduledAt ? new Date(item.scheduledAt).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }) : "—"}
+                                        </div>
+                                        <div className="text-[14px] text-[#8E8E93]">
+                                            {item.scheduledAt ? new Date(item.scheduledAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "—"}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -675,32 +632,28 @@ export default function MyLiveHelpPage() {
                             </div>
                         </div>
 
-                        {/* Bottom actions - Mobile responsive */}
+                        {/* Bottom actions - only Message + Reschedule */}
                         {showActions && (
-                            <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center justify-between">
-                                <div className="flex gap-2">
-                                    <button title="Chat" className="rounded border py-[12px] px-[16px] text-gray-600 hover:bg-gray-50">
-                                        <MessageCircle className="h-[24px] w-[24px]" />
+                            <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div className="flex gap-2 items-center">
+                                    <button
+                                        title="Chat"
+                                        onClick={() => openChat(item)}
+                                        className="inline-flex items-center justify-center rounded-full border border-gray-200 bg-white p-2 hover:bg-gray-50"
+                                    >
+                                        <MessageCircle className="h-5 w-5 text-gray-600" />
                                     </button>
                                 </div>
 
-                                {isPendingReschedule ? (
-                                    <div className="flex flex-wrap gap-2 justify-end">
-                                        <button onClick={() => approveReschedule(item)} className="px-3 py-2 rounded bg-emerald-600 text-white text-sm hover:bg-emerald-700">Approve</button>
-                                        <button onClick={() => declineReschedule(item)} className="px-3 py-2 rounded border text-sm">Decline</button>
-                                        <button onClick={() => handleReschedule(item)} className="px-3 py-2 rounded border text-sm">Reschedule</button>
-                                        <button onClick={() => handleDelete(item)} className="px-3 py-2 rounded bg-red-600 text-white text-sm hover:bg-red-700">Delete</button>
-                                    </div>
-                                ) : (
-                                    <div className="flex flex-wrap gap-2 justify-end">
-                                        <button onClick={() => handleReschedule(item)} className="py-[12px] px-[24px] border text-[16px] font-inter font-medium hover:bg-gray-50 flex items-center gap-2">
-                                            <img src={DateIcon} alt="Date" /> Reschedule
-                                        </button>
-                                        <button onClick={() => alert('Start session flow')} className="py-[12px] px-[24px] border text-[16px] font-inter flex items-center gap-2 bg-primary font-medium text-white hover:bg-cyan-700">
-                                            <Play className="h-4 w-4" /> Start
-                                        </button>
-                                    </div>
-                                )}
+                                <div className="flex gap-2">
+                                    {/* Reschedule button — keeps the same visual weight as before but narrower */}
+                                    <button
+                                        onClick={() => handleReschedule(item)}
+                                        className="py-[10px] px-[20px] border text-[14px] font-inter font-medium hover:bg-gray-50 flex items-center gap-2 justify-center"
+                                    >
+                                        <img src={DateIcon} alt="Date" className="h-4 w-4" /> Reschedule
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -815,25 +768,69 @@ export default function MyLiveHelpPage() {
 
                     {/* Desktop Tabs */}
                     <div className="hidden lg:flex mb-6 gap-6 border-b border-gray-200">
-                        {["calendar", "Active Exams", "list", "reschedule Exams", "completed Exams"].map(tab => (
+                        {[
+                            { label: "Calendar", value: "calendar" },
+                            { label: "Active Exams", value: "active" },
+                            { label: "Upcoming Exams", value: "list" },           // label shown, value used internally
+                            { label: "Reschedule Exams", value: "reschedule" },
+                            { label: "Completed Exams", value: "completed" },
+                        ].map((tab) => (
                             <button
-                                key={tab}
-                                onClick={() => setActiveTab(tab.split(" ")[0].toLowerCase())}
-                                className={`pb-[16px] pt-0 pr-[24px] pl-[24px] text-[16px] font-inter font-medium capitalize transition-colors ${activeTab === tab ? "border-b-2 border-primary text-[#141414]" : "text-[#8E8E93] hover:text-gray-700"
+                                key={tab.value}
+                                onClick={() => setActiveTab(tab.value)}
+                                className={`pb-[16px] pt-0 pr-[24px] pl-[24px] text-[16px] font-inter font-medium capitalize transition-colors ${activeTab === tab.value ? "border-b-2 border-primary text-[#141414]" : "text-[#8E8E93] hover:text-gray-700"
                                     }`}
                             >
-                                {tab === "list" ? "Upcoming Exams" : tab}
+                                {tab.label}
                             </button>
                         ))}
                     </div>
 
                     {/* Main Content */}
-                    {activeTab === "list" ? (
+                    {activeTab === "active" ? (
+                        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                            {activeItems.length === 0 ? (
+                                <div className="col-span-full py-20 text-center text-gray-500">No active sessions</div>
+                            ) : (
+                                activeItems.map(it => (
+                                    <ActiveLiveHelpCard
+                                        key={it.id}
+                                        item={it}
+                                        onChat={(s) => alert('Open chat: ' + (s.title ?? s.id))}
+                                        onStart={(s) => alert('Start session: ' + (s.title ?? s.id))}
+                                    />
+                                ))
+                            )}
+                        </div>
+                    ) : activeTab === "list" ? (
                         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                             {filteredItems.length === 0 ? (
-                                <div className="col-span-full py-20 text-center text-gray-500">No live help requests</div>
+                                <div className="col-span-full py-20 text-center text-gray-500">
+                                    No active live help sessions
+                                </div>
                             ) : (
-                                filteredItems.map(it => <LiveHelpCard item={it} key={it.id} />)
+                                filteredItems.map((it) => {
+                                    // Build a handlers object using functions already present in your file.
+                                    // Replace these mappings if you have different function names.
+                                    const handlers = {
+                                        handleOpenChat: (item: any) => handleViewDetails(item), // open details/chat
+                                        handleReschedule: (item: any) => handleReschedule(item),
+                                        handleJoinMeeting: (item: any) => alert("Start session flow"),
+                                        handleTeacher: (item: any) => handleAssignTeacher(item),
+                                        handleStudent: (item: any) => handleRemoveTeacher(item),
+                                        handleViewRecording: (item: any) => alert("View recording for " + (item.id ?? item.title)),
+                                    };
+
+                                    return (
+                                        <ActiveLiveHelpCard
+                                            key={it.id}
+                                            item={it}
+                                            handlers={handlers}
+                                            showActions={true}
+                                            activeTab={activeTab}
+                                        />
+                                    );
+                                })
                             )}
                         </div>
                     ) : activeTab === "completed" ? (
@@ -848,7 +845,7 @@ export default function MyLiveHelpPage() {
                         rescheduleItems.length === 0 ? (
                             <div className="py-12 text-center text-gray-500">No pending reschedules</div>
                         ) : (
-                            <div className="grid grid-cols-1 gap-4">
+                            <div className="grid grid-cols-2 gap-4">
                                 {rescheduleItems.map(it => (
                                     <RescheduleCard
                                         key={it.id}
@@ -875,29 +872,28 @@ export default function MyLiveHelpPage() {
                                     </button>
                                 </div>
 
-                                <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-3">
-                                    <div className="flex gap-2 rounded-lg border border-gray-200 p-[4px]">
-                                        {(["daily", "weekly", "monthly"] as const).map(mode => (
-                                            <button
-                                                key={mode}
-                                                onClick={() => setViewMode(mode)}
-                                                className={`rounded px-3 py-1 text-[14px] font-inter text-[#8E8E93] font-medium capitalize transition-colors ${viewMode === mode ? "bg-white text-primary" : "text-gray-600 hover:bg-gray-100"
-                                                    }`}
-                                            >
-                                                {mode}
-                                            </button>
-                                        ))}
-                                    </div>
-
-                                    <div className="flex gap-2">
-                                        <CategoryDropdown selectedFilters={selectedFilters} toggleFilter={toggleFilter} />
-                                        <Button onClick={openAddModal} className="text-[14px] lg:text-[16px] font-inter flex items-center gap-2 px-[12px] py-[12px] bg-primary text-white hover:bg-cyan-600">
-                                            <Plus className="h-4 w-4" />
-                                            <span className="hidden sm:inline">Request Help</span>
-                                            <span className="sm:hidden">Add</span>
-                                        </Button>
-                                    </div>
+                                {/* <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-3 "> */}
+                                <div className="flex gap-2 rounded-lg border border-gray-200 p-[4px]">
+                                    {(["daily", "weekly", "monthly"] as const).map(mode => (
+                                        <button
+                                            key={mode}
+                                            onClick={() => setViewMode(mode)}
+                                            className={`rounded px-3 py-1 text-[14px] font-inter text-[#8E8E93] font-medium capitalize transition-colors ${viewMode === mode ? "bg-white text-primary" : "text-gray-600 hover:bg-gray-100"
+                                                }`}
+                                        >
+                                            {mode}
+                                        </button>
+                                    ))}
                                 </div>
+
+                                <div className="flex gap-2">
+                                    <Button onClick={openAddModal} className="text-[14px] lg:text-[16px] font-inter flex items-center gap-2 px-[12px] py-[12px] bg-primary text-white hover:bg-cyan-600">
+                                        <Plus className="h-4 w-4" />
+                                        <span className="hidden sm:inline">Request Help</span>
+                                        <span className="sm:hidden">Add</span>
+                                    </Button>
+                                </div>
+                                {/* </div> */}
                             </div>
 
                             {/* Calendar Views - Now includes DAILY view */}
