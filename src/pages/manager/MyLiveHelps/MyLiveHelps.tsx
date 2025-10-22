@@ -836,9 +836,31 @@ export default function MyLiveHelpPage() {
                     ) : activeTab === "completed" ? (
                         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                             {filteredCompleted.length === 0 ? (
-                                <div className="col-span-full py-20 text-center text-gray-500">No completed requests</div>
+                                <div className="col-span-full py-20 text-center text-gray-500">
+                                    No completed requests
+                                </div>
                             ) : (
-                                filteredCompleted.map(it => <LiveHelpCard key={it.id} item={it} showActions={false} />)
+                                filteredCompleted.map((it) => {
+                                    const handlers = {
+                                        handleOpenChat: (item: any) => handleViewDetails(item),
+                                        handleReschedule: (item: any) => handleReschedule(item),
+                                        handleJoinMeeting: (item: any) => handleJoinMeeting(item),
+                                        handleTeacher: (item: any) => handleAssignTeacher(item),
+                                        handleStudent: (item: any) => handleRemoveTeacher(item),
+                                        handleViewRecording: (item: any) =>
+                                            alert("View recording for " + (item.id ?? item.title)),
+                                    };
+
+                                    return (
+                                        <ActiveLiveHelpCard
+                                            key={it.id}
+                                            item={it}
+                                            handlers={handlers}
+                                            showActions={true} // ✅ hide Teacher/Student/Reschedule, show read-only footer
+                                            activeTab={activeTab}
+                                        />
+                                    );
+                                })
                             )}
                         </div>
                     ) : activeTab === "reschedule" ? (
