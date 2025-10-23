@@ -1,5 +1,7 @@
 import { Settings } from "lucide-react";
 
+import { m } from "framer-motion";
+
 export const paths = {
   manager: {
     dashboard: {
@@ -133,6 +135,36 @@ export const paths = {
       path: '/student/wallet',
       getHref: () => '/student/wallet',
     },
+  },
+  teacher: {
+    dashboard: {
+      path: '/teacher/dashboard',
+      getHref: () => '/teacher/dashboard',
+    },
+    profile: {
+      path: '/teacher/profile',
+      getHref: () => '/teacher/profile',
+    },
+    jobListing: {
+      path: '/teacher/jobs', // changed for testing
+      getHref: () => '/teacher/jobs',
+    },
+    examHelpList: {
+      path: '/teacher/exam-help',
+      getHref: () => '/teacher/exam-help'
+    },
+    settings: {
+      path: '/teacher/settings',
+      getHref: () => '/teacher/settings'
+    },
+    assignmentList: {
+      path: '/teacher/assignment-list',
+      getHref: () => '/teacher/assignment-list'
+    },
+    sessionList: {
+      path: '/teacher/session-list',
+      getHref: () => '/teacher/session-list'
+    }
   },
   landing: {
     path: '/landing',

@@ -5,10 +5,7 @@ const ProtectedRoute = () => {
   const location = useLocation();
 
   // Check if token exists in localStorage
-  const token =
-    localStorage.getItem('token') ||
-    localStorage.getItem('authToken') ||
-    localStorage.getItem('accessToken');
+  const token = localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('accessToken');
 
   if (!token) {
     console.warn('🚫 No authentication token found');
@@ -37,6 +34,28 @@ const ProtectedRoute = () => {
   }
 
   // ✅ Token exists - render protected routes
+  // Optional: Role-based route restriction for teacher
+  try {
+    const role = (() => {
+      const storedRole = localStorage.getItem('role') || sessionStorage.getItem('role');
+      if (storedRole) return storedRole;
+      if (token.includes('.')) {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload?.role;
+      }
+      return undefined;
+    })();
+
+    if (role === 'teacher') {
+      // Only allow teacher paths and profile
+      const isTeacherAllowed = location.pathname.startsWith('/teacher/') || location.pathname === paths.auth.googleCallback.path;
+
+      if (!isTeacherAllowed) {
+        return <Navigate to={paths.teacher.dashboard.getHref()} replace />;
+      }
+    }
+  } catch { }
+
   return <Outlet />;
 };
 

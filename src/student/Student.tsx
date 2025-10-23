@@ -200,11 +200,10 @@ export default function Dashboard() {
               {options.map(({ label, icon }) => (
                 <DropdownMenuItem
                   key={label}
-                  className={`flex items-center px-4 py-3 text-[15px] font-poppinsmedium cursor-pointer ${
-                    selected === label
-                      ? 'bg-[#E6F6FF] text-[#007A99]'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`}
+                  className={`flex items-center px-4 py-3 text-[15px] font-poppinsmedium cursor-pointer ${selected === label
+                    ? 'bg-[#E6F6FF] text-[#007A99]'
+                    : 'text-gray-700 hover:bg-gray-100'
+                    }`}
                   onSelect={() => {
                     if (label === 'Assignment') {
                       navigate(paths.student.assignment.newAssignment.getHref());

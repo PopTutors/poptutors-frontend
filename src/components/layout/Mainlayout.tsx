@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { useState } from 'react';
-import Header from './Header';
+import Header from './Header/Header';
 import Sidebar from './Sidebar';
 
 const MainLayout = () => {
@@ -10,7 +10,7 @@ const MainLayout = () => {
     <div className="flex flex-col h-screen">
       <Header
         isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
+        // onClose={() => setIsSidebarOpen(false)}
         onSidebarToggle={() => setIsSidebarOpen(!isSidebarOpen)}
       />
 

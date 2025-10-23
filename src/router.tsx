@@ -25,7 +25,14 @@ import ProtectedRoute from './protectedRoute';
 import RequestSessionForm from './components/forms/RequestSessionForm';
 import BookExpertForm from './components/forms/BookExpert';
 import LiveQuestionDetailsPage from './pages/student/liveQuestion/details';
-import Settings from './pages/manager/Settings';
+import Teacher from './teacher/Teacher';
+import TeacherProfile from './teacher/Profile/Profile';
+import TeacherJobListing from './teacher/JobListing/JobListing';
+import ExamHelp from './teacher/ExamHelp/ExamHelp';
+import Settings from './teacher/Settings/Settings';
+import AssignmentList from './teacher/AssignmentList/AssignmentList';
+import SessionsList from './teacher/SessionList/SessionList';
+import SettingsManager from './pages/manager/Settings';
 import Hirings from './pages/manager/TeachersProfile/Hirings';
 import ManagerProfile from './pages/manager/MangerProfile/ManagerProfile';
 import DashboardPage from './pages/manager/Dashboard/DashboardPage';
@@ -96,7 +103,7 @@ export const createAppRouter = createBrowserRouter([
           },
           {
             path: paths.manager.settings.path,
-            element: <Settings />,
+            element: <SettingsManager />,
           },
           {
             path: paths.student.profile.path,
@@ -123,10 +130,38 @@ export const createAppRouter = createBrowserRouter([
             element: <Student />,
           },
           {
+            path: paths.teacher.dashboard.path,
+            element: <Teacher />,
+          },
+          {
+            path: paths.teacher.jobListing.path,
+            element: <TeacherJobListing />
+          },
+          {
+            path: paths.teacher.profile.path,
+            element: <TeacherProfile />
+          },
+          {
+            path: paths.teacher.examHelpList.path,
+            element: <ExamHelp />
+          },
+          {
+            path: paths.teacher.settings.path,
+            element: <Settings />
+          },
+          {
+            path: paths.teacher.assignmentList.path,
+            element: <AssignmentList />
+          },
+          {
+            path: paths.teacher.sessionList.path,
+            element: <SessionsList />
+          },
+          {
             path: paths.manager.teacherProfile.path,
             element: <Hirings />
           },
-          // {
+          // {  
           //   path: paths.student.livequestion.path,
           //   element: <BookExpertPage />,
           // },

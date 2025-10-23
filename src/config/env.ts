@@ -3,7 +3,7 @@ import * as z from 'zod';
 const createEnv = () => {
   const EnvSchema = z.object({
     API_URL: z.string(),
-    APP_URL: z.string().default('http://localhost:5000/api'),
+    APP_URL: z.string().default('http://localhost:4256/api'),
   });
 
   const envVars = Object.entries(import.meta.env).reduce<Record<string, string>>(

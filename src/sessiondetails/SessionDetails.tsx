@@ -1,113 +1,149 @@
-// components/SessionCard.tsx
-import TeacherCard from './components/TeacherCard';
-import { InfoIcon } from '../assets';
-import AssignmentMilestone from './components/AssignmentMilestone';
-import AssignmentDetails from './components/AssignmentDetails';
-import DocumentList from './components/DocumentList';
-import ChatPanel from './components/ChatPanel ';
+import React, { useState } from "react";
+import { ArrowLeft, Star } from "lucide-react";
+import ChatSection from "../components/ChatSection";
 
-const SessionCard = () => {
-  const skills = [
-    'Project Management',
-    'Copywriting',
-    'English',
-    'Social Media Marketing',
-    'Copy Editing',
-  ];
-  const teachers = Array(4).fill({
-    name: 'Dianne Russell',
-    price: 45,
-    rating: 4.8,
-    reviews: 451444,
-    image: 'https://randomuser.me/api/portraits/women/44.jpg',
-  });
+interface SessionDetailProps {
+  session: {
+    id: string;
+    milestone: string;
+    title: string;
+    description: string;
+    tags: string[];
+    postedDate: string;
+    meetingDate: string;
+    meetingTime: string;
+    status: "upcoming" | "requested" | "complete";
+    hourlyPrice?: number;
+    totalHours?: number;
+    rating?: number;
+  };
+  onBack: () => void;
+}
+
+export default function SessionDetail({ session, onBack }: SessionDetailProps) {
+  const [activeTab, setActiveTab] = useState<"Details" | "Chat">("Details");
+
   return (
-    <div className="container-fluid mx-auto">
-      {/* Main grid layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-6 gap-6 ">
-        {/* Left Column - Filter tabs and content */}
+    <div className="w-full h-full bg-gray-50 flex flex-col">
+      {/* Tabs */}
+      <div className="bg-white px-8 border-b border-gray-200 flex items-center h-14">
+        <button
+          onClick={onBack}
+          className="p-2 hover:bg-gray-100 transition-colors mr-4"
+        >
+          <ArrowLeft className="w-5 h-5 text-gray-600" />
+        </button>
+        <button
+          onClick={() => setActiveTab("Details")}
+          className={`h-full px-4 font-medium ${activeTab === "Details"
+            ? "text-blue-600 border-b-2 border-b-blue-600"
+            : "text-gray-500 hover:text-gray-700"
+            }`}
+        >
+          Details
+        </button>
+        <button
+          onClick={() => setActiveTab("Chat")}
+          className={`h-full px-4 font-medium ${activeTab === "Chat"
+            ? "text-blue-600 border-b-2 border-b-blue-600"
+            : "text-gray-500 hover:text-gray-700"
+            }`}
+        >
+          Chat
+        </button>
+      </div>
 
-        <div className="lg:col-span-4 ">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="flex justify-between items-start">
-              <h2 className="text-[25px] font-inter font-semibold text-gray-900 max-w-[80%]">
-                Complete Website Responsive Design: from Figma to Webflow to Website Design -
-                Assignment
-              </h2>
+      {/* Main Content */}
+      <div className="flex-1 overflow-auto px-8 py-6">
+        {activeTab === "Details" ? (
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr,400px] gap-8">
+            {/* Left Column */}
+            <div className="space-y-6">
+              {/* Title */}
+              <h2 className="text-3xl font-semibold text-gray-900">{session.title}</h2>
 
-              <span className="bg-green-500 font-poppinsmedium text-white text-[15px] px-3 py-1 rounded-md">
-                Completed
-              </span>
-            </div>
+              {/* Description */}
+              <div className="bg-white p-6 border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Session Description
+                </h3>
+                <p className="text-gray-600">{session.description}</p>
+              </div>
 
-            <div className="flex justify-between mt-4">
-              <div className="space-y-2">
-                <p className="text-[17px] text-gray-700 font-inter font-regular">Subject Name</p>
-
-                <div className="">
-                  <p className="text-[17px] text-gray-700 font-inter font-regular">Topic Name</p>
-                  <a href="#" className="text-[17px] text-gray-700 font-inter font-regular">
-                    Lorem ipsumosdluchowuhvuhvcouvncoujdhvuijohuijwegfoweyefcywociywqfcv
-                    wfcvwvicifificbichicidcic
-                  </a>
-                </div>
-
-                <p className="text-[17px] text-gray-700 font-inter font-regular ">Skills</p>
-
+              {/* Tags */}
+              <div className="bg-white p-6 border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Tags</h3>
                 <div className="flex flex-wrap gap-2">
-                  {skills.map((skill, index) => (
+                  {session.tags.map((tag) => (
                     <span
-                      key={index}
-                      className="bg-[#f8f8fd] text-primary px-6 py-1 rounded-md font-inter font-regular text-[17px]"
+                      key={tag}
+                      className="px-4 py-2 bg-cyan-50 text-cyan-500 text-sm rounded-lg"
                     >
-                      {skill}
+                      {tag}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <p className="text-sm text-orange-400 font-medium mt-1 whitespace-nowrap">
-                Price to be Decided
-              </p>
+              {/* Additional Info */}
+              <div className="bg-white p-6 border border-gray-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[
+                  [session.meetingDate, "Meeting Date"],
+                  [session.meetingTime, "Meeting Time"],
+                  [`${session.hourlyPrice || 0}/hr`, "Hourly Rate"],
+                  [`${session.totalHours || 0} hours`, "Total Hours"],
+                  [`$${(session.hourlyPrice || 0) * (session.totalHours || 1)}`, "Total Amount"],
+                  [session.status.charAt(0).toUpperCase() + session.status.slice(1), "Status"],
+                ].map(([value, label], i) => (
+                  <div key={i} className="relative pr-6 lg:pr-8">
+                    <div className="text-gray-900 font-medium">{value}</div>
+                    <div className="text-sm text-gray-500">{label}</div>
+                    {i % 3 !== 2 && (
+                      <div className="hidden lg:block absolute top-0 right-0 w-px h-full bg-gray-200" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Column */}
+            <div className="space-y-6">
+              {/* Session Info */}
+              <div className="bg-white p-6 border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-6">Session Information</h3>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Session ID:</span>
+                    <span className="font-semibold text-gray-900">{session.id}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Milestone:</span>
+                    <span className="font-semibold text-gray-900">{session.milestone}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Rating:</span>
+                    <div className="flex items-center gap-1">
+                      <Star className={`w-4 h-4 ${session.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`} />
+                      <span className="font-semibold text-gray-900">{session.rating || 0}</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Status:</span>
+                    <span className="px-3 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">
+                      {session.status.charAt(0).toUpperCase() + session.status.slice(1)}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-
-          <div className="space-y-4 bg-white p-4 rounded-lg mt-5 ">
-            <div className="flex items-center gap-4 mb-4 border-b pb-4">
-              <h2 className="text-lg font-semibold text-gray-800">Select Teacher</h2>
-              <button className="border border-pink-500 text-pink-500 px-4 py-1 rounded-full text-sm hover:bg-pink-50 transition">
-                Pick For Me
-              </button>
-              <img src={InfoIcon} alt="" />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 ">
-              {teachers.map((teacher, index) => (
-                <TeacherCard key={index} {...teacher} />
-              ))}
-            </div>
+        ) : (
+          // Chat Section takes full content area
+          <div className="h-full">
+            <ChatSection />
           </div>
-
-          <div className=" bg-gray-100 flex items-center justify-center mt-5">
-            <AssignmentMilestone totalSteps={4} completedSteps={1} />
-          </div>
-
-          <div className="bg-gray-100 mt-5">
-            <AssignmentDetails />
-          </div>
-
-          <div className="bg-gray-100 flex items-center justify-center mt-5">
-            <DocumentList />
-          </div>
-        </div>
-
-        {/* Right Column - Notifications and Transactions */}
-        <div className="lg:col-span-2 ">
-          <ChatPanel />
-        </div>
+        )}
       </div>
     </div>
   );
-};
-
-export default SessionCard;
+}

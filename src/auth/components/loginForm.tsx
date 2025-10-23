@@ -37,7 +37,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ role }) => {
   const googleButtonRef = useRef < HTMLDivElement > (null);
   const { refetch: fetchUserProfile } = useFetch < any > (
     ['user-profile', form.email],
-    `/users/profile`,
+    `/profile`,
     false,
     {
       onSuccessCallback: (data) => {
@@ -62,6 +62,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ role }) => {
         if (data?.token) {
           if (remember) {
             localStorage.setItem('authToken', data.token);
+            localStorage.setItem('role', role);
+            console.log('role stored in localStorage:', role);
           } else {
             sessionStorage.setItem('authToken', data.token);
           }
@@ -106,7 +108,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ role }) => {
       onSuccessCallback: (data) => {
         console.log('Login successful:', data);
         if (data?.token) {
+          console.log('name', data?.user?.name)
           localStorage.setItem('token', data.token);
+          localStorage.setItem('name', data?.user?.name || 'user');
+          localStorage.setItem('userprofile', data?.user ? JSON.stringify(data.user) : '');
+          localStorage.setItem('role', role);
+          console.log('role stored in localStorage:', role);
         }
         fetchUserProfile();
         const normalizedRole = String(role || "").toLowerCase();
